@@ -1,0 +1,24 @@
+{extend name="shop/b2c/Cms/base" /}
+{block name="resources"}
+<style type="text/css">
+.help-tit {
+/* 	font-weight: bold; */
+/* 	color: #131212; */
+}
+</style>
+{/block}
+{block name="main"}
+<div class="content w990 clearfix">
+	{include file='shop/b2c/Cms/controlLeftMenu'/}
+	<!-- 右半部分内容 -->
+	<div class="fr" id="question">
+		<div class="right-inner">
+			<h3 class="help-tit">{$info['title']}</h3>
+			<div class="help-detail">
+				<p style="color: #666666;">{$info['content']}</p>
+			</div>
+		</div>
+	</div>
+</div>
+{/block}
+{block name="javascript"}{/block}

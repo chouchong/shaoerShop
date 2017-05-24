@@ -1,0 +1,35 @@
+<link rel="stylesheet" type="text/css" href="__TEMP__/{$style}/public/css/goods_list.css">
+<section class="members_goodspic" id="main_list[id]">
+	<input type='hidden' id="goodslisttype[id]" value="[type]">
+	<input type='hidden' id="goodslistnumber[id]" value="[number]">
+</section>
+<script>
+if('[isbottom]'==1){
+	$('#main_list[id]').addClass('goods_butoom');
+}
+var goodslisttype=$('#goodslisttype[id]').val();
+var goodslistnumber=$('#goodslistnumber[id]').val();
+$.ajax({
+	type:"post",
+	url : "APP_MAIN/Components/getTypeGoodsList",
+	async : true,
+	data : {'type':goodslisttype,'number':goodslistnumber},
+	success : function(data){
+		if(data != null){
+			var html = '';
+			 html +='<ul>';
+			for(i=0; i<data.length;i++){
+				html+='<li class="gooditem"><div class="img"> <a href="APP_MAIN/Goods/goodsDetail.html?id='+data[i]['goods_id']+'">';
+				html+='<img class="lazy" src="__ROOT__/'+data[i]['pic_cover_micro']+'" >';
+				html+='</a></div><div class="info">';
+				html+='<p class="goods-title"><a href="APP_MAIN/Goods/goodsDetail.html?id='+data[i]['goods_id']+'" >'+data[i]['goods_name']+'</a></p>';
+				html+='<p class="goods-price"><em>￥'+data[i]['promotion_price']+'</em></p>';
+				html+=' <a href="APP_MAIN/Goods/goodsDetail.html?id='+data[i]['goods_id']+'"><div class="goods-buy"></div></a> </div></li>';	 			
+			}
+			html +='</ul>';
+			html += '<div class="h50"></div>';
+			$("#main_list[id]").append(html);
+			}
+		}
+	})
+</script>

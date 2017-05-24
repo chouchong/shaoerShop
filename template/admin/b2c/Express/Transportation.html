@@ -1,0 +1,240 @@
+{extend name="admin/b2c/base" /}
+{block name="resources"}
+<script src="ADMIN_JS/art_dialog.source.js" type="text/javascript"></script>
+<script src="__STATIC__/js/check_browser.js" type="text/javascript"></script>
+<script src="__STATIC__/js/jquery.unobtrusive-ajax.min.js" type="text/javascript"></script>
+<script src="ADMIN_JS/linkUrlJs.js" type="text/javascript"></script>
+<script src="__STATIC__/js/application.js"></script>
+<script src="__STATIC__/js/prettify.js"></script>
+<script src="__STATIC__/bootstrap/js/bootstrapCommon.js"></script>
+<script src="ADMIN_JS/jquery.pager.js"></script>
+<script src="ADMIN_JS/allselect.js" type="text/javascript"></script>
+<link href="ADMIN_CSS/defau.css" rel="stylesheet" type="text/css">
+<link href="ADMIN_CSS/member.css" rel="stylesheet" type="text/css">
+<link href="ADMIN_CSS/base.css" rel="stylesheet" type="text/css">
+<link href="ADMIN_CSS/dashbord.css" rel="stylesheet" type="text/css">
+<link href="ADMIN_CSS/guid.css" rel="stylesheet" type="text/css">
+<link href="ADMIN_CSS/mcm.css" rel="stylesheet" type="text/css">
+<link href="ADMIN_CSS/module.css" rel="stylesheet" type="text/css">
+<link href="ADMIN_CSS/product.css" rel="stylesheet" type="text/css">
+<!-- <link href="ADMIN_CSS/system.css" rel="stylesheet" type="text/css"> -->
+<link href="ADMIN_CSS/wechat.css" rel="stylesheet" type="text/css">
+<link href="__STATIC__/bootstrap/css/bootstrap-responsive.css" rel="stylesheet" type="text/css"/>
+<link href="ADMIN_CSS/default1.css" rel="stylesheet" type="text/css">
+<style>
+body .mod-tab .style0big .current, .mod-tab .style0big .current:hover{border-top:2px solid #27A9E3;}
+body .mod-tab .style0big .current, .mod-tab .style0big .current{border-top:2px solid #27A9E3;}
+.tabmenu_hr{
+	height:0;
+}
+</style>
+{/block}
+
+{block name="right_tab"}
+<li><a class="nscs-table-handle_green" href="ADMIN_MAIN/Express/TransportationAdd" >添加模板</a></li>
+{/block}
+
+{block name="main"}
+<div class="mod-table" style="margin-top:40px;">
+	<div style="border-top: 1px #D7D7D7 solid;"></div>
+	<div class="mod-table-main" style="min-height: 400px;">
+		<div style="border-left: 1px #D7D7D7 solid; border-right: 1px #D7D7D7 solid;" class="con style0line">
+			<table cellspacing="0" cellpadding="0" border="0" width="100%">
+				<colgroup>
+					<col style="width: 2%;">
+					<col style="width: 15%;">
+					<col style="width: 25%;">
+					<col style="width: 15%;">
+					<col style="width: 15%;">
+					<col style="width: 14%;">
+					<col style="width: 14%;">
+				</colgroup>
+				<tbody>
+				</tbody>
+			</table>
+		</div>
+	</div>
+</div>
+{include file="admin/b2c/openDialog" /}
+<script type="text/javascript">
+	//单删除
+	function Delect(shipping_fee_id, event) { 
+		$( "#dialog" ).dialog({buttons: {"确定,#e57373": function() {
+				$(this).dialog('close');
+				$.ajax({
+					type: "post",
+					url: "ADMIN_MAIN/Express/TransportationDelete",
+					data: { "shipping_fee_id": shipping_fee_id },
+					dataType : "json",
+					success: function (data){
+						if (data["code"] > 0) {
+							LoadingInfo();
+							$("#dialog").dialog({buttons: {"确定,#e57373": function() {
+										$(this).dialog('close');
+									}
+								},
+								contentText:"运费模板删除成功",
+								time:3,
+								timeHref:'ADMIN_MAIN/Express/Transportation',
+							});
+						}else{
+							$( "#dialog" ).dialog({buttons: {"确定,#e57373": function() {
+									$(this).dialog('close');
+									}
+								},
+								contentText:"运费模板删除失败",
+							});
+						} 
+					}
+				});
+			},
+			"取消":function(){
+				$(this).dialog('close');
+			}
+		},
+		contentText:"您确定要删除？",
+		});
+	}
+
+$(function () {
+
+	//查询
+	$("#btnSelect").click(function () {
+		TransportationQuery.Query = $("#txtName").val();
+		Page(1,TransportationQuery.Query);
+	});
+
+	$("#txtName").blur(function () {
+		condition = $(this).val().replace(/^\s*/g, "").replace(/\s*$/g, "");
+		if (condition == "") {
+			$(this).focus();
+			$(this).val("");
+		}
+	})
+
+	// enter 键搜索
+	document.onkeypress = function () {
+		var iKeyCode = -1;
+		if (arguments[0]) {
+			iKeyCode = arguments[0].which;
+		}else {
+			iKeyCode = event.keyCode;
+		}
+		if (iKeyCode == 13) {
+			$("#btnSelect").click();// 搜索
+		}
+	}
+
+	$("#type ul li").click(function () {
+		TransportationQuery.Query = "";
+		$("#types ul li").removeClass("current");
+		TransportationQuery.Groups[0] = "q1";
+		Transportation(1);
+	});
+});
+
+//删除全部
+function AllDeleteTransportation(event) {
+	var TransportationID = new Array();
+	$("input[name='sub']:checked").each(function () {
+		TransportationID.push($(this).val());
+	});
+
+	if(TransportationID.length == 0) {
+		$(".Loading").removeClass("style0green style0red").addClass("style0yellow");
+		$("#operateTip").html("请先勾选文本框再进行批量操作！").change();
+		return;
+	}
+	
+	if (confirmThis(event, "您确定要删除？")) {
+		$.ajax({
+			type: "post",
+			url: "ADMIN_MAIN/Express/DeleteDispatching",
+			data: { "srt": TransportationID },
+			dataType : "json",
+			success: function (jsonRes) {
+				if (jsonRes == 1) {
+					Page(pageindex,contact);
+					$(".Loading").removeClass("style0red style0yellow").addClass("style0green");
+					$("#operateTip").html(" 删除成功！").change();
+					Transportation(1);
+				} else {
+					$(".Loading").removeClass("style0green style0yellow").addClass("style0red"); //红色
+					$("#operateTip").html(JSON.stringify(jsonRes)).change();
+				}
+			}
+		});
+	}
+}
+
+
+function TransportationDelete(shipping_fee_id, event) {
+	$( "#dialog" ).dialog({
+		buttons: {"确定,#e57373": function() {
+			$(this).dialog('close');
+			$.ajax({
+				type:"post",
+				url:"ADMIN_MAIN/Express/TransportationDelete",
+				data:{ 'shipping_fee_id':shipping_fee_id },
+				async:false,
+				success:function (data) {
+					if (data["code"] > 0) {
+						LoadingInfo();
+						$( "#dialog" ).dialog({buttons: {"确定,#e57373": function() {
+									$(this).dialog('close');
+								}
+							},
+							contentText:"运费模板删除成功",
+							time:3,
+							timeHref:'ADMIN_MAIN/Express/Transportation',
+						});
+					}else{
+						$( "#dialog" ).dialog({
+								buttons: {"确定,#e57373": function() {
+									$(this).dialog('close');
+								}
+							},
+							contentText:"运费模板删除失败",
+						});
+					}
+				}
+			});
+			/* location.href = 'ADMIN_MAIN/Express/Transportation'; */ 
+		},
+			"取消":function(){
+				$(this).dialog('close');
+			}
+		},
+		contentText:"您确定要删除？",
+	});
+}
+
+//页面数据加载
+$(function(){
+	LoadingInfo();
+})
+function LoadingInfo(){
+	$.ajax({
+		url: 'ADMIN_MAIN/Express/Transportation',
+		type: 'POST',
+		dataType: 'html',
+		data: {pageindex:'1'},
+		success: function(data) {
+			$('.style0line table tbody').empty();
+			$('.style0line table tbody').append(data);
+		}
+	});
+}
+</script>
+<!--确认信息的公用弹层 开始-->
+<div id="dvConfirm" style="display: none;">
+	<div class="content" style="min-width: 300px; min-height: 50px;">
+		<div class="mod-form">
+			<div class="con style0alert">
+				<span id="confirmMessage"></span>
+			</div>
+		</div>
+	</div>
+</div>
+<!--确认信息的公用弹层 结束-->
+{/block}

@@ -1,0 +1,33 @@
+{extend name="admin/b2c/base" /}
+{block name="main"}
+<div class="set-style">
+	<dl>
+		<dt>用户通知:</dt>
+		<dd>
+			<textarea rows="2" id="user_notice" class="textarea w400" maxlength="50">{$user_notice}</textarea>
+			<p class="hint"></p>
+		</dd>
+	</dl>
+	<button class="edit_button" onclick="setConfigAjax();">提交</button>
+</div>
+<script>
+function setConfigAjax(){
+	var user_notice = $("#user_notice").val();
+	$.ajax({
+		type:"post",
+		url:"ADMIN_MAIN/Config/userNotice",
+		data:{
+			'user_notice' : user_notice,
+		},
+		success:function (data) {
+			if (data["code"] > 0) {
+				showMessage('success', data["message"],'');
+			}else{
+				showMessage('error', data["message"]);
+			}
+		}
+	});
+}
+</script>
+{include file="admin/b2c/openDialog" /}
+{/block}

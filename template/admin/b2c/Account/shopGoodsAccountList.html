@@ -1,0 +1,218 @@
+{extend name="admin/b2c/base" /} {block name="resources"/}
+<style>
+.style0list tbody td{border:0;vertical-align: middle;}
+.color_danger{
+	color: red;
+	font-size: 10px;
+}
+td{
+	text-align: center;
+}
+.total{
+
+}
+.statistics{
+	//border:1px solid #F5F6F5;
+	width:25%;
+	height:70px;
+	float:left;
+}
+.statistics img{
+	padding-left:15px;
+	padding-top:10px;
+	float:left;
+}
+.statistics  ul{
+	float:left;
+	font-size:12px;
+}
+.income{
+	width:100%;
+	height:260px;
+	/* border:1px solid red; */
+	clear:both;
+}
+.income-left{
+	float:left;
+	width:25%;
+	text-align:center;
+}
+.income-left ul{
+	margin:0;
+}
+.income-left ul li{
+	line-height:35px;
+}
+.income-right{
+	min-width:70%;
+	height:260px;
+	float:left;"
+}
+.withdraw-left{
+	float:left;
+	width:25%;
+	text-align:center;
+}
+.withdraw-left ul{
+	margin:0;
+}
+.withdraw-left ul li{
+	line-height:35px;
+}
+.withdraw-right{
+	min-width:70%;
+	height:260px;
+	float:left;"
+}
+.mytable select {
+	width:150px;
+}
+.goods-name{
+	max-width:30px;
+	white-space: nowrap; 
+ 	overflow:hidden;  
+	text-overflow:ellipsis;
+}
+</style>
+{/block}
+{block name="right_tab"}
+{/block}
+{block name="main"}
+<table class="mytable" style="margin-top:20px;">
+	<tr>
+		<th>
+			<!-- 方式：
+			<select id="account_type">
+	                    	<option value="0">请选择发生方式</option>
+	                    	<option value="1">订单</option>
+	                    	<option value="2">提现</option>
+	        </select> -->
+			<input type="text" id="startDate" class="input-sm form-control"placeholder="请选择开始日期" onclick="WdatePicker()" />
+			<input type="text" id="endDate" placeholder="请选择结束日期" class="input-sm form-control"onclick="WdatePicker()" />
+			<input type="button" onclick="LoadingInfo(1)" value="搜索" />
+		</th>
+	</tr>
+</table>
+<div class="total">
+	<div class="statistics">
+		<img src="__STATIC__/images/balance.png" />
+		<ul>
+			<li style="line-height: 40px;"><span>商品销售量</span></li>
+			<li><span style="font-size: 15px; font-weight: bold;" id="goods_sale_num">0</span></li>
+		</ul>
+	</div>	
+</div>
+<div class="mod-table">
+	<div class="mod-table-head">
+		<div class="style0list">
+			<table>
+				<colgroup>
+			 		<col style="width: 10%;">
+					<col style="width: 8%;">
+					<col style="width: 10%;">
+					<col style="width: 8%;">
+					<col style="width: 8%;">
+					<col style="width: 10%;">
+					<col style="width: 8%;">
+					<col style="width: 10%;">
+					<col style="width: 10%;">
+					<col style="width: 10%;">
+					<col style="width: 8%;">
+				</colgroup>
+				<thead>
+					<tr align="center">
+	                      <th>商品名称 </th> 
+	                      <th >实付金额</th>
+	                      <th >平台抽取比率</th>
+	                      <th >店铺收入</th>
+	                      <th >平台收入</th>                     
+	                      <th >是否存在退款</th>                      
+	                      <th >退款金额</th>
+	                      <th >店铺扣减余额</th>
+	                      <th >平台扣减余额</th>
+	                      <th >创建时间</th>
+	                      <th >是否结算</th>
+					</tr>
+				</thead>
+				<colgroup>
+			 		<col style="width: 10%;"> 
+					<col style="width: 8%;">
+					<col style="width: 10%;">
+					<col style="width: 8%;">
+					<col style="width: 8%;">
+					<col style="width: 10%;">
+					<col style="width: 8%;">
+					<col style="width: 10%;">
+					<col style="width: 10%;">
+					<col style="width: 10%;">
+					<col style="width: 8%;">
+				</colgroup>
+				<tbody></tbody>
+			</table>
+		</div>
+	</div>
+</div>
+{/block}{block name="script"}
+{include file="admin/b2c/openDialog" /}
+{include file="admin/b2c/pageCommon" /}
+<script type="text/javascript" src="__STATIC__/My97DatePicker/WdatePicker.js"></script> 
+<script type="text/javascript">
+//查询用户列表
+function LoadingInfo(pageIndex) {
+	var start_date = $("#startDate").val();
+	var end_date = $("#endDate").val();
+	var search_text = $("#search_text").val();
+	$.ajax({
+		type : "post",
+		url : "ADMIN_MAIN/Account/shopGoodsAccountList",
+		data : {
+			"pageIndex" : pageIndex,
+			"start_date":start_date,
+			"end_date":end_date,
+			"goods_id":"{$goods_id}"
+		},
+		success : function(data) {
+			$("#goods_sale_num").text(data.count.goods_sale_num);
+			$("#page_count").val(1);
+			$("#pageNumber a").remove();
+			var html = '';
+			if (data.list["data"].length > 0) {
+				for (var i = 0; i < data.list["data"].length; i++) {
+					html += '<tr>';
+					html += '<td class="goods-name" title="' + data.list["data"][i]["goods_name"] + '">' + data.list["data"][i]["goods_name"] + '</td>';
+					html += '<td>' + data.list["data"][i]["goods_pay_money"] + '</td>';
+					html += '<td>' + data.list["data"][i]["rate"] + '%</td>';
+					html += '<td>' + data.list["data"][i]["shop_money"] + '</td>';
+					html += '<td>' + data.list["data"][i]["platform_money"] + '</td>';
+					if(data.list["data"][i]["is_refund"]){
+						html += '<td><i class="fa fa-check text-success"></i></td>';
+					}else{
+						html += '<td><i class="fa  fa-times"></i></td>';
+					}
+					html += '<td>' + data.list["data"][i]["refund_money"] + '</td>';
+					html += '<td>' + data.list["data"][i]["shop_refund_money"] + '</td>';
+					
+					html += '<td>' + data.list["data"][i]["platform_refund_money"] + '</td>';
+					html += '<td>' + data.list["data"][i]["create_time"] + '</td>';
+					if(data.list["data"][i]["is_issue"]){
+						html += '<td><i class="fa fa-check text-success"></i></td>';
+					}else{
+						html += '<td><i class="fa  fa-times"></i></td>';
+					}
+					html += '</tr>';
+				}
+			} else {
+				html += '<tr align="center"><th colspan="12">暂无符合条件的数据记录</th></tr>';
+			}
+			$(".style0list tbody").html(html);
+			var totalpage = $("#page_count").val();
+			if (totalpage == 1) {
+				changeClass("all");
+			}
+			var $html = pagenumShow(jumpNumber,totalpage,{$pageshow})
+			$("#pageNumber").append($html);
+		}
+	});
+}
+</script>
+{/block}

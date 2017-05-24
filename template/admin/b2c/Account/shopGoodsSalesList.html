@@ -1,0 +1,152 @@
+{extend name="admin/b2c/base" /}
+{block name="resources"/}
+<script src="ADMIN_JS/highcharts.js"></script>
+<script src="ADMIN_JS/exporting.js"></script>
+<style  type="text/css">
+body{
+	font: 12px/20px "Hiragino Sans GB","Microsoft Yahei",arial,ç€¹å¬©ç¶‹,"Helvetica Neue",Helvetica,STHeiTi,sans-serif !important;
+}
+.alert{
+	color: #C09853;
+	height:auto;
+}
+.alert-info{
+	color: #3A87AD;
+}
+.w210{
+	width:210px;
+}
+.h30 {
+    height: 30px !important;
+}
+.top-alert{
+	    border: 1px solid #FBEED5;
+}
+.w450 {
+    width: 450px!important;
+}
+.mr50 {
+    margin-right: 50px !important;
+}
+.count-box li{
+	font: 12px/20px 'Hiragino Sans GB','Microsoft Yahei',arial,ç€¹å¬©ç¶‹,'Helvetica Neue',Helvetica,STHeiTi,sans-serif;
+}
+.mytable {border: 0;}
+.style0list tbody td {vertical-align: middle;}
+.style0list  tbody tr {border-bottom: 1px dashed  #E3E3E3;}
+a{
+	cursor:pointer;
+}
+</style>
+ {/block}
+{block name="main"}
+<div class="count-box">
+<div class="main-content" id="mainContent">
+<div class="alert mt10" style="clear:both;">
+	<ul class="mt5">
+		<li>1、符合以下任何一种条件的订单即为有效订单：1）采用在线支付方式支付并且已付款；2）采用货到付款方式支付并且交易已完成</li>
+		<li>2、以下列表为从昨天开始最近30天有效订单中的所有商品数据</li>
+        <li>3、近30天下单商品数：从昨天开始最近30天有效订单的某商品总销量</li>
+        <li>4、近30天下单金额：从昨天开始最近30天有效订单的某商品总销售额</li>
+        <li>5、点击每列旁边的箭头对列表进行排序，默认按照“近30天成交件数”降序排列</li>
+        <li>6、点击每条记录后的“走势图”，查看最近30天下单金额、下单商品数、下单量走势</li>
+      </ul>
+</div>
+<form method="get" action="index.php" target="_self" id="formSearch">
+  
+</form>
+<div class="mod-table">
+	<div class="mod-table-head">
+		<table class="mytable">
+			<tr>
+				<th width="10%">
+					<div class="fr">&nbsp;&nbsp;商品名称
+		    			<input type="text" class="text w150"id="goods_name" value="">
+		    			<label class="submit-border"><input type="submit" class="submit" value="搜索" onclick="LoadingInfo(1);"/></label>
+		    		</div>
+				</th>
+			</tr>
+		</table>
+	<div class="mod-table-head">		
+		<div class="style0list">
+			<table>
+				<colgroup>
+			 		<col style="width: 5%;">
+					<col style="width: 30%;">
+					<col style="width: 20%;">
+					<col style="width: 20%;">
+					<col style="width: 20%;">
+					<col style="width: 5%;">
+				</colgroup>
+				<thead>
+					<tr align="center">
+						<th></th>
+						<th>商品名称</th>
+      					<th>价格</th>
+						<th><a title="点击进行排序" nc_type="orderitem" data-param="{&quot;orderby&quot;:&quot;ordergoodsnum&quot;}" class="selected desc">近30天下单商品数<i></i></a></th>
+						<th><a title="点击进行排序" nc_type="orderitem" data-param="{&quot;orderby&quot;:&quot;ordergamount&quot;}" class="">近30天下单金额<i></i></a></th>
+						<th>操作</th>
+					</tr>
+				</thead>
+				<colgroup>
+			 		<col style="width: 5%;">
+					<col style="width: 30%;">
+					<col style="width: 20%;">
+					<col style="width: 20%;">
+					<col style="width: 20%;">
+					<col style="width: 5%;">
+				</colgroup>
+				<tbody></tbody>
+			</table>
+		</div>
+	</div>
+</div>
+</div>
+{include file="admin/b2c/pageCommon"/}
+<script type="text/javascript">
+function LoadingInfo(pageIndex) {
+	var goods_name = $("#goods_name").val();
+	$.ajax({
+		type : "post",
+		url : "ADMIN_MAIN/Account/ShopGoodsSalesList",
+		data : {
+			"pageIndex" : pageIndex,
+			"goods_name":goods_name
+		},
+		success : function(data) {
+			$("#page_count").val(data["page_count"]);
+			$("#pageNumber a").remove();
+			var html = '';
+			if (data["data"].length > 0) {
+				for (var i = 0; i < data["data"].length; i++) {
+					var goods_name = "";
+					if(data["data"][i]["goods_name"].length > 23){
+						goods_name = data["data"][i]["goods_name"].substring(0 ,24)+"..." ;
+					}else{
+						goods_name =  data["data"][i]["goods_name"];
+					}
+					html += '<tr align="center">';
+					html += '<td></td>';
+					html += '<td title="' + data["data"][i]["goods_name"] + '"align="left">' + goods_name + '</td>';
+					html += '<td>' + data["data"][i]["price"] + '</td>';
+					html += '<td>' + data["data"][i]["sales_info"]["sales_num"] + '</td>';
+					html += '<td>' + data["data"][i]["sales_info"]["sales_money"] + '</td>';
+					html += '<td></td>';
+					html += '</tr>';
+				}
+			} else {
+				html += '<tr align="center"><th colspan="6">暂无符合条件的数据记录</th></tr>';
+			}
+			$(".style0list tbody").html(html);
+				var totalpage = $("#page_count").val();
+			if (totalpage == 1) {
+				changeClass("all");
+			}
+			var $html = pagenumShow(jumpNumber,totalpage,{$pageshow})
+			$("#pageNumber").append($html);
+		}
+	});
+}
+</script>    </div>
+</div>
+{/block}

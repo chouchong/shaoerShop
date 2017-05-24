@@ -1,0 +1,205 @@
+{extend name="wap/b2c/base" /}
+{block name="resources"}
+<link rel="stylesheet" type="text/css" href="__TEMP__/{$style}/public/css/foundation.css">
+<link rel="stylesheet" type="text/css" href="__TEMP__/{$style}/public/css/common-v4.4.css">
+<link rel="stylesheet" type="text/css" href="__TEMP__/{$style}/public/css/components.css">
+
+<style>
+
+.tab-title2{margin-top: 0px;padding: 0;}
+.tabs.tab-title2 dd > a{padding: 7px 12px;color:#000000;font-size: 14px;}
+.tabs.tab-title2 dd > a:nth-child(1){border-right:3px solid #F7F7F7;}
+tr {
+    overflow: hidden;
+    border-bottom: 1px solid #ddd;
+    float: left;
+    width: 100%;
+    background: #FFFFFF;
+}
+tr td:last-child {
+    width: 100%;
+}
+tr td {
+    padding: 0.5625rem 0.625rem ;
+    font-size: 0.875rem;
+    color: #222222;
+	  float: left;
+}
+
+tr td:last-child p {
+    line-height: 22px;
+    margin-bottom: 0px;
+    width: 100%;
+    font-size: 16px;
+}
+tr td:last-child p:last-child {
+    float: left;
+    color: #666666;
+    font-size: 14px;
+}
+tr td:last-child .text-name {
+    float: left;
+    color: #2d2d2d;
+    font-size: 14px;
+}
+tr td:last-child .text-money {
+    float: right;
+    font-size: 14px;
+    color: #FF7C56;
+}
+tr td:last-child .text-2{
+    color: #909090;
+    font-size: 14px;
+}
+
+.disorder-none .icon-none {
+    display: block;
+    width: 115px;
+    height: 110px;
+    margin: 60px auto 15px auto;
+    background:url(__TEMP__/{$style}/public/images/money_cry.png) no-repeat;
+    background-size: 100px 100px;
+}
+.disorder-none{width:100%;text-align:center;}
+.tabs-content {
+    margin-top: 80px;
+	margin-bottom: 10px;
+}
+.tabs.tab-title2 dd.active a {
+    color: #FF9F9F;
+    border-bottom: none;
+    text-align: center;
+    border-radius: inherit;
+	padding: 8px 12px;
+	font-size: 14px;
+}
+</style>
+<style>
+</style>	
+{/block} 
+
+{block name="main"}
+<section class="head">
+	<a class="head_back" onclick="window.history.go(-1)"
+		href="javascript:void(0)"><i class="icon-back"></i></a>
+	<div class="head-title">佣金明细</div>
+	 <dl class="tabs tab-title2">
+        <dd class="active" id="brokeragetab"><a href="javascript:void(0)" onclick="brokeragelistshow(this)" >本店佣金明细</a></dd>
+        <dd id="extracttab"><a href="javascript:void(0)" onclick="extractlistshow(this)" >提现记录</a></dd>
+    </dl>
+</section>
+
+    <div class="tabs-content">
+      
+        <div class="content_01" id="detail_List" style="display: block;overflow:hidden;"></div>
+        <div class="content_02" id="extractlist" style="display: none;">
+              <div id="withdraw"> </div>            
+        </div>
+        <!--wait recevie end-->
+    </div>
+<input type="hidden" value="{$shop_id}" id="id"/>
+{/block}
+{block name="bottom"}{/block}
+{block name="javascript"}
+ <script type="text/javascript">
+    $(function(){
+    	query_detail();
+    	query_withdraw();
+    })
+    function backPage(){
+    	window.history.go(-1);
+    }
+    function query_detail()
+    {
+    	var shop_id=$("#id").val();
+
+		$.ajax({				
+			url: "APP_MAIN/Distribution/userAccountRecordsList",				    
+			type: "post",				    
+			asysc: false,	
+			data:{"shop_id":shop_id},
+			success: function (res) {
+				
+				$("#detail_List").html("");
+				var str = "";
+				if(res.length ==0)
+				{
+					$("#detail_List").append('<div class="nothing-data" align="center"><img src="__TEMP__/{$style}/public/images/wap_nodata.png"/><div>您还没有佣金！</div></div>');					
+				}else
+				{					
+				
+					for(var i =0;i<res.length;i++)
+					{
+					
+						    str = str +'<tr><td>';
+							str = str + '<p>';
+							str = str + '<span class="text-name">'+res[i]['type_name']+'</span><span class="text-money">¥'+res[i]["money"]+'</span></p>';
+							str = str + '<p>';
+							str = str + '<span class="text-2">'+res[i]['create_time']+'</span></p>';
+							str = str +'</td></tr>';
+							
+											
+					}
+					$("#detail_List").append(str);		
+				}
+			}				   
+		})
+    }
+
+    function query_withdraw(){
+    	var shop_id=$("#id").val();
+		$.ajax({				
+			url: "APP_MAIN/Distribution/ajaxUserCommissionWithdraw",				    
+			type: "post",				    
+			asysc: false,
+			data:{"shop_id":shop_id},
+			success: function (res) {
+				//alert(JSON.stringify(res));
+			
+				$("#withdraw").html("");
+				var str = "";
+				if(res['data'].length == 0){
+					$("#withdraw").append('<div class="nothing-data" align="center"><img src="__TEMP__/{$style}/public/images/wap_nodata.png"/><div>您还没有提现记录！</div></div>');
+				}else{
+					for(var i =0;i<res['data'].length;i++){
+				
+						    str = str +'<tr><td>';
+							str = str + '<p>';
+							str = str + '<span class="text-name">'+res['data'][i]["bank_name"]+'</span><span class="text-money">￥'+res['data'][i]["cash"]+'</span></p>';
+							str = str + '<p>';
+							str = str + '<span class="text-2">'+res['data'][i]["ask_for_date"]+'</span>';
+							if(res['data'][i]["status"] == -1){
+							      str = str + '<span class="text-money">已拒绝</span>';
+					        }else if(res['data'][i]["status"] == 0){
+					        	str = str + '<span class="text-money">已申请(等待处理)</span>';
+					        }else{
+					        	str = str + '<span class="text-money">已同意</span>';
+					        }
+							
+							str = str + '</p>';
+							str = str +'</td></tr>';
+						
+											
+					}
+					$("#withdraw").append(str);		
+				}
+			}				   
+		})
+    }
+
+      
+        function brokeragelistshow() {
+            $("#detail_List").show();
+            $("#extractlist").hide();
+            $("#brokeragetab").addClass("active");
+            $("#extracttab").removeClass("active");
+        }
+        function extractlistshow() {
+            $("#detail_List").hide();
+            $("#extractlist").show();
+            $("#extracttab").addClass("active");
+            $("#brokeragetab").removeClass("active");
+        }
+    </script>
+
+{/block}

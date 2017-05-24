@@ -1,0 +1,286 @@
+{extend name="shop/b2c/base" /}
+{block name="resources"}
+<link type="text/css" rel="stylesheet" href="__TEMP__/{$style}/public/css/goods.css">
+<script type="text/javascript" src="__TEMP__/{$style}/public/js/jquery.lazyload.js"></script>
+{/block}
+{block name="main"}
+<div class="w1210">
+	<div class="breadcrumb clearfix">
+		<a href="SHOP_MAIN.html" class="index">首页</a>
+		<span class="crumbs-arrow">&gt;</span>
+		<span class="last">{$goods_info.category_name}{$goods_info.goods_name}</span>
+	</div>
+	<!-- 商品详细信息 -->
+	<div class="goods-info">
+	<!-- 商品图片以及相册 _star-->
+		<div id="preview" class="preview">
+			<div class="goodsgallery"><!-- 商品相册容器 -->{include file="shop/b2c/Goods/controlGallery" }</div>
+			<div class="goods-gallery-bottom">
+				<!-- <a href="javascript:;" class="goods-compare compare-btn fr add-compare"><i></i> 对比</a> -->
+				<a href="javascript:;" class="goods-col fr collect-goods">
+					<i {if condition="$is_member_fav_goods>0"}style="background-position: -112px -91px;"{/if}></i>
+					<span data-collects="{$goods_info.collects}">收藏商品 ({$goods_info.collects}人气)</span>
+				</a>
+<!-- 				<div class="bdsharebuttonbox fr bdshare-button-style0-16"> -->
+<!-- 					<a class="bds_more" href="#" data-cmd="more" style="background: none; color: #999; line-height: 25px; height: 25px; margin: 0px 10px; padding-left: 20px; display: block;"> -->
+<!-- 						<i style="width: 13px; height: 13px; background: transparent url(__TEMP__/{$style}/public/images/goods-icon.png) no-repeat -113px -65px; vertical-align: middle; display: inline-block;"></i> 分享 -->
+<!-- 					</a> -->
+<!-- 				</div> -->
+			</div>
+		</div>
+		<!-- 商品图片以及相册 _end-->
+		<!-- 商品详细信息 _star-->
+		<div class="detail-info">
+			<form action="" method="post" name="formBuyNow" id="formBuyNow">
+				<!-- 商品名称 -->
+				<h1 class="goods-name js-goods-name">{$goods_info.goods_name}</h1>
+				<!-- 商品简单描述 -->
+				<p class="goods-brief second-color">{$goods_info.introduction}</p>
+				<!-- 商品团购倒计时 -->
+				<div class="goods-price">
+					<!-- 商品不同的价格 -->
+					<div class="show-price">
+						<span class="price">原&nbsp;&nbsp;&nbsp;价</span>
+						<font class="market-price">￥{$goods_info.price}</font>
+					</div>
+					<div class="realy-price">
+						<div class="now-prices">
+							<span class="price">售&nbsp;&nbsp;&nbsp;价</span>
+							<strong class="p-price second-color" id="price">￥{$goods_info.promotion_price}</strong>
+							{if condition="$goods_info.point_exchange_type==1 && $goods_info.point_exchange>0"}
+								<strong class="p-price second-color" style="font-size:22px;" id="member_point">+{$goods_info.point_exchange}积分</strong>
+							{/if}
+						</div>
+						<!-- <div class="depreciate">
+							<a href="" title="">（降价通知）</a>
+						</div> -->
+					</div>
+					{if condition="$goods_info.max_buy!=0"}
+					<!-- 限购 -->
+					<div class="prom-gift" >
+						<div class="dt">限购数量</div>
+						<div class="dd">
+							<span class="prom-gift-label">
+								<em>{$goods_info.max_buy}个</em>
+							</span>
+							<div></div>
+						</div>
+					</div>
+					{/if}
+					{if condition="$goods_info.mansong_name neq ''"}
+					<div class="shop-prom">
+						<div class="shop-prom-title">
+							<dt class="dt">本店活动</dt>
+							<dd>{$goods_info.mansong_name}</dd>
+<!-- 							<a class="more">更多活动<i></i></a> -->
+						</div>
+<!-- 						<div class="shop-prom-Box"> -->
+<!-- 							<div class="floater"> -->
+<!-- 								<div class="hd"> -->
+<!-- 									<em class="title">本店活动</em> -->
+<!-- 									<ul class="bd"> -->
+<!-- 										<li><a href="" target="_blank" title="">{$goods_info.mansong_name}</a></li> -->
+<!-- 									</ul> -->
+<!-- 									<a class="more unmore">收起<i></i></a> -->
+<!-- 								</div> -->
+<!-- 							</div> -->
+<!-- 						</div> -->
+					</div>
+					{/if}
+				</div>
+				<!-- 运费 -->
+				<div class="freight">
+					<div class="dt">配送至</div>
+					<div class="dd">
+						<div class="post-age">
+							<div class="region-chooser-container region-chooser" style="z-index: 3">
+								<div class="region-chooser-selected">
+									<div class="region js-region">
+										<font>{$user_location.province}{$user_location.city}<i></i></font>
+									</div>
+								</div>
+								<div class="region-chooser-box" id="region-chooser-box" style="display: none;">
+									<div class="region-chooser-close"></div>
+									<div class="region-tabs">
+										<div class="region-tab selected" data-region-level="1" style="display: block">
+											{$user_location.province}<i></i>
+										</div>
+										<div class="region-tab" data-region-level="2" style="display: block">
+											{$user_location.city}<i></i>
+										</div>
+										<div class="region-tab" data-region-level="3" style="display: block">
+											请选择区/县<i></i>
+										</div>
+									</div>
+									<div class="region-items" data-region-level="1"  style="display: block;"></div>
+									<div class="region-items" data-region-level="2" style="display: none;"></div>
+									<div class="region-items" data-region-level="3" style="display: none;"></div>
+								</div>
+								<div style="clear: both;"></div>
+							</div>
+							<div class="post-age-info">
+								<p><span class="freight-info">运费：{$goods_info.shipping_fee_name}</span></p>
+							</div>
+						</div>
+					</div>
+				</div>
+				<!-- 评价、销量、积分 -->
+				<div class="info-other">
+					<ul class="other">
+						<li><p>累积评价<span><a id="evaluate_num" href="#" class="second-color">{$goods_info.evaluates}人评价</a></span></p></li>
+						<li><p>累计销量<span class="second-color">{$goods_info.sales}</span></p></li>
+						<li class="last"><p>赠送积分<span class="second-color">{$goods_info.give_point}</span></p></li>
+					</ul>
+				</div>
+				<div class="choose js-skulist">
+					<p class="choose-title">请选择您要的商品信息<b onclick="closePrompt(this)">x</b></p><br/>
+					<input type="hidden" id="goods_sku_count" value="{$goods_sku_count}"/>
+					<input type="hidden" id="attribute_list" value="{$attribute_list}"/>
+					{foreach name="goods_info['sku_list']" item="pro_skus" key="k"}
+					<input type="hidden" id="goods_sku{$k}" value="{$pro_skus.attr_value_items};" stock="{$pro_skus.stock}" price="{$pro_skus.promote_price}" skuid="{$pro_skus.sku_id}" skuname="{$pro_skus.sku_name}">
+					{/foreach}
+					{foreach name="goods_info['attribute_list']" item="pro_prop" key="parent_k"}
+					<dl class="attr">
+						<dt class="dt">{$pro_prop.attr_name}</dt>
+						<dd class="dd">
+							<ul>
+							{foreach name="goods_info['attribute_value_list']" item="pro_propvalue" key="k"}
+							{if condition="$pro_propvalue['attr_id'] eq $pro_prop['attr_id']"}
+								<li class="goods-spec-item {if condition="$k==0 && count($goods_info['attribute_list'])==1"}selected{/if}">
+									<a href="javascript:;" title="{$pro_propvalue.attr_value}">
+										<!-- <img src="" width="30" height="30" alt=""> --> 
+										<span class="value-label" name="Span{$k}" id="{$pro_prop.attr_id}:{$pro_propvalue.attr_value_id}" >{$pro_propvalue.attr_value}</span>
+										{if condition='$k==0'}
+										<i></i>
+										{/if}
+									</a>
+								</li>
+								{/if}
+							{/foreach}
+							</ul>
+						</dd>
+					</dl>
+					{/foreach}
+					<!-- 购买数量 -->
+					<dl class="amount">
+						<dt class="dt">数量</dt>
+						<dd class="dd">
+							<span class="amount-widget">
+								<input type="text" class="amount-input" value="1"  data-max="{if condition='$goods_info.max_buy==0' }{$goods_info.stock}{else/}{$goods_info.max_buy}{/if}" title="请输入购买量" id="num" />
+								<span class="amount-btn">
+									<span class="amount-plus"><i>+</i></span>
+									<span class="amount-minus"><i>-</i></span>
+								</span>
+								<span class="amount-unit">件</span>
+							</span>
+							<em class="stock js-goods-number">库存{$goods_info.stock}件</em>
+						</dd>
+					</dl>
+					<!-- 限购提示语 -->
+					<!-- 加入购物车按钮、手机购买 -->
+					<div class="action">
+					{if condition="$goods_info.state==1"}
+						<div class="btn-buy">
+							<a href="javascript:;" class="buy-goods color js-buy-now" data-tag="buy_now">
+								<span class="buy-goods-bg bg-color"></span>
+								<span class="buy-goods-border"></span>
+								{if condition="$integral_flag==1"}
+								积分兑换
+								{else/}
+								立即购买
+								{/if}
+							</a>
+						</div>
+						<div class="btn-buy"><a href="javascript:void(0);" class="add-cart bg-color" data-tag="to_cart"><i></i> 加入购物车</a></div>
+					{else/}
+						<div class="btn-buy"><a href="javascript:void(0);" class="no-auth ">该商品已下架 </a></div>
+					{/if}
+					<!-- 	<div class="btn-phone">
+							<a href="#" class="go-phone">
+								<span>手机购买</span>
+								<i></i>
+								<div id="phone-tan">
+									<span class="arr"></span>
+									<div class="m-qrcode-wrap">
+										<img src="" alt="二维码图片" width="100" height="100">
+									</div>
+								</div>
+							</a>
+						</div> -->
+					</div>
+				</div>
+				<input type="hidden" id="hidden_cart_id" name="cart_id" />
+			</form>
+		</div>
+	<!-- 商品详细信息 _end-->
+	</div>
+	<!-- 搭配套餐 -->
+	<!-- 内容 -->
+	<div class="clearfix">
+		<!-- 左半部分内容 提出来的  客服-->
+		<div class="fl">
+			<!-- 客服组 提出来的  客服，先隐藏掉
+			2017年2月10日 08:40:53
+			{1include file="shop/b2c/Goods/controlCustomerCenter"}
+			-->
+			
+			<!-- 排行榜 提出来的 【排行榜】-->
+			{include file="shop/b2c/Goods/controlStoreRank"}
+		</div>
+		<!-- 右半部分内容 -->
+		<div class="right right-con">
+			<div class="wrapper">
+				<div id="main-nav-holder" class="goods-detail">
+					<ul id="nav" class="tab">
+						<li class="title-list current"><a href="javascript:;">商品详情</a></li>
+						<li class="title-list"><a id="evaluate_count" href="javascript:;">累计评价({$goods_info.evaluates})</a></li>
+						<li class="title-list"><a href="javascript:;">购买咨询</a></li>
+					</ul>
+					<div class="right-side">
+						<a href="javascript:void(0);" class="right-addcart js-buy-now" data-tag="buy_now" id="right-addcart">
+							<i></i> 积分兑换
+						</a>
+						<div class="right-side-con" ><!-- style="height: 442px;" -->
+							<ul class="right-side-ul">
+								<li class="abs-active">
+									<i></i>
+									<span>商品详情</span>
+								</li>
+								<li>
+									<i></i>
+									<span>商品评价</span>
+								</li>
+								<li>
+									<i></i>
+									<span>购买咨询</span>
+								</li>
+							</ul>
+						</div>
+					</div>
+				</div>
+				<div id="main_widget_1">
+					<!-- 商品详情 _star -->
+					<div id="goods_introduce" class="goods-detail-con goods-detail-tabs">
+						<!-- 推荐商品 -->
+						<!-- 商品后台上传的商品描述 -->
+						<div class="detail-content goods-detail-content">
+						{$goods_info.description}</div>
+					</div>
+					<!-- 商品详情 end -->
+					<!-- 商品评价 start -->
+					{include file="shop/b2c/Goods/controlGoodEvaluate"}
+					<!-- 商品评价 end -->
+					<!-- 服务 start -->
+					<!-- 常见问题 _star -->
+					<div class="goods-detail-con goods-detail-tabs">
+						{include file="shop/b2c/Goods/controlPurchaseConsulting"}
+					</div>
+					<!-- 常见问题 _end -->
+					<!-- 服务 end -->
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+{include file="shop/b2c/Goods/controlGoodsInfoData"}
+{/block}

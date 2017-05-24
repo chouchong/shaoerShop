@@ -1,0 +1,156 @@
+{extend name="admin/b2c/base" /}
+{block name="resources"/}
+<script type="text/javascript" src="__STATIC__/My97DatePicker/WdatePicker.js"></script>
+<style  type="text/css">
+.modal-div{
+	width:90%;
+	margin:auto;
+}
+.modal-dl{
+	overflow:hidden;
+}
+.modal-dl dt{
+	line-height:33px;
+	float:left;
+	font-weight:normal;
+}
+.modal-dl dd{
+	float:left;
+}
+.modal-dl dd span{
+	display:block;
+	color:#de533c;
+}
+.btn.off{
+	background-color:#e26f6f;
+	color:#FFF;
+}
+.btn.sure{
+	color:#FFF;
+	background-color:#62c462;
+}
+
+
+/*独立*/
+.status-error{
+	display:inline-block;
+	padding-left:5px;
+	padding-right:5px;	
+	padding-bottom:3px;
+	padding-top:3px;
+	color:#FFF;
+	background-color:#de533c;
+}
+/*独立*/
+.status-success{
+	display:inline-block;
+	color:#FFF;
+	padding-left:5px;
+	padding-right:5px;	
+	padding-bottom:3px;
+	padding-top:3px;
+	background-color:#5be15b;
+}
+
+</style>
+
+ {/block}
+{block name="right_tab"}
+<li><a class="nscs-table-handle_green" href="ADMIN_MAIN/System/addBlock.html"><i class="fa fa-plus-circle"></i>&nbsp;添加版块</a></li> 
+{/block}
+{block name="main"}
+
+	
+<div class="mod-table">
+	<div class="mod-table-head">
+		<div class="con style0list">
+			<table>
+				<colgroup>
+					<col style="width: 5%;">
+					<col style="width: 19%;">
+					<col style="width: 19%;">
+					<col style="width: 19%;">
+					<col style="width: 19%;">
+					<col style="width: 19%;">
+				</colgroup>
+				<thead>
+					<tr>
+						<th><label style="margin-left: 5px;"> <input type="checkbox"  onclick="CheckAll(this)"></label></th>
+						<th>版块名称</th>
+						<th>色彩风格</th>
+						<th>更新时间</th>
+						<th>是否显示</th>
+						<th>操作</th>
+					</tr>
+				</thead>
+				<colgroup>
+					<col style="width: 5%;">
+					<col style="width: 19%;">
+					<col style="width: 19%;">
+					<col style="width: 19%;">
+					<col style="width: 19%;">
+					<col style="width: 19%;">
+				</colgroup>
+				<tbody id="list">
+					
+				</tbody>
+			</table>
+		</div>
+	</div>
+</div>
+{/block}
+{block name="script"}
+{include file="admin/b2c/pageCommon" /}
+{include file="admin/b2c/openDialog" /}
+<script type="text/javascript">
+$(function(){
+	LoadingInfo(1);
+})
+function LoadingInfo(pageIndex) {
+	var search_text = null;
+	$.ajax({
+		type : "post",
+		url : "ADMIN_MAIN/System/blockList",
+		async : true,
+		data : {
+			"pageIndex" : pageIndex, "search_text" : search_text
+		},
+		success : function(data) {
+			var html = '';
+			$("#page_count").val(data["page_count"]);
+			$("#pageNumber a").remove();
+			if (data['data'].length > 0) {
+				for (var i = 0; i < data['data'].length; i++) {
+					html += '<tr>';
+					html += '<td><label style="margin-left: 10px;"> <input type="checkbox" name="sub" value="'+ data['data'][i]['block_id']+'"></lable></td>';
+					html += '<td class="center">'+ data['data'][i]['block_name']+'</td>';
+					html += '<td class="center"><span style="display:inline-block;width:20px;height:20px;background:' + data['data'][i]["block_color"] + ';"></span></td>';
+					html += '<td class="center">' + data['data'][i]["modify_time"] + '</td>';
+					if(data['data'][i]["is_display"] == 0){
+						html += '<td class="center"><a href="javascript:void(0);" class data-toggle="class"><i class="fa fa-times text-danger text"></i></a></td>';
+					}else{
+						html += '<td class="center"><a href="javascript:void(0);" class="active" data-toggle="class"><i class="fa fa-check text-success text-active"></i></a></td>';
+					}
+					html += '<td class="center"><a href="ADMIN_MAIN/System/updateBlock.html?block_id=' + data['data'][i]["block_id"] + '">编辑</a></td> ';
+					html += '</tr>';
+				}
+			} else {
+				html += '<tr><th colspan="6">暂无符合条件的数据记录</th></tr>';
+			}
+			$("#list").html(html);
+			var totalpage = $("#page_count").val();
+			if (totalpage == 1) {
+				changeClass("all");
+			}
+			var $html = pagenumShow(jumpNumber,totalpage,{$pageshow})
+			$("#pageNumber").append($html);
+		}
+	});
+}	
+$("#search_text").keypress(function(e){
+	if(e.keyCode == 13){
+		LoadingInfo(1);
+	}
+});
+</script>
+{/block}

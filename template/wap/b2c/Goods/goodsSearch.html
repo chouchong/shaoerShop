@@ -1,0 +1,55 @@
+{extend name="wap/b2c/base" /}
+{block name="resources"}
+<link rel="stylesheet" type="text/css" href="__TEMP__/{$style}/public/css/goods_search.css">
+<style>
+.search{
+	float: left;
+    display: block;
+    padding: 3px 10px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    margin-right: 11px;
+    margin-top: 7px;
+    color: #3d4245;
+    font-size: 14px;
+    height: 24px;
+}
+.sc{
+	overflow: hidden;
+    background: #fff;
+    padding: 8px 18px 10px 24px;
+}
+</style>
+
+{/block}
+
+{block name="goodsHead"}
+<section class="head_search">
+	<a class="head_search_back" href="">
+<!-- 	<i class="icon-back"></i> -->
+	</a>
+	<div class="head-title">
+		<div class="editing">
+			<div class="control-group">
+			    <div class="custom-search">
+			        <form action="APP_MAIN/Goods/goodsSearchList" method="GET">
+			            <input type="text" class="custom-search-input" placeholder="搜索商品" id='sear_name' name='sear_name'>
+			            <button type="submit" class="custom-search-button">搜索</button>
+			        </form>
+			    </div>
+			</div>
+		</div>
+	</div>
+</section>
+{/block}
+
+{block name="main" }
+<div class="search_Recommend" style="margin-top: 45px;">
+<p>大家都在搜</p>
+	<div class="sc">
+	{volist name="recommmend_list" id="vo"}
+	<a href="APP_MAIN/goods/goodsSearchList.html?sear_name={$vo.goods_name}" class="search">{$vo.goods_name}</a>
+	{/volist}
+	</div>
+</div>
+{/block}

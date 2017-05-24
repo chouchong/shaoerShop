@@ -1,0 +1,3 @@
+<?php
+//000000000000a:16:{s:10:"website_id";i:1;s:5:"title";s:19:"Niushop开源商城";s:4:"logo";s:34:"upload/admin/common/1493179603.png";s:8:"web_desc";s:4:"desc";s:9:"key_words";s:9:"keywords2";s:7:"web_icp";s:7:"0300259";s:8:"style_id";i:1;s:11:"web_address";s:18:"山西省太原市";s:10:"web_qrcode";s:34:"upload/admin/common/1495202882.png";s:7:"web_url";s:48:"http://demo.niushop.com.cn/shop/index/index.html";s:9:"web_email";s:17:"1518079521@qq.com";s:9:"web_phone";s:12:"400-886-7993";s:11:"create_time";s:19:"2016-10-26 11:21:52";s:11:"modify_time";s:19:"2017-05-19 22:08:04";s:6:"web_qq";s:10:"1518079521";s:10:"web_weixin";s:7:"y159753";}
+?>

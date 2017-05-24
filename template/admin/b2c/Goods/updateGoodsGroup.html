@@ -1,0 +1,250 @@
+{extend name="admin/b2c/base" /}
+{block name="resources"/}
+<script src="ADMIN_JS/art_dialog.source.js"></script>
+<script src="ADMIN_JS/iframe_tools.source.js"></script>
+<script src="ADMIN_JS/material_managedialog.js"></script>
+<link rel="stylesheet" type="text/css" href="ADMIN_CSS/defau.css">
+<style  type="text/css">
+.set-style{
+	width:100%;
+}
+.set-style dl{
+	width:100%;
+	font-size: 0;
+	/* line-height: 20px; */
+	clear: both;
+	padding: 0;
+	margin: 0;
+	border-bottom: dotted 1px #E6E6E6;
+	overflow: hidden;
+}
+.set-style dl dt{
+	font-size: 12px;
+	line-height: 32px;
+	vertical-align: top;
+	letter-spacing: normal;
+	word-spacing: normal;
+	text-align: right;
+	display: inline-block;
+	width: 19%;
+	padding: 10px 1% 10px 0;
+	margin: 0;
+	font-weight:normal;
+}
+.set-style dl dd{
+	font-size: 12px;
+	line-height: 32px;
+	vertical-align: top;
+	letter-spacing: normal;
+	word-spacing: normal;
+	display: inline-block;
+	width: 78%;
+	padding: 10px 0 10px 0;
+}
+.set-style dl dd input[type="text"]{
+	font: 12px/20px Arial;
+	color: #777;
+	background-color: #FFF;
+	vertical-align: top;
+	display: inline-block;
+	height:24px;
+	line-height:24px;
+	padding: 4px;
+	border: 1px solid #CCC;
+	outline: 0 none;
+	width: 400px;
+	margin:0;
+}
+.set-style dl dd textarea{
+    font: 12px/20px Arial;
+    color: #777;
+    background-color: #FFF;
+    vertical-align: top;
+    display: inline-block;
+    height: 60px;
+    padding: 4px;
+    border: solid 1px #CCC;
+    outline: 0 none;
+	width: 400px;
+	margin:0;
+}
+.hint{
+    font-size: 12px;
+    line-height: 16px;
+    color: #BBB;
+    margin-top: 10px;
+}
+.set-style dl dd p img{
+	border: medium none;
+	vertical-align: middle;
+}
+.class-logo{
+	background-color: #FFF;
+	position: relative;
+	z-index: 1;
+}
+.class-logo p{
+	width: 200px;
+	height: 60px;
+	line-height: 0;
+	background-color: #FFF;
+	text-align: center;
+	vertical-align: middle;
+	display: table-cell;
+	*display: block;
+	overflow: hidden;
+	    margin: 0 0 10px;
+		border: dashed 1px #E6E6E6;
+}
+.class-logo p img{
+	max-width: 200px;
+	max-height: 60px;
+	border: medium none;
+	vertical-align: middle;
+	margin-top: expression(60-this.height/2);
+	*margin-top: expression(30-this.height/2);
+}
+.edit_button{
+	padding-top:10px;
+	padding-bottom:10px;
+	padding-left:30px;
+	padding-right:30px;
+	background-color:#51A351;
+	color:#FFF;
+	margin:20px auto;
+	border:none;
+	display:block;
+}
+.error{
+	font-size: 12px;
+    line-height: 16px;
+    color: red;
+    margin-top: 10px;
+	display:none;
+}
+.set-style dl dd p{
+	margin-bottom:0;
+}
+</style>
+ {/block}
+{block name="main"}
+<div class="set-style">
+	<input name="UserCode" id="group_id" type="hidden"value="{$data.group_id}">
+	<dl>
+		<dt>商品分组名称:</dt>
+		<dd>
+			<p><input name="UserCode" id="group_name" type="text"value="{$data.group_name}"> </p>
+			<p class="error">请输入商品分类</p>
+		</dd>
+	</dl>
+	<dl>
+		<dt>上级分类:</dt>
+		<dd>
+			<select name="search_type" id="pid">
+				<option value="0">顶级分组</option>
+				{foreach name="group_list" item="v1"}
+				<option value="{$v1['group_id']}" {if condition="$data.pid eq $v1['group_id']"}selected{/if}>{$v1['group_name']}</option>
+				{/foreach}
+			</select>
+		</dd>
+	</dl>
+	<dl>
+		<dt>是否可见:</dt>
+		<dd>
+			<p>
+					<input id="is_visible" type="checkbox" class="checkbox" {if condition="$data.is_visible eq 1"}checked="checked"{/if}/>
+					<span class="help-inline" id="is_menuPrompt" style="display: none;"></span>
+			</p>
+		</dd>
+	</dl>
+	<dl>
+		<dt>排序:</dt>
+		<dd>
+			<p><input name="UserCode" id="sort" type="text"value="{$data.sort}"></p>
+			<p class="error">请输入序号</p>			
+		</dd>
+	</dl>
+	<dl>
+		<dt>分组图片:</dt>
+		<dd>
+			<div class="class-logo"><p><img id="imgLogo"src="__ROOT__/{$data.picture.pic_cover}" ></p></div>
+			<div class="ncsc-upload-btn"> 
+				<a href="javascript:void(0);" onclick="imgUpload();" >
+					<span><input type="hidden" value="{$data.group_pic}" id="group_pic"value=""/></span>
+					<p><i></i>图片上传</p>
+				</a> 
+			</div>
+			<p class="hint">此处理品牌;<br>
+				<span style="color:orange;">建议使用宽200像素-高60像素内的GIF或PNG透明图片；点击下方"提交"按钮后生效。</span>
+			</p>
+		</dd>
+	</dl>
+	<button class="edit_button" onclick="updateGoodsCategoryAjax();">提交</button>
+</div>
+{include file="admin/b2c/openDialog" /}
+<script>	
+	/**
+	*模块输入信息验证
+	*/
+	function verify( group_name, sort){
+		if(group_name == ''){
+			$("#group_name").parent().next().show();
+			return flase;
+		}else{
+			$(".error").hide();
+		}
+		if(sort == ''){
+			$("#sort").parent().next().show();
+			return flase;
+		}else{
+			$(".error").hide();
+		}
+	}
+	/**
+	*添加模块
+	*/
+	function updateGoodsCategoryAjax() {
+		var group_id = $("#group_id").val();
+		var group_name = $("#group_name").val();
+		var pid = $("#pid").val();
+		var sort = $("#sort").val();
+		var group_pic = $("#group_pic").val();
+		if($("#is_visible").prop("checked")){
+			var is_visible = 1;
+		}else{
+			var is_visible = 0;
+		}
+		verify(group_name, sort);
+		$.ajax({
+			type : "post",
+			url : "ADMIN_MAIN/Goods/updateGoodsGroup",
+			data : {
+				'group_id' : group_id,
+				'group_name' : group_name,
+				'pid' : pid,
+				'sort' : sort,
+				'is_visible' : is_visible,
+				'group_pic' : group_pic
+			},
+			async : true,
+			success : function(data) {
+				if (data["code"] > 0) {
+					showMessage('success', "商品分组修改成功",'ADMIN_MAIN/Goods/goodsGroupList');
+				}else{
+					showMessage('error', "商品分组修改失败");
+				}	
+			}
+		});
+	}
+	/**
+	*图片上传
+	*/
+	function imgUpload(){
+		OpenPricureDialog("PopPicure", 'ADMIN_MAIN',1);
+	}
+	function PopUpCallBack(img_id,img_src){
+		$("#imgLogo").attr("src",img_src);	
+		$("#group_pic").val(img_id);
+	}
+</script>
+{/block}

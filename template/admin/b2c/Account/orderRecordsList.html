@@ -1,0 +1,111 @@
+{extend name="admin/b2c/base" /}
+{block name="resources"/} {/block}
+{block name="right_tab"}
+{/block}
+{block name="main"}
+<table class="mytable">
+	<tr>
+		<th style="line-height:33px;">
+			下单时间：
+			<input type="text" id="startDate" class="input-medium" placeholder="请选择开始日期" onclick="WdatePicker()" value="{$start_time}"/>
+			&nbsp;-&nbsp;
+			<input type="text" id="endDate" placeholder="请选择结束日期" class="input-medium" onclick="WdatePicker()" value="{$end_time}"/>
+			<input type="button" onclick="searchData()" value="搜索" />
+		</th>
+	</tr>
+</table>
+<div class="mod-table">
+	<div class="mod-table-head">
+		<div class="con style0list">
+			<table>
+				<colgroup>
+					<col style="width: 10%;">
+					<col style="width: 10%;">
+					<col style="width: 10%;">
+					<col style="width: 10%;">
+					<col style="width: 10%;">
+					<col style="width: 10%;">
+					<col style="width: 10%;">
+					<col style="width: 20%;">
+				</colgroup>
+				<thead>
+					<tr>
+						<th>订单号</th>
+						<th>商品总价</th>
+						<th>订单总价</th>
+						<th>余额支付</th>
+						<th>优惠金额</th>
+						<th>实付金额</th>
+						<th>退款金额</th>
+						<th>创建时间</th>
+					</tr>
+				</thead>
+				<colgroup>
+					<col style="width: 10%;">
+					<col style="width: 10%;">
+					<col style="width: 10%;">
+					<col style="width: 10%;">
+					<col style="width: 10%;">
+					<col style="width: 10%;">
+					<col style="width: 10%;">
+					<col style="width: 20%;">
+				</colgroup>
+				<tbody></tbody>
+			</table>
+		</div>
+	</div>
+</div>
+{/block}
+{block name="script"}
+{include file="admin/b2c/pageCommon" /}
+{include file="admin/b2c/openDialog" /}
+<script type="text/javascript">	
+	/* 跳转到添加品牌 */
+	function addBrand() {
+		location.href = "ADMIN_MAIN/goods/addgoodsbrand";
+	}
+
+	//加载数据
+	function LoadingInfo(pageIndex) {
+		var start_date = $("#startDate").val();
+		var end_date = $("#endDate").val();
+		$.ajax({
+			type : "post",
+			url : "ADMIN_MAIN/Account/orderRecordsList",
+			data : {
+				"pageIndex" : pageIndex,
+				"start_date" : start_date,
+				"end_date" : end_date
+			},
+			success : function(data) {
+				$("#page_count").val(data["page_count"]);
+				$("#pageNumber a").remove();
+				var html = '';
+				if (data["data"].length > 0) {
+					for (var i = 0; i < data["data"].length; i++) {
+						html += '<tr align="center">';
+						html += '<td>' + data["data"][i]["out_trade_no"] + '</td>';
+						html += '<td>' + data["data"][i]["goods_money"] + '</td>';
+						html += '<td>' + data["data"][i]["order_money"] + '</td>';
+						html += '<td>' + data["data"][i]["user_platform_money"] + '</td>';
+						html += '<td>' + data["data"][i]["promotion_money"] + '</td>';
+						html += '<td>' + data["data"][i]["pay_money"] + '</td>';
+						html += '<td>' + data["data"][i]["refund_money"] + '</td>';
+						html += '<td>' + data["data"][i]["create_time"] + '</td>';
+						html += '</tr>';
+					}
+				} else {
+					html += '<tr align="center"><th colspan="9">暂无符合条件的数据记录</th></tr>';
+				}
+				$(".style0list tbody").html(html);
+				var totalpage = $("#page_count").val();
+				if (totalpage == 1) {
+					changeClass("all");
+				}
+				var $html = pagenumShow(jumpNumber,totalpage,{$pageshow})
+				$("#pageNumber").append($html);
+			}
+		});
+	}
+</script>
+{/block}

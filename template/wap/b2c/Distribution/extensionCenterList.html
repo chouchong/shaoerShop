@@ -1,0 +1,84 @@
+{extend name="wap/b2c/base" /}
+{block name="resources"}
+<link type="text/css" rel="stylesheet" href="__TEMP__/{$style}/public/css/extension_center_list.css">
+{/block}
+{block name="goodsHead"}
+<section class="head">
+	<a class="head_back" href="javascript:window.history.go(-1);"><i class="icon-back"></i></a>
+	<div class="head-title">我的推广中心</div>
+</section>
+{/block}
+{block name="main"}
+<img src="__TEMP__/{$style}/public/images/platformPromotion/platform_promotion_head.png" class="promoters-head"/>
+<h1 class="promoters-title">推广员店铺</h1>
+<hr class="segmentation-line" />
+<article class="promoters-list">
+	{if condition="count($promoter_shop_list)>0"}
+	{foreach $promoter_shop_list as $promoter_shop}
+	<div class="promoters-item">
+		<a href = "APP_MAIN/distribution/extensionCenterList?shop_id={$promoter_shop.shop_id}">
+			
+			<div class="promoters-right">
+				<div class="promoters-info">
+					{if condition="$promoter_shop.is_promoter==0 && $promoter_shop.is_partner==0 && $promoter_shop.region_center_id==0"}
+					<h1 style="padding:0;">
+					{else/}
+					<h1>
+					{/if}
+					{$promoter_shop.shop_name}</h1>
+					{if condition="$promoter_shop.is_promoter!=0"}
+					<span class="is-promoters">推广员</span>
+					{/if}
+					{if condition="$promoter_shop.is_partner!=0"}
+					<span class="is-shareholders">股东</span>
+					{/if}
+					{if condition="$promoter_shop.region_center_id!=0"}
+					<span class="is-region-agent">区域代理</span>
+					{/if}
+					<img  src="__TEMP__/{$style}/public/images/right_arrow.png" class="right-arrow" />
+				</div>
+				
+				{if condition="$promoter_shop.shop_logo neq ''"}
+				<img src="__UPLOAD__/{$promoter_shop.shop_logo}" class="promoters-item-img" />
+				{else/}
+				<img src="__TEMP__/{$style}/public/images/b2c_shop_avatar.png" class="promoters-item-img" />
+				{/if}
+				<div class="promoters-detail">
+					<ul>
+						<li>
+							<img src="__TEMP__/{$style}/public/images/platformPromotion/platform_promotion_team.png" />
+							<span>团队：<strong>{$promoter_shop.team_count}</strong></span>
+						</li>
+						<li>
+							<img src="__TEMP__/{$style}/public/images/platformPromotion/platform_promotion_commission.png" />
+							<span>佣金：<strong>￥{$promoter_shop.commission}</strong></span>
+						</li>
+						<li>
+							<img src="__TEMP__/{$style}/public/images/platformPromotion/platform_promotion_turnover.png" />
+							<span>营业额：<strong>￥{$promoter_shop.shop_profit}</strong></span>
+						</li>
+					</ul>
+				</div>
+				
+			</div>
+		</a>
+	</div>
+	{/foreach}
+	{else/}
+	<p style="text-align: center;">
+		<img src="__TEMP__/{$style}/public/images/not_promote.png" style="vertical-align: middle;width:90px;"/>
+		<br/><br/>
+		<a href="APP_MAIN/index/shopstreet">您还没有推广员店铺，去店铺街逛逛</a>
+	</p>
+	{/if}
+</article>
+{/block}
+{block name="bottom"}{/block}
+{block name="javascript"}
+<script>
+	$(function(){
+		var width = $(".promoters-item").width()-95;
+		$(".promoters-right").css("height",height+"px");//动态计算高度
+	})
+</script>
+{/block}

@@ -1,0 +1,56 @@
+<!--滚动图右侧公告及其小菜单
+	2017年2月14日12:28:00
+-->
+<script type="text/javascript">
+$.ajax({
+	type:"post",
+	url:"SHOP_MAIN/Components/getLoginInfo",
+	async:true,
+	success:function(data){
+		var login_info_html='';
+		if(data != null && data !=""){
+			if(data["user_info"]["nick_name"]!=null && data["user_info"]["nick_name"] != ""){
+				if(data["user_info"]["user_headimg"]==""){
+					login_info_html+='<div class="login_img"><img src="__TEMP__/{$style}/public/images/temp_default_user_portrait_0.png" alt="默认头像" /></div>';
+				}else{
+					login_info_html+='<div class="login_img"><img src="__UPLOAD__/'+data["user_info"]["user_headimg"]+'" alt="默认头像" /></div>';
+				}
+				login_info_html+='<div class="login_message"><p class="message_title">Hi,我是<a href="SHOP_MAIN/member/index.html" class="member_name" title="'+data["user_info"]["nick_name"]+'">'+data["user_info"]["nick_name"]+'</a></p><p class="message_operation"><a href="javascript:logout();">退出</a></p></div>';
+				$('.right-login-message').html(login_info_html);
+			}
+		}
+	}
+});
+</script>
+<div class="right-sidebar NS-TEMPLATE-NAV-CONTAINER">
+	<!-- 个人信息 -->
+	<div class="right-login-message">
+		<div class="login_img"><img src="__TEMP__/{$style}/public/images/temp_default_user_portrait_0.png" alt="默认头像" /></div>	
+		<div class="login_message"><p >Hi,欢迎登陆NIUSHOP</p><p class="message_operation"><a href="javascript:;" class="ajax-login">登陆</a><a href="SHOP_MAIN/login/register.html">注册</a></p></div>
+	</div>
+	
+	<p class="right_title"><span>&nbsp;</span>公告</p>
+	<!-- banner右侧公告 _start -->
+	<div class="proclamation1">
+		<!-- <h3>
+			<span> <i></i> 公告
+			</span> <a href="SHOP_MAIN/cms/articleClassInfo.html"
+				target="_blank"> 更多 <i>&gt;</i>
+			</a>
+		</h3> -->
+		<ul class="mall-news">
+			{volist name="new_article" id="vo" empty="暂时没有数据"}
+			<li><a target="_blank" href="SHOP_MAIN/cms/articleClassInfo.html?article_id={$vo.article_id}" title=""> <i></i>{$vo.title}</a></li>
+			{/volist}
+		</ul>
+	</div>
+	<!-- banner右侧公告 _end -->
+			
+	<p class="right_title"><span>&nbsp;</span>管理</p>
+	<!-- 快捷菜单-->
+	<!-- banner右侧快捷菜单 _start -->
+	<div class="shortcut-menu">
+		<a href="ADMIN_MAIN.html" title="登录商家管理中心" class="store-join-btn" target="_blank">登录管理中心</a>
+	</div>
+	<!-- banner右侧快捷菜单 _end -->
+</div>

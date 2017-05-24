@@ -1,0 +1,39 @@
+<link rel="stylesheet" type="text/css" href="__TEMP__/{$style}/public/css/pro-detail.css">
+ <section class="members_goodspic" id="main_list">    
+</section>
+<script>
+$.ajax({
+	type:"post",
+	url : "APP_MAIN/Components/goodsList",
+	async : true,
+	data : {
+	},
+	success : function(data){
+				if(data != null)
+					{
+					var html = '';
+					 html +='<ul>';
+					 	for(i=0; i<data.length;i++)
+					 		{
+					 			html += '<li class="mingoods" >';
+					 			html +='<div style="min-height:160px;">';
+					 			html +=' <a href="APP_MAIN/Goods/goodsDetail?id='+data[i]['goods_id']+'" >';
+					 			html +='<img class="lazy"  src="__ROOT__/'+data[i]['pic_cover_micro']+'" style="width:100%;min-height:100px;display: inline;">';
+					 			html +='</a>';
+					 			html +='</div>';
+					 			html +='<span class="goods-title" ><a href="APP_MAIN/Goods/goodsDetail?id='+data[i]['goods_id']+'" style="color:#8a8c8e;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;">'+data[i]['goods_name']+'</a></span>';
+					 			html += '<span class="price" style="font-size: 12px;">价格：￥'+data[i]['promotion_price']+'';
+					 			html += '</span>';
+					 			html += '<br/><span class="pxui-color-yellow" style="font-size:12px;color:#333">销量：'+data[i]['sales']+'笔</span>';
+					 			html += '</li> ';
+					 		
+					 			
+					 		}
+		                
+		      		html +='</ul>';
+		      		html += '<div class="h50"></div>';
+		      		$("#main_list").append(html);
+					}
+			}
+		})
+</script>

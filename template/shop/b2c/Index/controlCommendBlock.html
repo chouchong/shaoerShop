@@ -1,0 +1,53 @@
+<div class="w1210 index-sale">
+	<ul class="tabs-nav">
+		{foreach name="recommend_block" item="recommend" key="k"}
+		<li {if condition="$k eq 0" }class="tabs-selected"{/if}>
+			<i class="arrow"></i>
+			<h3>{$recommend.class_name}</h3></li>
+		{/foreach}
+	</ul>
+	{foreach name="recommend_block" item="recommend_detail" key="k"}
+	{if condition="$k eq 0" }
+	<div class="tabs-panel sale-goods-list">
+	{else/}
+	<div class="tabs-panel sale-goods-list tabs-hide">
+	{/if}
+		<ul>
+		{foreach name="recommend_detail['goods_list']" item="goods_list"}
+			<li>
+				<dl>
+					<dt class="goods-name"><a title="" href="SHOP_MAIN/goods/goodsinfo.html?goodsid={$goods_list.goods_info.goods_id}" target="_blank">{$goods_list.goods_info.goods_name}</a></dt>
+					<dd class="goods-thumb">
+						<a title="" href="SHOP_MAIN/goods/goodsinfo.html?goodsid={$goods_list.goods_info.goods_id}" target="_blank">
+							<img alt="" src="__UPLOAD__/{$goods_list.picture_info.pic_cover_mid}">
+						</a>
+					</dd>
+					<dd class="goods-price">
+						<em class="second-color" style="font-size:18px;">￥{$goods_list.goods_info.promotion_price}</em>
+					</dd>
+				</dl>
+			</li>
+		{/foreach}
+		</ul>
+	</div>
+	 {/foreach}
+</div>
+</div>
+<div class="w1210 ad-groups ad-groups5">
+	<div class="ad-groups5-layout">
+		<div class="ad-groups5-list" ></div>
+		<script type="text/javascript">
+			//logo右侧小广告 
+			var ap_id=[ap_id];
+			var data=platformAdvLoad(ap_id);
+			var listhtml='';
+			for(var i=0;i<data.length;i++){
+				listhtml+='<div class="item">';
+				listhtml+='<a class="ad-img" target="_blank" href="'+data[i]['adv_url']+'" >';
+				listhtml+='<img class="lazy" src="__UPLOAD__/'+data[i]['adv_image']+'" style="display: inline;height:auto;max-width:'+data[i]['ap_info']['ap_width']+'px;">';
+				listhtml+='</a></div>';
+			}
+			$('.ad-groups5-list').html(listhtml);
+		</script>
+	</div>
+</div>

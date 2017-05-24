@@ -1,0 +1,115 @@
+{extend name="admin/b2c/base" /}
+{block name="resources"/}
+<link rel="stylesheet" type="text/css" href="ADMIN_CSS/defau.css">
+<style>
+.table-input{
+	height:12px !important;
+	line-height:12px !important;
+	width:30px;
+	margin-bottom:0px !important;
+}
+</style>
+{/block}
+{block name="main"}
+<div class="set-style">
+	<dl>
+		<dt>是否开启区域代理:</dt>
+		<dd>			
+					{if condition="$shop_config_info.is_regional_agent eq 1 "} 
+					<input id="is_regional_agent" type="checkbox" class="checkbox" checked="checked" />					
+					{else /}
+					<input id="is_regional_agent" type="checkbox" class="checkbox" />
+					{/if}
+					<span class="help-inline" id="is_menuPrompt" style="display: none;"></span>
+		</dd>
+	</dl>	
+	<div class="mod-table">
+	<div class="mod-table-head">
+		<div class="con style0list">
+			<table>
+				<colgroup>
+					<col style="width: 20%;">
+					<col style="width: 40%;">
+					<col style="width: 40%;">					
+				</colgroup>
+				<thead>
+					<tr>
+						<th>代理级别</th>						
+						<th>各级奖励比例</th>
+						<th>升级条件</th>						
+					</tr>
+				</thead>
+				<colgroup>
+					<col style="width: 20%;">
+					<col style="width: 40%;">
+					<col style="width: 40%;">		
+				</colgroup>
+				<tbody  id="partner_global">
+				
+				    <tr align="center" >
+						<td>省级代理</td>
+						<td><input  class="table-input" type="text" id="province_rate"value="{$region_agent_info.province_rate}" />%</td>
+						<td><input  class="table-input"  type="text" id="application_require_province"value="{$region_agent_info.application_require_province}" />元</td>						
+					</tr>					
+					<tr align="center" >
+						<td>市级代理</td>
+						<td><input  class="table-input" type="text" id="city_rate"value="{$region_agent_info.city_rate}" />%</td>
+						<td><input  class="table-input"  type="text" id="application_require_city"value="{$region_agent_info.application_require_city}" />元</td>						
+					</tr>
+					<tr align="center" >
+						<td>区级代理</td>
+						<td><input  class="table-input" type="text" id="district_rate"value="{$region_agent_info.district_rate}" />%</td>
+						<td><input  class="table-input"  type="text" id="application_require_district"value="{$region_agent_info.application_require_district}" />元</td>						
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+	
+</div>	
+	<button class="edit_button" onclick="modifyShopConfigIsRegionalAgent();">提交</button>
+</div>
+{include file="admin/b2c/openDialog" /}
+<script src="__STATIC__/js/limit_input_digit.js"></script>
+<script>		
+	function modifyShopConfigIsRegionalAgent(){
+		if($("#is_regional_agent").prop("checked")){
+			var is_open = 1;
+		}else{
+			var is_open = 0;
+		}
+		var province_rate=$("#province_rate").val();
+		var application_require_province=$("#application_require_province").val();
+		var city_rate=$("#city_rate").val();
+		var application_require_city=$("#application_require_city").val();
+		var district_rate=$("#district_rate").val();
+		var application_require_district=$("#application_require_district").val();
+		
+		if((parseFloat(province_rate) +parseFloat(city_rate)+ parseFloat(district_rate))>100 ){
+			showMessage('error', "佣金比率不可超过100%！");	
+			return false;
+		}
+		$.ajax({
+			type:"post",
+			url:"ADMIN_MAIN/Distribution/UpdateShopRegionAgentConfig",
+			data:{
+				'is_open':is_open,
+				'province_rate':province_rate,
+				'application_require_province':application_require_province,
+				'city_rate':city_rate,
+				'application_require_city':application_require_city,
+				'district_rate':district_rate,
+				'application_require_district':application_require_district
+			},
+			async:true,
+			success:function (data) {
+				if (data["code"] > 0) {
+					showMessage('success', data["message"],"ADMIN_MAIN/Distribution/regionalAgent");
+				}else{
+					showMessage('error', data["message"]);
+				}	
+			}
+		});
+	}
+</script>
+{/block}

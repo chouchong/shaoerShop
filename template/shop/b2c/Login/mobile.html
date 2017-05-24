@@ -1,0 +1,239 @@
+{extend name="shop/b2c/Login/registerBase"}
+{block name="main"}
+<script>
+var yz4;
+	$(document).ready(function(){
+		$("#mobile").change(function(){
+			if(!($(this).val().search(/^1(3|4|5|7|8)\d{9}$/)==-1)){
+				$('#mobile').css("border","1px solid #ccc");
+				$("#mobileyz").css("color","red").text("");
+				$("isset_mobile").attr("value","不存在");
+				$.ajax({
+					type: "GET",
+					url: "SHOP_MAIN/login/mobile",
+					data: {"mobile":$('#mobile').val()},
+					success: function(data){
+						if(data){
+							$('#mobile').css("border","1px solid red");
+							$("#mobileyz").css("color","red").text("该手机号已被注册");
+							$("isset_mobile").attr("value","存在");							
+						}
+					} 
+				});
+			}
+		});
+		$("#btn_submit").click(function(){
+			var mobile = $("#mobile").val();
+			var password = $("#password").val();
+			var repass = $("#repass").val();
+			var isset_mobile = $("#isset_mobile").attr("value");
+			var code =$("#mobileregistermodel-sms_captcha").val();
+	 		if(mobile.search(/^1(3|4|5|7|8)\d{9}$/) == -1){
+	 			$("#mobile").trigger("focus");
+	 			$('#mobile').css("border","1px solid red");
+				$("#mobileyz").css("color","red").text("请输入正确的手机格式");
+				return false;
+			}
+	 		 if(isset_mobile == "存在"){
+	 			$('#mobile').css("border","1px solid red");
+				$("#mobileyz").css("color","red").text("该手机号已被注册");
+				$("#mobile").trigger("focus");
+				return false;
+	 		}
+	 		if(!( password.length >=6 && password.length <=16)){
+				$("#isset_mobile").attr("value","不存在");
+				$("#password").trigger("focus");
+				$("#password").css("border","1px solid red");
+				$("#yzpassword").css("color","red").text("密码为6到16位");
+				$('#mobile').css("border","1px solid #ccc");
+				$("#mobileyz").css("color","red").text("");
+				return false;
+			}
+	
+			if( !(repass.length >=6 && repass.length <=16 && repass == password)){
+				$("#repass").trigger("focus");
+				$("#repass").css("border","1px solid red");
+				$("#qrrepass").css("color","red").text("密码为6到16位");
+				$("#password").css("border","1px solid #ccc");
+				$("#yzpassword").css("color","red").text("");
+				return false;
+			}
+			if(code.length != 6){
+				$("#mobileregistermodel-sms_captcha").trigger("change");
+				$("#mobileregistermodel-sms_captcha").css("border","1px solid red");
+				$("#qryzm").css("color","red").text("输入正确验证码格式");
+				$("#repass").css("border","1px solid #ccc");
+				$("#qrrepass").css("color","red").text("");
+				return false;
+			}
+			$("#MobileRegisterModel").submit(); 
+		});
+	});
+</script>
+	<input type="hidden" value="不存在" id="isset_mobile"/>
+	<!-- 红包消息 -->
+	<div class="header w990">
+		<div class="logo-info">
+			<a href="SHOP_MAIN/index/index.html" class="logo">
+				<img alt="" src="__UPLOAD__/{$web_info['logo']}" />
+			</a>
+			<span class="findpw">欢迎注册</span>
+		</div>
+	</div>
+	<div class="reg-content">
+		<div class="w990">
+<div class="reg-form">
+	<div class="reg-con">
+		<div class="reg-type">
+			<p class="login-info">
+				我已经注册，现在就
+				<a href="SHOP_MAIN/login/index.html" title="去登录" class="color">登录</a>
+			</p>
+			<ul class="clearfix">
+				<li>
+					<a href="SHOP_MAIN/login/register.html">普通注册</a>
+				</li>
+				{if condition="$phone_info['is_use'] eq 1"}
+				<li class="active">
+					<a href="javascript:void(0);">手机注册</a>
+				</li>
+				{/if}
+				{if condition="$email_info['is_use'] eq 1"}
+				<li >
+					<a href="SHOP_MAIN/login/email.html">邮箱注册</a>
+				</li>
+				{/if}
+			</ul>		
+		</div>
+		<div class="reg-wrap">
+			<div class="reg-wrap-con" style="background: url(__TEMP__/{$style}/public/images/register_bg_image.png) no-repeat right 70px;">				
+				<!-- 手机注册 start -->
+		<form id="MobileRegisterModel" class="form-horizontal" name="MobileRegisterModel" action="SHOP_MAIN/login/mobile" method="post">
+			<input type="hidden" name="_csrf" value="eXVLd2ExOFMhBiocM0N.Eh0.Mg0nY2BiOxkaRAwBVxUgDQcQGQVWKw==">
+			<!-- 用户名 -->
+			<!-- 手机号 -->
+			<div class="form-group form-group-spe">
+				<label for="mobileregistermodel-mobile" class="input-left">
+				<span class="spark">*</span>
+				<span>手机号：</span>
+				</label>
+				<div class="form-control-box">
+					<input type="text" id="mobile" class="form-control" name="mobile" placeholder="请输入您的手机号" />
+					<!-- <span class='state1'>请输入手机号</span> -->
+					<span id="mobileyz"></span>
+			   	</div>
+				<div class="invalid"></div>
+			</div>
+			<input style="display: none">
+				
+			<!-- 密码 -->
+			<div class="form-group form-group-spe">
+				<label for="mobileregistermodel-password" class="input-left">
+				<span class="spark">*</span>
+				<span>密码：</span>
+				</label>
+				<div class="form-control-box">
+				<input type="password" id="password" class="form-control" name="password" autocomplete="off" placeholder="请输入密码">
+				<span id="yzpassword"></span>
+				<!-- <span class='state1'>请输入密码</span>-->				
+				<!--  <i class="fa fa-eye-slash pwd-toggle" data-id="password"></i>	-->	
+			  	</div>
+				<div class="invalid"></div>
+			</div>
+			
+			
+			
+			<!-- 确认密码 -->
+			<div class="form-group form-group-spe">
+				<label for="mobileregistermodel-password" class="input-left">
+				<span class="spark">*</span>
+				<span>确认密码：</span>
+				</label>
+				<div class="form-control-box">
+				<input type="password" id="repass" class="form-control" name="repass" autocomplete="off" placeholder="请确认输入密码">
+				<!-- <span class='state1'>请确认密码</span> -->
+				<!--  <i class="fa fa-eye-slash pwd-toggle" data-id="password"></i>	-->	
+				<span id="qrrepass"></span>
+			  	</div>
+				<div class="invalid"></div>
+			</div>
+				
+				
+			<!--	
+			<!-- 验证码
+			<div class="form-group form-group-spe">
+				<label for="mobileregistermodel-captcha" class="input-left">
+				<span>验证码：</span>
+				</label>
+				<div class="form-control-box">
+				<input type="text" id="captcha" class="input-small" name="MobileRegisterModel[captcha]">
+				<label class="captcha">
+					<img id="captcha-image" class="captcha-image" src="/site/captcha.html?v=58981a53ea418" alt="点击换图" title="点击换图" style="vertical-align: middle; cursor: pointer;"><script data-captcha-id='captcha-image' type='text'>{"refreshUrl":"\/site\/captcha.html?refresh=1","hashKey":"niiCaptcha\/site\/captcha"}</script>
+				</label>
+				</div>
+				<div class="invalid"></div>
+			</div>
+		 -->		
+			
+			
+			<!-- 短信校验码 -->	
+		
+			 <div class="form-group form-group-spe">
+				<label for="mobileregistermodel-sms_captcha" class="input-left">
+				<span class="spark">*</span>
+				<span>短信校验码：</span>
+				</label>
+				<div class="form-control-box">
+				<input type="text" id="mobileregistermodel-sms_captcha" class="input-small" name="MobileRegisterModel[sms_captcha]">
+	<!-- 			<a href="javascript:void(0);" class="phonecode" id="sendOutCode" name="code_mobile">获取短信校验码</a> -->
+					<input type="button" class="phonecode" id="sendOutCode" name="code_mobile" value="获取短信校验码">
+					<span id="qryzm"></span>
+				</div>
+				<div class="invalid"></div>
+			</div>
+		 
+	<!--		
+			<div class="form-group form-group-spe">
+				<label for="mobileregistermodel-invite_code" class="input-left">
+				<span>注册邀请码：</span>
+				</label>
+				<div class="form-control-box">
+				<input type="text" id="mobileregistermodel-invite_code" class="input-small" name="MobileRegisterModel[invite_code]">		
+				</div>
+				<div class="invalid"></div>
+			</div>
+	 -->			
+				<div class="form-group m-10">
+					<label class="input-left">&nbsp;</label>
+					<div class="form-control-box">
+						<label for="remember1">
+							<input type="checkbox" value="0" name="remember" id="remember1" class="checkbox" checked="checked" />
+							<span>
+								我已阅读并同意
+								<a href="SHOP_MAIN/cms/articleClassInfo.html?article_id=178" class="user_protocol">《用户注册协议》</a>
+							</span>
+						</label>
+					</div>
+				</div>
+				<div class="reg-btn">
+					<div class="form-group form-group-spe">
+					<label for="" class="input-left">
+					</label>
+					<div class="form-control-box">
+					<input type="button" class="btn-img btn-entry bg-color" id="btn_submit" name="btn_submit" value="同意协议并注册" title="请按照要求填写，才能注册的哦">
+					</div>
+					<div class="invalid"></div>
+					</div>
+				</div>		
+			</form>
+			<div id="message" style="color:red;width: 170px;height: 30px;margin-left: 160px;margin-top: -36px; display:none">必须满足规则才能注册的哦</div>
+				<!-- 手机注册 end -->
+			</div>
+		</div>
+	</div>
+</div>
+</div>
+</div>
+{/block}
+{/extend}
+

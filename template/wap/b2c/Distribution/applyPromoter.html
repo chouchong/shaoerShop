@@ -1,0 +1,145 @@
+{extend name="wap/b2c/base" /}
+{block name="resources"}
+<link rel="stylesheet" type="text/css" href="__TEMP__/{$style}/public/css/weui.css">	
+<link rel="stylesheet" type="text/css" href="__TEMP__/{$style}/public/css/apply_statu.css">
+<link rel="stylesheet" type="text/css" href="__TEMP__/{$style}/public/css/apply_promoter.css">
+
+{/block}
+{block name="goodsHead"}
+    <section class="head">
+		<a class="head_back" onclick="window.history.go(-1)" href="javascript:void(0)"><i class="icon-back"></i></a>
+		<div class="head-title">申请推广员</div>
+	</section>
+{/block}
+{block name="main"}
+<div class="main_content">
+	{if condition="$promoter_info neq '' and $reapply eq 0"}
+		{if condition="$promoter_info['is_audit'] eq 0"/}
+			 <div class="frog">        
+			    <img src="__TEMP__/{$style}/public/images/agent_apply.png" style="width: 107px;">申请正在审核中......
+			</div>
+			<a href="javascript:location.href='APP_MAIN/member/index.html?shop_id={$shop_id}'" class="a_button">返回会员中心</a>
+		{elseif condition="$promoter_info['is_audit'] eq -1"/}
+			 <div class="frog">        
+			    <img src="__TEMP__/{$style}/public/images/agent_apply.png" style="width: 107px;">申请已被拒绝......
+			</div>
+			<!-- <a href="javascript:location.href='APP_MAIN/distribution/applyPromoter.html?shop_id={$shop_id}&reapply=1'" class="a_button">重新申请</a> -->
+		{elseif condition="$promoter_info['is_audit'] eq 1"/}
+			<script type="text/javascript">
+			location.href='APP_MAIN/member/index?shop_id={$shop_id}';
+			</script>
+		{/if}
+		
+	{else/}
+	<p class="title_img"><img src="__TEMP__/{$style}/public/images/apply_promoter.png" alt="" /></p>
+	<div class="apply_content">
+		<p class="apply_title_one">申请等级 <span class="title_two">添加信息，立刻赚钱</span></p>
+	    <div class="content_i">
+	    	{volist name="promoter_level" id="vo" key="k"}
+	    	
+	    		{if condition="$vo.level_money elt $user_consume"}
+	    			<a href="javascript:;">
+	    		{else /}
+	    			<a href="javascript:;" class="no_i" >
+	    		{/if}
+	    		
+	   			{$vo.level_name}（消费满{$vo.level_money}/已消费{$user_consume}）
+	   			
+	    		{if condition="$k eq 1 and $vo.level_money elt $user_consume"}
+	    			<span class="weui_icon_curr"></span>
+	    		{else /}
+	    			<span></span>
+	    		{/if}
+	    		</a> 
+	    	{/volist} 
+	     </div>
+	</div>
+	<div class="apply_content">
+		<p class="apply_title_one">申请信息</p>
+		<div class="content_i">
+			<div class="weui_cell">
+	            <div class="weui_cell_hd"><label class="weui_label">店铺名称</label></div>
+	            <div class="weui_cell_bd weui_cell_primary">
+	                <input class="weui_input" type="text" id="promoter_shop_name" placeholder="请输入店铺名称">
+	            </div>
+	        </div>
+		</div>
+		
+	</div>
+	
+	<a href="javascript:applyPromoter()" class="a_button">申请</a>
+	{/if}
+	<div class="apply_content">
+		<div class="apply_title_item">
+			<i class="apply_add"></i>
+			<div class="item_row">
+				<p class="item_title">无门槛加入</p>
+				<p class="item_content">零成本、不囤货，轻松获利</p>
+			</div>
+		</div>
+		<div class="apply_title_item">
+			<i class="extension"></i>
+			<div class="item_row">
+				<p class="item_title">多维度推广</p>
+				<p class="item_content">商品、商铺、二维码任选</p>
+			</div>
+		</div>
+		<div class="apply_title_item">
+			<i class="team"></i>
+			<div class="item_row">
+				<p class="item_title">新增团队玩法</p>
+				<p class="item_content">支持线上组件团队，奖励更多</p>
+			</div>
+		</div>
+	</div>
+</div>
+<input type="hidden" id="shop_id" value="{$shop_id}"/>
+{/block}
+{block name="bottom"}{/block}
+{block name="javascript"}
+  <script type="text/javascript">
+	$(function(){
+		/* $('.apply_content .content_i>a').click(function(){
+			if(!$(this).is(".no_i")){
+				$('.apply_content .content_i>a').children('span').removeClass('weui_icon_curr');
+				$(this).children('span').addClass('weui_icon_curr');	
+			}else{
+				showBox("您为满足消费条件!");
+			}
+		}); */
+	});
+	 	function applyPromoter(){
+	 		if(Number('{$promoter_level[0]["level_money"]}')>Number('{$user_consume}')){
+	 			showBox("您未满足消费条件!");
+	 			return false;
+	 		}
+	 		
+	 		var promoter_shop_name = $("#promoter_shop_name").val();
+	 		var shop_id = $("#shop_id").val();
+			
+	 	    if(promoter_shop_name==''){
+	        	showBox("名称不能为空");
+	    		$("#promoter_shop_name").focus();
+	        	return false;
+	        }
+	 		$.ajax({
+				type : "post",
+				url : "APP_MAIN/Distribution/applyPromoter",
+				dataType : "json",
+				data : {
+					"shop_id":shop_id,
+					"promoter_shop_name":promoter_shop_name
+				},
+				success : function(data) {
+					if(data['code']>0){
+						showBox("已提交申请,等待审核");
+						location.reload();
+					}else{
+						showBox("申请失败");
+					}
+					
+				}
+			})
+	 	}
+  </script>
+{/block}

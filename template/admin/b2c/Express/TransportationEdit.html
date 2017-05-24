@@ -1,0 +1,1501 @@
+{extend name="admin/b2c/base" /} {block name="resources"/}
+<style type="text/css">
+<style type="text/css">
+    .float-l{float:left;}
+    .float-l input,.float-l label{float: left;}
+    .float-l input{margin: 8px 6px 0;}
+    .float-l label{margin-right: 30px;}
+    #PressPaper {margin-bottom: 10px;}
+    #PressPaper span{color: #666;}
+    #PressPaper input,#PressPaper label{float: none;margin: 0px;}
+    .w130{width:130px;}
+    .input-text {
+        text-align: right;
+        width: 4em;
+    }
+    .area-group {
+        text-align: left;
+    }
+    table {
+        border-color: #BBBBBB;
+        border-style: solid;
+        border-width: 1px 0 0 1px;
+    }
+        table th {
+            background-color: #F5F5F5;
+            font-weight: 400;
+            height: 32px;
+        }
+    .title {
+        font-weight: bold;
+        background-color: #cccccc;
+    }
+    .text {
+        width: 50px;
+    }
+    h2 {
+        margin: 0px;
+        padding: 0px;
+        font-size: 12px;
+        font-weight: bold;
+    }
+    .bton {
+        border: 1px solid #CCC;
+        background: #DDD;
+    }
+    .cont {
+        padding: 10px;
+    }
+    #main {
+        width: 400px;
+        margin: 0px auto;
+    }
+    #selectItem {
+        color: #666;
+        background: #FFF;
+        position: absolute;
+        top: 0px;
+        left: center;
+        border: 1px solid #000;
+        margin-top: -200px;
+        width: 690px;
+        z-index: 2;
+        overflow: visible;
+    }
+    #preview {
+        margin: 1px;
+        border: 1px solid #CCC;
+    }
+    #result {
+        border: 1px solid #CCC;
+        margin-top: 10px;
+    }
+    .tit {
+        line-height: 20px;
+        height: 20px;
+        margin: 1px;
+        padding-left: 10px;
+    }
+    .bgc_ccc {
+        background: #CCC;
+    }
+    .bgc_eee {
+        background: #eee;
+    }
+    .c_999 {
+        color: #999;
+    }
+    .pointer {
+        cursor: pointer;
+    }
+    .left {
+        float: left;
+    }
+    .right {
+        float: right;
+    }
+    .cls {
+        clear: both;
+        font-size: 0px;
+        height: 0px;
+        overflow: hidden;
+    }
+    #bg {
+        background: #fff;
+        filter: alpha(opacity=70);
+        opacity: 0.7;
+        width: 100%;
+        height: 10%;
+        position: absolute;
+        left: 0px;
+        top: 0px;
+        display: none;
+        z-index: 1;
+    }
+    .hidden {
+        display: none;
+    }
+    .move {
+        cursor: move;
+    }
+    .clearfix:after {
+        clear: both;
+        content: "";
+        display: block;
+        height: 0;
+    }
+    .dcity {
+        display: block;
+        vertical-align: middle;
+        z-index: 1;
+    }
+    .gcity, .province-list {
+        display: inline-block;
+    }
+    .ecity {
+        float: left;
+        height: 30px;
+        margin-right: 1px;
+        padding-right: 8px;
+        position: relative;
+    	
+    }
+    .l15 {
+        margin-left: 15px;
+    }
+    .dialog-areas li span.group-label {
+        display: inline-block;
+        font-weight: 700;
+        margin-right: 5px;
+        padding: 5px 0 5px 10px;
+        width: 70px;
+    }
+    .trigger {
+        cursor: pointer;
+        height: 8px;
+        padding: 2px;
+        width: 8px;
+    }
+    .dialog-areas li span.group-label {
+        font-weight: 700;
+    }
+    .dialog-areas .even {
+        background-color: #ECF4FF;
+    }
+    .dialog-areas .even span.gareas {
+        background-color: #ECF4FF;
+        border-color: #ECF4FF;
+    }
+    .citys {
+        background-color: #FFFEC6;
+        border: 1px solid #F7E4A5;
+        display: none;
+        float: right;
+        left: 0;
+        position: absolute;
+        top: 23px;
+        width: 214px;
+        z-index: 20000;
+    }
+    .province-list {
+        width: 500px;
+    }
+    .gcity, .province-list {
+        display: inline-block;
+    }
+    .gcity, .province-list {
+        display: inline-block;
+    }
+    .areas input {
+        float: left;
+        margin: 3px 3px 0;
+    }
+    .areas label {
+        float: left;
+        margin: 0px;
+    }
+    .gareas input{
+        float: left;
+        margin: 3px;
+    }
+    .gareas label{
+        float: left;
+        margin: 0px;
+    }
+    .group-label input{
+        float: left;
+        margin: 3px 8px 3px 0px;
+    }
+    .group-label label{
+        font-weight: 700;
+    }
+    .dialog-areas .even .showCityPop .gareas {
+        background-color: #FFFEC6;
+        border-color: #F7E4A5 #F7E4A5 #FFFEC6;
+    }
+    .dialog-areas .even span.gareas {
+        background-color: #ECF4FF;
+        border-color: #ECF4FF;
+    }
+    .dialog-areas .showCityPop .gareas {
+        -moz-border-bottom-colors: none;
+        -moz-border-left-colors: none;
+        -moz-border-right-colors: none;
+        -moz-border-top-colors: none;
+        background-color: #FFFEC6;
+        border-color: #F7E4A5 #F7E4A5 #FFFEC6;
+        border-image: none;
+        border-style: solid;
+        border-width: 1px;
+        z-index: 56000;
+    }
+    .dialog-areas span.gareas {
+        border: 1px solid #FFFFFF;
+        display: inline-block;
+        height: 17px;
+        margin-right: 3px;
+        padding: 4px 2px 1px;
+        position: relative;
+        white-space: nowrap;
+    }
+    .dialog-areas .showCityPop .gareas {
+        -moz-border-bottom-colors: none;
+        -moz-border-left-colors: none;
+        -moz-border-right-colors: none;
+        -moz-border-top-colors: none;
+        background-color: #FFFEC6;
+        border-color: #F7E4A5 #F7E4A5 #FFFEC6;
+        border-image: none;
+        border-style: solid;
+        border-width: 1px;
+        z-index: 56000;
+    }
+    .dialog-areas li span.areas {
+        display: inline-block;
+        margin-right: 3px;
+        padding: 0px 0px 0px 4px;
+    }
+    .showCityPop .citys {
+        display: block;
+        z-index: 55900;
+    }
+    .area-group {
+        display: block;
+        padding-right: 3em;
+        font-size: 12px;
+    }
+	.table-div{margin-top:0px;padding-right:20px;background-color:#fff;font-size:12px;}
+	.table-div table{width:100%;padding-left:20px;}
+    .table-div table tr td{border:1px solid #e6e6e6;padding:10px;}
+	.table-div .back-f5f5f5{background-color:#F5F5F5;}
+	.table-title-font{font-size:14px;font-weight:600;}
+	.table-1td{width:12%;text-align:right;}
+    body .mod-form .style0page .list-li{margin:0;}
+    body li{line-height:20px;}
+    body .navbar .nav{position:relative;top:15px;}
+    .dialog-areas, .dialog-batch{position: inherit;margin-left: 0px;width: 670px;}
+    .float-l input{
+	width:35px;
+    vertical-align: middle;
+    }
+.btn-gradient-blue {
+    display: inline-block;
+    padding: 4px 15px;
+    border: 1px solid #377ced;
+    border-radius: 3px;
+    color: #fff;
+    background: -webkit-linear-gradient(#4a8bf6,#377ced);
+    background: -moz-linear-gradient(#4a8bf6,#377ced);
+    background: -o-linear-gradient(#4a8bf6,#377ced);
+    background: linear-gradient(#4a8bf6,#377ced);
+    background: #4a8bf6;
+}
+</style>
+ {/block}
+ {block name="right_tab"}
+
+
+
+	
+{/block} {block name="main"}
+<input type="hidden"   id="shipping_fee_id" value="{$shipping_fee_id}"/>
+<!--Main Start-->
+    
+    <form style="min-height:500px;margin-top:50px;">
+
+<!--     <input type="hidden" id="HidResult" name="HidResult"> -->
+
+    <span style="display: none" id="HidUpdateTargetId"></span>
+    <div class="mod-form t20">
+        <div class="con style0page">
+            <ul class="list-ul">
+            	<li class="list-li">
+            		<div class='table-div'>
+						<table>
+							<tr>
+								<td colspan='2' class='back-f5f5f5'>
+									<!--big title begin-->
+									<div class='table-title-font'>
+											<span>运费信息</span>
+									</div>
+									<!--big title end-->
+								</td>
+							</tr>
+							<tr>
+								<td class='table-1td'>
+									<li class="list-li">
+					                    <div class="float-l w130">
+					                        <span class="star">*</span><label>模板名称:</label>
+					                    </div>
+					                </li>
+								</td>
+								<td>
+									<li class="list-li">
+									
+					                    <div class="float-l">
+					                        <input id="TextName" type="text" name="TextName" style="width:220px;margin:0px;" class="w230" value="{$shipping_fee_name}">
+					                    </div>
+					                    <div class="float-l">
+					                        <span class="prompt"></span>
+					                    </div>
+					                </li>
+								</td>
+							</tr>																																																																
+							<tr>
+								<td class='table-1td'>
+									<li class="list-li">
+					                    <div class="float-l w130">
+					                        <span class="star">*</span>
+					                        <label>
+					                            运费:</label>
+					                    </div>
+					                </li>
+								</td>
+								<td>
+									<li class="list-li">
+
+					                    <div class="float-l" id="fee_box">
+					                        
+					                        	{foreach name="order_shipping_fee_info[1]" item="info" key="k"}
+					                                    		{if condition="$info.is_default eq 1"}
+					                             <div id="PressPaper" style="border:1px solid #e6e6e6;width:713px;padding:10px;">
+					                            <span>默认运费：{$info.is_default}</span><input type="text" id="NumberStartStandard" name="StartStandard0" value="{$info.snum}" class="w100"><span id="defaultUnit">件</span> <span class="l15">费用：</span><input type="text" id="NumberStartFee" name="StartFee0" class="w100"value="{$info.sprice}"><span id="defaultMoney">元</span>
+					                            <span class="l15">每增加：</span><input type="text" id="NumberAddStandard" value="{$info.xnum}"name="StartAddStandard0" class="w100"><span id="defaultAddUnit">件</span> <span class="l15">费用增加：</span><input type="text" id="NumberAddFee" name="StartAddFee0" class="w100"value="{$info.xprice}"><span id="defaultAddMoney">元</span>
+					                        	<a  class="l15"style="float:right; height: 32px;line-height: 32px;" onclick="deleteThisParentBox(this);">删除</a>
+					                        	 </div>
+					                        	{/if}
+					                            {/foreach}
+					                       
+					                        <div class="mod-table-main t10">
+					                            <div class="con style03" id="tbl-except" >
+					                                <table style="width: 735px;" id="myPressPaperTable">
+					                                    <colgroup>
+					                                        <col style="width: 34%;">
+					                                        <col style="width: 15%;">
+					                                        <col style="width: 15%;">
+					                                        <col style="width: 15%;">
+					                                        <col style="width: 15%;">
+					                                        <col style="width: 6%;">
+					                                    </colgroup>
+					                                    <tbody>
+					                                    	
+							                                        <tr>
+							                                            <td class="td_bg"  >运送到
+							                                            </td>
+							                                            <td class="td_bg" >
+							                                                <span id="initialWorkpiece">首件(件)</span>
+							                                            </td>
+							                                            <td class="td_bg" >
+							                                                <span id="collectFees">首费(元)</span>
+							                                            </td>
+							                                            <td class="td_bg" >
+							                                                <span id="Continued">续件(件)</span>
+							                                            </td>
+							                                            <td class="td_bg" >
+							                                                <span id="Renew">续费(元)</span>
+							                                            </td>
+							                                            <td class="td_bg">操作
+							                                            </td>
+							                                        </tr>
+							                                       
+					
+					                                        {foreach name="order_shipping_fee_info[0]" item="info" key="k"}
+					                                        	{if condition="$info.is_default eq 0"}
+																	<tr id="trRow{$k+1}">
+					                                        		<td>
+					                                        			<div> 
+					                                        				{$info.address_name}
+					                                        			</div> 
+					                                        			<div class="mod-operate float-r">
+					                                        				<div class="con style0editdel" style="float:right;"> 
+					                                        				
+					                                        					<a  id="edit{$k+1}"  onclick="openBg(1,event);openSelect(1);" title="编辑运送区域" class="del" href="javascript:void(0)">
+					                                        						编辑
+					                                        					</a>
+					                                        				</div>
+					                                        			</div>
+					                                        			<input type="hidden" name="furniture_areas_n{$k+1}" value="{$info.address_id}">
+					                                        			<input type="hidden" name="furniture_areas_name_n{$k+1}" value="{$info.province_id};{$info.city_id}">
+					                                        		</td>
+					                                        		<td>
+					                                        			<input id='StartStandard_{$k+1}' class='w30' type='text' value='{$info.snum}' name='StartStandard{$k+1}' />
+					                                        		</td>
+					                                        		<td>
+					                                        			<input id='StartFee_{$k+1}' class='w30' type='text' name='StartFee{$k+1}' value="{$info.sprice}"/>
+					                                        		</td>
+					                                        		<td>
+					                                        			<input id='StartAddStandard_{$k+1}' class='w30' type='text'  value="{$info.xnum}" name='StartAddStandard{$k+1}' />
+					                                        		</td>
+					                                        		<td>
+					                                        			<input id='StartAddFee_{$k+1}' class='w30' type='text' name='StartAddFee{$k+1}' value="{$info.xprice}"/>
+					                                        		</td>
+					                                        		<td>
+					                                        			<div class='mod-operate'>
+					                                        				<div class='con style0editdel'>
+					                                        					<a name='de_{$k+1}'  class='del' href='javascript:void(0)'  onclick="dlRow('trRow{$k+1}')"> 
+					                                        						删除
+					                                        					</a>
+					                                        				</div>
+					                                        			</div>
+					                                        		</td>
+					                                        	</tr>
+																{/if}
+					                                        	
+					                                        {/foreach}
+					                                    </tbody>
+					                                </table>
+					                            </div>
+					                        </div>
+					                        <div class="t10" style="margin:10px 0;">
+					                            <a class="btn-gradient-blue" id="J_AddRule" onclick="InsertRow()" href="javascript:void(0)">为指定地区城市设置运费</a>
+					                        </div>
+					                    </div>
+					                    <div class="float-l" style="margin-left:6px;">
+					                        <span class="prompt" id="spMessage"></span>
+					                    </div>
+					                </li>
+								</td>
+							</tr>
+						</table>
+					</div>
+            
+            	</li>
+            
+           
+            </ul>
+            <div class="l130 t20 b20" style="margin-bottom:10px;margin-top:30px;text-align:center;">
+                <button type="button" onclick="javascript:TransportationAdd();" class="edit_button" >
+                    保存</button>
+                <button type="submit" id="realSub" style="display: none;">
+                    保存</button>
+            </div>
+        </div>
+        <div class="fill" style="height:280px;display:none;"></div>
+    </div>
+    <div id="bg">
+    </div>
+    <div id="selectItem"   style="display:none;top:320px;">
+        <div class="tit bgc_ccc move">
+            <h2 class="left" style="margin:-10px 0;">请选择城市</h2>
+            <span class="pointer right" onclick="openBg(0,event);openSelect(0);">[取消]</span>
+            <span class="pointer right" onclick="makeSure();">[确定]</span>
+            
+            <input type="hidden" id="hidMakeSure">
+            
+            <input type="hidden" id="hidArea">
+            <input type="hidden" id="hidAreaName">
+        </div>
+        <div class="cls">
+        </div>
+        <div class="cont">
+           <div class="selectSub dialog-areas">
+                <ul id="J_CityList">
+                    {foreach name="address_list" item="area" key="k"}
+                    <li>
+                        <div class=" dcity clearfix">
+                            <div class="ecity gcity">
+                                <span class="group-label">
+                                    <input id="J_Group_{$k}" name="J_Group_{$k}" class="J_Group" type="checkbox" value="{foreach name="area.province_list" item="province"}{$province.province_id},{/foreach}">
+                                    <label for="J_Group_{$k}" style="font-weight:100;">{$area.area_name}</label>
+                                </span>
+                            </div>
+                            <div class="province-list">
+                            	{foreach name="area.province_list" item="province" key="i" }
+                               		<div class="ecity">
+                               			<span class="gareas">
+                               				<input    name="J_Group_{$k}_Province"    id="J_Province_{$province.province_id}" class="J_Province"   type="checkbox" lang="{$province.province_name}"   value="{$province.province_id}">
+                               				<label for="J_Province_{$province.province_id}" style="font-weight:100;">{$province.province_name}</label>
+                               				<span class="check_num"></span>
+                               				<img class="trigger" src="ADMIN_IMG/T1XZCWXd8iXXXXXXXX-8-8.gif"  >
+                               			</span>
+                               			<div class="citys" id="citys_{$province.province_id}">
+                               				{foreach name="province.city_list" item="city" key="i" }
+                               				<span class="areas" style="font-weight:100"> <input lang="{$city.city_name}" value="{$city.city_id}" id="J_City_100{$city.city_id}" data-value_id="{$city.province_id}:100{$city.city_id}"name="J_City_100{$city.city_id}" class="J_City" type="checkbox"><label for="J_City_100{$city.city_id}" style="font-weight:100;">{$city.city_name}</label></span>
+                               				{/foreach}
+                               				<p style="text-align:right;"><input class="close_button" type="button" value="关闭"></p>
+                               			</div>
+                               		</div>
+                            	{/foreach}
+                            </div>
+                        </div>
+                    </li>
+                    {/foreach}
+                </ul>
+            </div>
+           </div>
+            
+           
+            
+            <!--确认信息的公用弹层 开始-->
+            <div id="dvConfirm" style="display: none;">
+                <div class="content" style="min-width: 300px; min-height: 50px;">
+                    <div class="mod-form">
+                        <div class="con style0alert">
+                            <span id="confirmMessage"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--确认信息的公用弹层 结束-->
+        </div></form>
+        <!--Main End-->
+{include file="admin/b2c/openDialog" /}
+<script type="text/javascript">
+                function btnSub() {
+                	 
+                    var tr = $("tr:last").find("td a").attr("id");
+                    if (tr != undefined) {
+                        var trRow = tr.substring(4, tr.length);
+                        $("#HidResult").val(trRow);
+                    }
+                    else { $("#HidResult").val(0); }
+                    $("#realSub").submit();
+                }               
+                
+                //添加行
+                function InsertRow(){
+                /* var tag = "checkbox04";
+                   
+                    $("#initialWorkpiece").text("首件(件)");
+                    $("#collectFees").text("首费(元)");
+                    $("#Continued").text("续件(件)");
+                    $("#Renew").text("续费(元)");
+                    $("#tbl-except").css("display", "block"); */
+                   
+                    //<a href="" class="acc_popup edit J_EditArea" style="float: right;color: #3366CC;" data-acc="event:enter" area-controls="J_DialogArea"   area-haspopup="true" >编辑</a><div class="area-group"><p>未添加地区</p></div>
+                    var tableRow = document.getElementById("myPressPaperTable");
+                    var row_index = tableRow.rows.length;
+                    var trRow = tableRow.insertRow(row_index);
+                    trRow.id = "trRow" + row_index;
+                    var cel1 = trRow.insertCell(0);
+                    cel1.innerHTML = '<div> 未添加地区</div> <div class="mod-operate float-r"><div class="con style0editdel" style="float:right;"> <a  id="edit' + row_index + '"  onclick="openBg(1,event);openSelect(1);" title="编辑运送区域" class="del" href="javascript:void(0)">编辑</a></div></div><input type="hidden" name="furniture_areas_n' + row_index + '"><input type="hidden" name="furniture_areas_name_n' + row_index + '">';
+                    var cel2 = trRow.insertCell(1);
+                    cel2.innerHTML = "<input id='StartStandard_" + row_index + "' class='w30' type='text' value='1' name='StartStandard" + row_index + "' />";
+                    var cel3 = trRow.insertCell(2);
+                    cel3.innerHTML = "<input id='StartFee_" + row_index + "' class='w30' type='text' name='StartFee" + row_index + "'/>";
+                    var cel4 = trRow.insertCell(3);
+                    cel4.innerHTML = "<input id='StartAddStandard_" + row_index + "' class='w30' type='text' value='1' name='StartAddStandard" + row_index + "' />";
+                    var cel5 = trRow.insertCell(4);
+                    cel5.innerHTML = "<input id='StartAddFee_" + row_index + "' class='w30' type='text' name='StartAddFee" + row_index + "'/>";
+                    var cel6 = trRow.insertCell(5);
+                    cel6.innerHTML = "<div class='mod-operate'><div class='con style0editdel'><a name='de_" + row_index + "'  class='del' href='javascript:void(0)'  onclick=\"dlRow('trRow" + row_index + "')\"> 删除</a></div> </div>";
+                    var Rowsindex = 0;
+                    $(function(){
+                        $('#tablerow').val(row_index);
+                    })
+                    $("#myPressPaperTable tr").not("tr:eq(0)").each(function () {
+                        Rowsindex++;
+                        ISinputString("#StartStandard_" + Rowsindex + "");
+                        ISinputString("#StartFee_" + Rowsindex + "");
+                        ISinputString("#StartAddStandard_" + Rowsindex + "");
+                        ISinputString("#StartAddFee_" + Rowsindex + "");
+                    });
+                }
+                //删除行
+                function dlRow(RowId) {
+                    var itemsCheckbox = $("#J_CityList :input[type='checkbox']");
+                    var deleteRow = document.getElementById(RowId).rowIndex;
+                    var items = "";
+                    var item = "";
+                    items = $("#edit" + deleteRow + "").parents("td").find("input[type='hidden']").val();
+                    document.getElementById("myPressPaperTable").deleteRow(deleteRow);
+                    $('#tablerow').val($('#tablerow').val()-1);
+                    //多选框解锁
+                    item = items.split(',');
+                    for (var i = 0; i < item.length; i++) {
+                        for (var j = 0; j < itemsCheckbox.length; j++) {
+                            if (item[i] == itemsCheckbox[j].value) {
+                                itemsCheckbox[j].disabled = false;
+                            }
+                        }
+                    }
+                    //重新设置ID
+                    var index = 0;
+                    $("#myPressPaperTable tr:not(:first)").each(function () {
+                        index++;
+                        $("td:first a", $(this)).attr("id", "edit" + index);
+                        $("td:first input:eq(0)", $(this)).attr("name", "furniture_areas_n" + index);
+                        $("td:first input:eq(1)", $(this)).attr("name", "furniture_areas_name_n" + index);
+                        $("td:eq(1) input", $(this)).attr("name", "StartStandard" + index);
+                        $("td:eq(2) input", $(this)).attr("name", "StartFee" + index);
+                        $("td:eq(3) input", $(this)).attr("name", "StartAddStandard" + index);
+                        $("td:eq(4) input", $(this)).attr("name", "StartAddFee" + index);
+                        $("td:eq(1) input", $(this)).attr("id", "StartStandard_" + index);
+                        $("td:eq(2) input", $(this)).attr("id", "StartFee_" + index);
+                        $("td:eq(3) input", $(this)).attr("id", "StartAddStandard_" + index);
+                        $("td:eq(4) input", $(this)).attr("id", "StartAddFee_" + index);
+                    })
+                }
+                //编辑
+                function openBg(state, event) { //遮照打开关闭控制
+                    if (state == 1) {
+                        //显示加长空间
+                        $('.fill').css('display', 'block');
+                        //浏览器兼容
+                        event = event ? event : window.event;
+                        var eventSrc = event.srcElement ? event.srcElement : event.target;
+                        $("#hidMakeSure").val($(eventSrc).attr("id"));
+                        $("#hidArea").val($(eventSrc).parents("td").find("input").attr("name"));
+                        $("#hidAreaName").val($(eventSrc).parents("td").find("input").next().attr("name"));
+                        //获取当前所选择
+                        var itemsCheckboxs = $(eventSrc).parents("td").find("input").val();
+                        var itemCheckbox = "";
+                        //获取所有的记录选择地区的ID
+                        var itemHidden = "";
+                        var items = $("#J_CityList input[type='checkbox']");
+                        var itemsHidden = $("#myPressPaperTable input[type='hidden']:first");
+                        for (var i = 0; i < itemsHidden.length; i++) {
+                            itemHidden += itemsHidden[i].value + ",";
+                        }
+                        //alert(itemHidden);
+                        if (itemsHidden !== "") {
+                            //判断是否选择是就禁用
+                            var itemsHiddens = itemHidden.split(',');
+                            for (var j = 0; j < itemsHiddens.length; j++) {
+                                for (var i = 0; i < items.length; i++) {
+                                	var attr_class = $(items[i]).attr("class");
+                                	if(attr_class =="J_Province"){                               		
+                                		if (itemsHiddens[j] == items[i].value) {                                  			
+                                            $(items[i]).attr("disabled", "disabled");
+                                            $(items[i]).attr("checked", false);
+                                        }
+                                	}else if(attr_class =="J_City"){
+                                		if(itemsHiddens[j] == $(items[i]).data("value_id")){
+                                			$(items[i]).attr("disabled", "disabled");
+                                            $(items[i]).attr("checked", false);
+                                		}
+                                	}
+                                    
+                                }
+                            }
+                        }
+                        //判断是否是当前的选择如果是就解禁
+                        if (itemsCheckboxs !== undefined) {
+                            if (itemsCheckboxs !== "") {
+                                itemCheckbox = itemsCheckboxs.split(',');                               
+                                for (var i = 0; i < itemCheckbox.length; i++) {
+                                    for (var j = 0; j < items.length; j++) {
+                                    	var attr_class = $(items[j]).attr("class");
+                                    	if(attr_class =="J_Province"){
+                                    		if (itemCheckbox[i] == items[j].value) { 
+                                    			$(items[j]).attr("checked", "checked");
+                                                $(items[j]).attr("disabled", false);
+                                            }
+                                    	}else if(attr_class =="J_City"){                                   	
+                                    		if(itemCheckbox[i] == $(items[j]).data("value_id")){
+                                    			$(items[j]).attr("checked", "checked");
+                                                $(items[j]).attr("disabled", false);
+                                    		}
+                                    	}
+                                    
+                                    }
+                                }
+                            }
+                        }
+                        document.getElementById("bg").style.display = "block";
+                        var h = document.body.offsetWidth > document.documentElement.offsetWidth ? document.body.offsetWidth : document.documentElement.offsetWidth;
+                        //alert(document.body.offsetHeight);
+                        //alert(document.documentElement.offsetHeight);
+                        document.getElementById("bg").style.height = h + "px";
+                    }
+                    else {
+                        document.getElementById("bg").style.display = "none";
+                    }
+                }
+                function openSelect(state) { //选择城市层关闭打开控制
+                    if (state == 1) {
+                        document.getElementById("selectItem").style.display = "block";
+                        document.getElementById("selectItem").style.left = (document.getElementById("bg").offsetWidth - document.getElementById("selectItem").offsetWidth) / 7 + "px";
+                        document.getElementById("selectItem").style.top = document.body.scrollTop + 320 + "px";
+                    }
+                    else {
+                        document.getElementById("selectItem").style.display = "none";
+                        $("#J_CityList input[type='checkbox']").each(function () {
+                            if ($(this).attr("checked") == "checked") {
+                                $(this).attr("checked", false);
+                                $(this).attr("disabled", false);
+                            }
+                        })
+                    }
+                }
+                $(function () {
+                		
+                	if($("#PressPaper").html() == undefined){
+                		$("#fee_box").prepend("<a onclick='addDefaultBox(this);'>添加默认模板</a>");
+                	}
+                    //动态添加地区显示
+                    $.ajax({
+                        type: "post",
+                        async: false,
+                        dataType: "json",
+                        url: "ADMIN_MAIN/Express/GetTransportation",
+                        success: function (data) {
+                            //华东
+                            var str = "";
+                            //华北
+                            var NorthChinaStr = "";
+                            //华中
+                            var CentralChinaStr = "";
+                            //华南
+                            var SouthChinaStr = "";
+                            //东北
+                            var NortheastStr = "";
+                            //西北
+                            var NorthwestStr = "";
+                            //西南
+                            var SouthwestStr = "";
+                            //港澳台
+                            var HongKongStr = "";
+                            //子集
+                            var city = "";
+                            if (data != null) {
+                                var j_group_0 = Split($("#J_Group_0"));
+                                var j_group_1 = Split($("#J_Group_1"));
+                                var j_group_2 = Split($("#J_Group_2"));
+                                var j_group_3 = Split($("#J_Group_3"));
+                                var j_group_4 = Split($("#J_Group_4"));
+                                var j_group_5 = Split($("#J_Group_5"));
+                                var j_group_6 = Split($("#J_Group_6"));
+                                var j_group_7 = Split($("#J_Group_7"));
+                                for (var j = 0; j < data.list.length; j++) {
+                                    for (var i = 0; i < j_group_0.length; i++) {
+                                        //华东
+                                        if (data.list[j].provinceId == j_group_0[i]) {
+                                            str += '<div class="ecity"><span class="gareas"><input    name="J_Group_0_Province"    id="J_Province_' + data.list[j].provinceId + '" class="J_Province"   type="checkbox" lang="' + data.list[j].ProvinceName + '"   value="' + data.list[j].provinceId + '"><label for="J_Province_' + data.list[j].provinceId + '">' + data.list[j].ProvinceName + '</label><span class="check_num"></span><img class="trigger" src="ADMIN_IMG/T1XZCWXd8iXXXXXXXX-8-8.gif"  ></span><div class="citys" id="citys_' + j_group_0[i] + '"></div></div>';
+                                        }
+                                    }
+                                    for (var i = 0; i < j_group_1.length; i++) {
+                                        //华北
+                                        if (data.list[j].provinceId == j_group_1[i]) {
+                                            NorthChinaStr += '<div class="ecity"><span class="gareas"><input name="J_Group_1_Province"  id="J_Province_' + data.list[j].provinceId + '" class="J_Province" type="checkbox" lang="' + data.list[j].ProvinceName + '" value="' + data.list[j].provinceId + '"><label for="J_Province_' + data.list[j].provinceId + '">' + data.list[j].ProvinceName + '</label><span class="check_num"></span><img class="trigger" src="ADMIN_IMG/T1XZCWXd8iXXXXXXXX-8-8.gif"></span><div class="citys" id="citys_' + j_group_1[i] + '"></div></div>';
+                                        }
+                                    }
+                                    for (var i = 0; i < j_group_2.length; i++) {
+                                        //华中
+                                        if (data.list[j].provinceId == j_group_2[i]) {
+                                            CentralChinaStr += '<div class="ecity"><span class="gareas"><input name="J_Group_2_Province" id="J_Province_' + data.list[j].provinceId + '" class="J_Province" type="checkbox" lang="' + data.list[j].ProvinceName + '" value="' + data.list[j].provinceId + '"><label for="J_Province_' + data.list[j].provinceId + '">' + data.list[j].ProvinceName + '</label><span class="check_num"></span><img class="trigger" src="ADMIN_IMG/T1XZCWXd8iXXXXXXXX-8-8.gif"></span><div class="citys" id="citys_' + j_group_2[i] + '"></div></div>';
+                                        }
+                                    }
+                                    for (var i = 0; i < j_group_3.length; i++) {
+                                        //华南
+                                        if (data.list[j].provinceId == j_group_3[i]) {
+                                            SouthChinaStr += '<div class="ecity"><span class="gareas"><input name="J_Group_3_Province" id="J_Province_' + data.list[j].provinceId + '" class="J_Province" type="checkbox" lang="' + data.list[j].ProvinceName + '" value="' + data.list[j].provinceId + '"><label for="J_Province_' + data.list[j].provinceId + '">' + data.list[j].ProvinceName + '</label><span class="check_num"></span><img class="trigger" src="ADMIN_IMG/T1XZCWXd8iXXXXXXXX-8-8.gif"></span><div class="citys" id="citys_' + j_group_3[i] + '"></div></div>';
+                                        }
+                                    }
+                                    for (var i = 0; i < j_group_4.length; i++) {
+                                        //东北
+                                        if (data.list[j].provinceId == j_group_4[i]) {
+                                            NortheastStr += '<div class="ecity"><span class="gareas"><input name="J_Group_4_Province" id="J_Province_' + data.list[j].provinceId + '" class="J_Province" type="checkbox" lang="' + data.list[j].ProvinceName + '" value="' + data.list[j].provinceId + '"><label for="J_Province_' + data.list[j].provinceId + '">' + data.list[j].ProvinceName + '</label><span class="check_num"></span><img class="trigger" src="ADMIN_IMG/T1XZCWXd8iXXXXXXXX-8-8.gif"></span><div class="citys" id="citys_' + j_group_4[i] + '"></div></div>';
+                                        }
+                                    }
+                                    for (var i = 0; i < j_group_5.length; i++) {
+                                        //西北
+                                        if (data.list[j].provinceId == j_group_5[i]) {
+                                            NorthwestStr += '<div class="ecity"><span class="gareas"><input name="J_Group_5_Province" id="J_Province_' + data.list[j].provinceId + '" class="J_Province" type="checkbox" lang="' + data.list[j].ProvinceName + '" value="' + data.list[j].provinceId + '"><label for="J_Province_' + data.list[j].provinceId + '">' + data.list[j].ProvinceName + '</label><span class="check_num"></span><img class="trigger" src="ADMIN_IMG/T1XZCWXd8iXXXXXXXX-8-8.gif"></span><div class="citys" id="citys_' + j_group_5[i] + '"></div></div>';
+                                        }
+                                    }
+                                    for (var i = 0; i < j_group_6.length; i++) {
+                                        //西南
+                                        if (data.list[j].provinceId == j_group_6[i]) {
+                                            SouthwestStr += '<div class="ecity"><span class="gareas"><input name="J_Group_6_Province" id="J_Province_' + data.list[j].provinceId + '" class="J_Province" type="checkbox" lang="' + data.list[j].ProvinceName + '" value="' + data.list[j].provinceId + '"><label for="J_Province_' + data.list[j].provinceId + '">' + data.list[j].ProvinceName + '</label><span class="check_num"></span><img class="trigger" src="ADMIN_IMG/T1XZCWXd8iXXXXXXXX-8-8.gif"></span><div class="citys" id="citys_' + j_group_6[i] + '"></div></div>';
+                                        }
+                                    }
+                                    for (var i = 0; i < j_group_7.length; i++) {
+                                        //港澳台
+                                        if (data.list[j].provinceId == j_group_7[i]) {
+                                            HongKongStr += '<div class="ecity"><span class="gareas"><input name="J_Group_7_Province" id="J_Province_' + data.list[j].provinceId + '" class="J_Province" type="checkbox" lang="' + data.list[j].ProvinceName + '" value="' + data.list[j].provinceId + '"><label for="J_Province_' + data.list[j].provinceId + '">' + data.list[j].ProvinceName + '</label><span class="check_num"></span><img class="trigger" src="ADMIN_IMG/T1XZCWXd8iXXXXXXXX-8-8.gif"></span><div class="citys" id="citys_' + j_group_7[i] + '"></div></div>';
+                                        }
+                                    }
+                                }
+                                $("#J_CityList li:eq(0) .clearfix .province-list").append(str);
+                                $("#J_CityList li:eq(1) .clearfix .province-list").append(NorthChinaStr);
+                                $("#J_CityList li:eq(2) .clearfix .province-list").append(CentralChinaStr);
+                                $("#J_CityList li:eq(3) .clearfix .province-list").append(SouthChinaStr);
+                                $("#J_CityList li:eq(4) .clearfix .province-list").append(NortheastStr);
+                                $("#J_CityList li:eq(5) .clearfix .province-list").append(NorthwestStr);
+                                $("#J_CityList li:eq(6) .clearfix .province-list").append(SouthwestStr);
+                                $("#J_CityList li:eq(7) .clearfix .province-list").append(HongKongStr);
+                            }
+                            //alert(data.citylist[3][1].CityName);
+                            //遍历子集
+                            var city;
+                            var item = $(".province-list .ecity .gareas input");
+                            for (var i = 0; i < item.length; i++) {
+                                for (var j = 0; j < data.list.length; j++) {
+                                    if (item[i].value == data.list[j].provinceId) {
+                                        //清空
+                                        city = "";
+                                        for (var c = 0; c < data.citylist[j].length; c++) {
+                                            city += '<span class="areas"> <input lang="' + data.citylist[j][c].CityName + '" value="' + data.citylist[j][c].provinceId + ':' + 100 + data.citylist[j][c].cityId + '" id="J_City_' + 100 + data.citylist[j][c].cityId + '" name="J_City_' + 100 + data.citylist[j][c].cityId + '" class="J_City" type="checkbox"><label for="J_City_' + 100 + data.citylist[j][c].cityId + '">' + data.citylist[j][c].CityName + '</label></span>';
+                                        }
+                                    }
+                                }
+                                city += '<p style="text-align:right;"><input class="close_button" type="button" value="关闭"></p>';
+                                $("#citys_" + item[i].value + "").append(city);
+                            }
+                        } 
+                    });
+                    //判断是否显示
+                    $(".trigger").click(function () {
+                        var item = $(".province-list .ecity .gareas input");
+                        var province_list = $(".province-list .ecity");
+                        if ($(this).parent().next().css("display") == "block") {
+                            for (var i = 0; i < item.length; i++) {
+                                $("#citys_" + item[i].value + "").css("display", "none");
+                            }
+                            for (var i = 0; i < province_list.length; i++) {
+                                $(province_list[i]).removeClass("showCityPop");
+                            }
+                            $(this).parent().next().css("display", "none");
+                            $(this).parent().parent().removeClass("showCityPop");
+                        }
+                        else {
+                            for (var i = 0; i < item.length; i++) {
+                                $("#citys_" + item[i].value + "").css("display", "none");
+                            }
+                            for (var i = 0; i < province_list.length; i++) {
+                                $(province_list[i]).removeClass("showCityPop");
+                            }
+                            $(this).parent().parent().addClass("showCityPop");
+                            $(this).parent().next().css("display", "block")
+                        }
+                    })
+                    //关闭按钮
+                    $(".close_button").click(function () {
+                        $(this).parent().parent().css("display", "none");
+                        $(this).parent().parent().parent().removeClass("showCityPop");
+                    })
+                    //全部省市华东
+                    $("[name='J_Group_0_Province']").each(function () {
+                        $("[name='J_Group_0_Province']").change(function () {
+                            if ($(this).attr("checked") === "checked") {
+                                var citys = $("#citys_" + $(this).val() + " .areas input");
+                                for (var i = 0; i < citys.length; i++) {
+                                    if ($(citys[i]).attr("disabled") === undefined || $(citys[i]).attr("disabled") === false) {
+                                        $(citys[i]).attr("checked", true);
+                                    }
+                                }
+                            }
+                            else { $("#citys_" + $(this).val() + " .areas input").attr("checked", false); }
+                        })
+                    });
+                    //全部省市华北
+                    $("[name='J_Group_1_Province']").each(function () {
+                        $(this).change(function () {
+                            if ($(this).attr("checked") === "checked") {
+                                var citys = $("#citys_" + $(this).val() + " .areas input");
+                                for (var i = 0; i < citys.length; i++) {
+                                    if ($(citys[i]).attr("disabled") === undefined || $(citys[i]).attr("disabled") === false) {
+                                        $(citys[i]).attr("checked", true);
+                                    }
+                                }
+                            }
+                            else { $("#citys_" + $(this).val() + " .areas input").attr("checked", false); }
+                        });
+                    })
+                    //全部省市华中
+                    $("[name='J_Group_2_Province']").each(function () {
+                        $(this).change(function () {
+                            if ($(this).attr("checked") === "checked") {
+                                var citys = $("#citys_" + $(this).val() + " .areas input");
+                                for (var i = 0; i < citys.length; i++) {
+                                    if ($(citys[i]).attr("disabled") === undefined || $(citys[i]).attr("disabled") === false) {
+                                        $(citys[i]).attr("checked", true);
+                                    }
+                                }
+                            }
+                            else { $("#citys_" + $(this).val() + " .areas input").attr("checked", false); }
+                        });
+                    })
+                    //全部省市华南
+                    $("[name='J_Group_3_Province']").each(function () {
+                        $(this).change(function () {
+                            if ($(this).attr("checked") === "checked") {
+                                var citys = $("#citys_" + $(this).val() + " .areas input");
+                                for (var i = 0; i < citys.length; i++) {
+                                    if ($(citys[i]).attr("disabled") === undefined || $(citys[i]).attr("disabled") === false) {
+                                        $(citys[i]).attr("checked", true);
+                                    }
+                                }
+                            }
+                            else { $("#citys_" + $(this).val() + " .areas input").attr("checked", false); }
+                        });
+                    })
+                    //全部省市东北
+                    $("[name='J_Group_4_Province']").each(function () {
+                        $(this).change(function () {
+                            if ($(this).attr("checked") === "checked") {
+                                var citys = $("#citys_" + $(this).val() + " .areas input");
+                                for (var i = 0; i < citys.length; i++) {
+                                    if ($(citys[i]).attr("disabled") === undefined || $(citys[i]).attr("disabled") === false) {
+                                        $(citys[i]).attr("checked", true);
+                                    }
+                                }
+                            }
+                            else { $("#citys_" + $(this).val() + " .areas input").attr("checked", false); }
+                        });
+                    })
+                    //全部省市西北
+                    $("[name='J_Group_5_Province']").each(function () {
+                        $(this).change(function () {
+                            if ($(this).attr("checked") === "checked") {
+                                var citys = $("#citys_" + $(this).val() + " .areas input");
+                                for (var i = 0; i < citys.length; i++) {
+                                    if ($(citys[i]).attr("disabled") === undefined || $(citys[i]).attr("disabled") === false) {
+                                        $(citys[i]).attr("checked", true);
+                                    }
+                                }
+                            }
+                            else { $("#citys_" + $(this).val() + " .areas input").attr("checked", false); }
+                        });
+                    })
+                    //全部省市西南
+                    $("[name='J_Group_6_Province']").each(function () {
+                        $(this).change(function () {
+                            if ($(this).attr("checked") === "checked") {
+                                var citys = $("#citys_" + $(this).val() + " .areas input");
+                                for (var i = 0; i < citys.length; i++) {
+                                    if ($(citys[i]).attr("disabled") === undefined || $(citys[i]).attr("disabled") === false) {
+                                        $(citys[i]).attr("checked", true);
+                                    }
+                                }
+                            }
+                            else { $("#citys_" + $(this).val() + " .areas input").attr("checked", false); }
+                        });
+                    })
+                    //全部省市港澳台
+                    $("[name='J_Group_7_Province']").each(function () {
+                        $(this).change(function () {
+                            if ($(this).attr("checked") === "checked") {
+                                var citys = $("#citys_" + $(this).val() + " .areas input");
+                                for (var i = 0; i < citys.length; i++) {
+                                    if ($(citys[i]).attr("disabled") === undefined || $(citys[i]).attr("disabled") === false) {
+                                        $(citys[i]).attr("checked", true);
+                                    }
+                                }
+                            }
+                            else { $("#citys_" + $(this).val() + " .areas input").attr("checked", false); }
+                        });
+                    })
+                    //华东
+                    $("[name='J_Group_0']").change(function () {
+                        if ($(this).attr("checked") === "checked") {
+                            $("[name='J_Group_0_Province']").each(function () {
+                                if ($(this).attr("disabled") == undefined || $(this).attr("disabled") == false) {
+                                    $(this).attr("checked", true);
+                                }
+                                else { $(this).attr("checked", false); }
+                                //全部省市
+                                $("[name='J_Group_0_Province']").each(function () {
+                                    $("#citys_" + $(this).val() + " .areas input").each(function () {
+                                        if ($(this).attr("disabled") == undefined || $("#citys_" + $(this).val() + " .areas input").attr("disabled") == false) {
+                                            $(this).attr("checked", true);
+                                        }
+                                        else { $(this).attr("checked", false); }
+                                    });
+                                })
+                            })
+                        }
+                        else {
+                            $("[name='J_Group_0_Province']").attr("checked", false);
+                            //全部省市
+                            $("[name='J_Group_0_Province']").each(function () {
+                                $("#citys_" + $(this).val() + " .areas input").attr("checked", false);
+                            });
+                        }
+                    })
+                    //华北
+                    $("[name='J_Group_1']").change(function () {
+                        if ($(this).attr("checked") === "checked") {
+                            $("[name='J_Group_1_Province']").each(function () {
+                                if ($(this).attr("disabled") == undefined || $(this).attr("disabled") == false) {
+                                    $(this).attr("checked", true);
+                                }
+                                else { $(this).attr("checked", false); }
+                                //全部省市
+                                $("[name='J_Group_1_Province']").each(function () {
+                                    $("#citys_" + $(this).val() + " .areas input").each(function () {
+                                        if ($(this).attr("disabled") == undefined || $("#citys_" + $(this).val() + " .areas input").attr("disabled") == false) {
+                                            $(this).attr("checked", true);
+                                        }
+                                        else { $(this).attr("checked", false); }
+                                    });
+                                })
+                            })
+                        }
+                        else {
+                            $("[name='J_Group_1_Province']").attr("checked", false);
+                            //全部省市
+                            $("[name='J_Group_1_Province']").each(function () {
+                                $("#citys_" + $(this).val() + " .areas input").attr("checked", false);
+                            });
+                        }
+                    })
+                    //华中
+                    $("[name='J_Group_2']").change(function () {
+                        if ($(this).attr("checked") === "checked") {
+                            $("[name='J_Group_2_Province']").each(function () {
+                                if ($(this).attr("disabled") == undefined || $(this).attr("disabled") == false) {
+                                    $(this).attr("checked", true);
+                                }
+                                else { $(this).attr("checked", false); }
+                                //全部省市
+                                $("[name='J_Group_2_Province']").each(function () {
+                                    $("#citys_" + $(this).val() + " .areas input").each(function () {
+                                        if ($(this).attr("disabled") == undefined || $("#citys_" + $(this).val() + " .areas input").attr("disabled") == false) {
+                                            $(this).attr("checked", true);
+                                        }
+                                        else { $(this).attr("checked", false); }
+                                    });
+                                })
+                            })
+                        }
+                        else {
+                            $("[name='J_Group_2_Province']").attr("checked", false);
+                            //全部省市
+                            $("[name='J_Group_2_Province']").each(function () {
+                                $("#citys_" + $(this).val() + " .areas input").attr("checked", false);
+                            });
+                        }
+                    })
+                    //华南
+                    $("[name='J_Group_3']").change(function () {
+                        if ($(this).attr("checked") === "checked") {
+                            $("[name='J_Group_3_Province']").each(function () {
+                                if ($(this).attr("disabled") == undefined || $(this).attr("disabled") == false) {
+                                    $(this).attr("checked", true);
+                                }
+                                else { $(this).attr("checked", false); }
+                                //全部省市
+                                $("[name='J_Group_3_Province']").each(function () {
+                                    $("#citys_" + $(this).val() + " .areas input").each(function () {
+                                        if ($(this).attr("disabled") == undefined || $("#citys_" + $(this).val() + " .areas input").attr("disabled") == false) {
+                                            $(this).attr("checked", true);
+                                        }
+                                        else { $(this).attr("checked", false); }
+                                    });
+                                })
+                            })
+                        }
+                        else {
+                            $("[name='J_Group_3_Province']").attr("checked", false);
+                            //全部省市
+                            $("[name='J_Group_3_Province']").each(function () {
+                                $("#citys_" + $(this).val() + " .areas input").attr("checked", false);
+                            });
+                        }
+                    })
+                    //东北
+                    $("[name='J_Group_4']").change(function () {
+                        if ($(this).attr("checked") === "checked") {
+                            $("[name='J_Group_4_Province']").each(function () {
+                                if ($(this).attr("disabled") == undefined || $(this).attr("disabled") == false) {
+                                    $(this).attr("checked", true);
+                                }
+                                else { $(this).attr("checked", false); }
+                                //全部省市
+                                $("[name='J_Group_4_Province']").each(function () {
+                                    $("#citys_" + $(this).val() + " .areas input").each(function () {
+                                        if ($(this).attr("disabled") == undefined || $("#citys_" + $(this).val() + " .areas input").attr("disabled") == false) {
+                                            $(this).attr("checked", true);
+                                        }
+                                        else { $(this).attr("checked", false); }
+                                    });
+                                })
+                            })
+                        }
+                        else {
+                            $("[name='J_Group_4_Province']").attr("checked", false);
+                            //全部省市
+                            $("[name='J_Group_4_Province']").each(function () {
+                                $("#citys_" + $(this).val() + " .areas input").attr("checked", false);
+                            });
+                        }
+                    })
+                    //西北
+                    $("[name='J_Group_5']").change(function () {
+                        if ($(this).attr("checked") === "checked") {
+                            $("[name='J_Group_5_Province']").each(function () {
+                                if ($(this).attr("disabled") == undefined || $(this).attr("disabled") == false) {
+                                    $(this).attr("checked", true);
+                                }
+                                else { $(this).attr("checked", false); }
+                                //全部省市
+                                $("[name='J_Group_5_Province']").each(function () {
+                                    $("#citys_" + $(this).val() + " .areas input").each(function () {
+                                        if ($(this).attr("disabled") == undefined || $("#citys_" + $(this).val() + " .areas input").attr("disabled") == false) {
+                                            $(this).attr("checked", true);
+                                        }
+                                        else { $(this).attr("checked", false); }
+                                    });
+                                })
+                            })
+                        }
+                        else {
+                            $("[name='J_Group_5_Province']").attr("checked", false);
+                            //全部省市
+                            $("[name='J_Group_5_Province']").each(function () {
+                                $("#citys_" + $(this).val() + " .areas input").attr("checked", false);
+                            });
+                        }
+                    })
+                    //西南
+                    $("[name='J_Group_6']").change(function () {
+                        if ($(this).attr("checked") === "checked") {
+                            $("[name='J_Group_6_Province']").each(function () {
+                                if ($(this).attr("disabled") == undefined || $(this).attr("disabled") == false) {
+                                    $(this).attr("checked", true);
+                                }
+                                else { $(this).attr("checked", false); }
+                                //全部省市
+                                $("[name='J_Group_6_Province']").each(function () {
+                                    $("#citys_" + $(this).val() + " .areas input").each(function () {
+                                        if ($(this).attr("disabled") == undefined || $("#citys_" + $(this).val() + " .areas input").attr("disabled") == false) {
+                                            $(this).attr("checked", true);
+                                        }
+                                        else { $(this).attr("checked", false); }
+                                    });
+                                })
+                            })
+                        }
+                        else {
+                            $("[name='J_Group_6_Province']").attr("checked", false);
+                            //全部省市
+                            $("[name='J_Group_6_Province']").each(function () {
+                                $("#citys_" + $(this).val() + " .areas input").attr("checked", false);
+                            });
+                        }
+                    })
+                    //港台澳
+                    $("[name='J_Group_7']").change(function () {
+                        if ($(this).attr("checked") === "checked") {
+                            $("[name='J_Group_7_Province']").each(function () {
+                                if ($(this).attr("disabled") == undefined || $(this).attr("disabled") == false) {
+                                    $(this).attr("checked", true);
+                                }
+                                else { $(this).attr("checked", false); }
+                                //全部省市
+                                $("[name='J_Group_7_Province']").each(function () {
+                                    $("#citys_" + $(this).val() + " .areas input").each(function () {
+                                        if ($(this).attr("disabled") == undefined || $("#citys_" + $(this).val() + " .areas input").attr("disabled") == false) {
+                                            $(this).attr("checked", true);
+                                        }
+                                        else { $(this).attr("checked", false); }
+                                    });
+                                })
+                            })
+                        }
+                        else {
+                            $("[name='J_Group_7_Province']").attr("checked", false);
+                            //全部省市
+                            $("[name='J_Group_7_Province']").each(function () {
+                                $("#citys_" + $(this).val() + " .areas input").attr("checked", false);
+                            });
+                        }
+                    })
+                })
+                //        function CheckThis() {
+                //            var Group = $("input[name='J_Group_0_Province']");
+                //            $("input[name='J_Group_0']").prop("checked", Group.length == Group.filter(":checked").length ? true : false);
+                //        }
+                //字符截取
+                function Split(group) {
+                    var j_group = group.val().split(',');
+                    return j_group;
+                }
+                //地区选择点击确定
+                function makeSure() {
+                    //alert(1);
+                    //$("makeSureItem").innerHTML = $("previewItem").innerHTML;
+                    var makeSure = $("#hidMakeSure").val()
+                    var hidArea = $("#hidArea").val();
+                    var hidAreaName = $("#hidAreaName").val();
+                    var hidProvince = $("#hidProvince").val();
+                    //添加地区显示到表格
+                    var items = $("#J_CityList .clearfix .province-list :input[type='checkbox']");
+                    var province_values = "";
+                    var city_values = "";
+                    var values = "";
+                    var text = "";
+                    for (var i = 0; i < items.length; i++) {
+                        if (items[i].checked === true) {
+                        	var attr_class = $(items[i]).attr("class");
+                        	if(attr_class =="J_Province"){
+                        		values += items[i].value + ","; 
+                        		province_values +=items[i].value + ",";
+                        	}else{
+                        		city_values +=items[i].value + ",";
+                        		values += $(items[i]).data("value_id") + ","; 
+                        	}
+                           /*  values += items[i].value + ","; */
+                            text += items[i].lang + "、";
+                        }
+                    }
+                    address_value=province_values.substring(0, province_values.length - 1)+";"+city_values.substring(0, city_values.length - 1);
+                    if (text != "") {
+                        $("#" + makeSure + "").parent().parent().prev("div").text(text.substring(0, text.length - 1));
+                        $("[name='" + hidAreaName + "']").val(address_value);
+                        $("[name='" + hidArea + "']").val(values.substring(0, values.length - 1));
+                    }
+                    openBg(0, "event");
+                    openSelect(0);
+                }
+                $(function () {
+                    ISinputString("#NumberStartFee");
+                    ISinputString("#NumberAddFee");
+                    onlyNum("#NumberStartStandard");
+                    onlyNum("#NumberAddStandard");
+                    ISinputString("#InsuranceFee");
+                    ISinputString("#InsuranceRate");
+                    //            $("#input").keydown(function (event) {
+                    //                var keyCode = event.which;
+                    //                if (keyCode == 46 || keyCode == 8 || keyCode == 190 || (keyCode >= 48 && keyCode <= 57) || (keyCode >= 96 && keyCode <= 105) || keyCode == 110) {
+                    //                    return true;
+                    //                } else { return false }
+                    //            }).focus(function () {
+                    //                this.style.imeMode = 'disabled';
+                    //            });
+                });
+                //验证只能输入小数点和数字
+                function ISinputString(input) {
+                    $(input).keydown(function (event) {
+                        var keyCode = event.which;
+                        if (keyCode == 46 || keyCode == 8 || keyCode == 190 || (keyCode >= 48 && keyCode <= 57) || (keyCode >= 96 && keyCode <= 105) || keyCode == 110) {
+                            return true;
+                        } else { return false }
+                    }).focus(function () {
+                        this.style.imeMode = 'disabled';
+                    });
+                }
+                //文本框只能输入数字，不能输入小数点和字母 by john
+                function onlyNum(input) {
+                    $(input).keydown(function (event) {
+                        var keyCode = event.which;
+                        if (keyCode == 46 || keyCode == 8 || keyCode == 37 || keyCode == 39 || (keyCode >= 48 && keyCode <= 57) || (keyCode >= 96 && keyCode <= 105))
+                        { return true; }
+                        else { return false }
+                    }).focus(function ()
+                    { this.style.imeMode = 'disabled'; });
+                }
+                function TransportationAdd() {
+                	var shipping_fee_name = $("#TextName").val();
+                    if ($("#TextName").val() == "") {
+                        $(".prompt", $("#TextName").parent().parent()).text("请输入运费模板");
+                        $("#TextName").focus();
+                        return false;
+                    }
+					var shipping_fee_ext = "";
+                    
+                	if($("#PressPaper").html() != undefined){
+                    
+	                    if ($("#NumberStartStandard").val() == "") {
+	                        $(".prompt").text("");
+	                        $("#spMessage").text("请输入默认运费");
+	                        $("#NumberStartStandard").focus();
+	                        return false;
+	                    }
+	                    else if (isNaN($("#NumberStartStandard").val())) {
+	                        $(".prompt").text("");
+	                        $("#spMessage").text("请输入数字类型");
+	                        $("#NumberStartStandard").focus();
+	                        return false;
+	                    }
+	                    else if ($("#NumberStartFee").val() == "") {
+	                        $(".prompt").text("");
+	                        $("#spMessage").text("请输入费用");
+	                        $("#NumberStartFee").focus();
+	                        return false;
+	                    }
+	                    else if (isNaN($("#NumberStartFee").val())) {
+	                        $(".prompt").text("");
+	                        $("#spMessage").text("请输入数字类型");
+	                        $("#NumberStartFee").focus();
+	                        return false;
+	                    }
+	                    else if ($("#NumberAddStandard").val() == "") {
+	                        $(".prompt").text("");
+	                        $("#spMessage").text("请输入续件数");
+	                        $("#NumberAddStandard").focus();
+	                        return false;
+	                    }
+	                    else if (isNaN($("#NumberAddStandard").val())) {
+	                        $(".prompt").text("");
+	                        $("#spMessage").text("请输入数字类型");
+	                        $("#NumberAddStandard").focus();
+	                        return false;
+	                    }
+	                    else if ($("#NumberAddFee").val() == "") {
+	                        $(".prompt").text("");
+	                        $("#spMessage").text("请输入续费");
+	                        $("#NumberAddFee").focus();
+	                        return false;
+	                    }
+	                    else if (isNaN($("#NumberAddFee").val())) {
+	                        $(".prompt").text("");
+	                        $("#spMessage").text("请输入数字类型");
+	                        $("#NumberAddFee").focus();
+	                        return false;
+	                    }
+	                    var shipping_fee_ext=$.trim(""+";"+""+";"+$("#NumberStartStandard").val()+";"+$("#NumberStartFee").val()+";"+
+	                    $("#NumberAddStandard").val()+";"+$("#NumberAddFee").val()+";1|");
+                	}
+                	
+                    if ($("#tbl-except").css("display") == "block") {
+                    	
+                        var Rowsindex = 0;
+                        var IsNull = true;
+                        $("#myPressPaperTable tr").not("tr:eq(0)").each(function () {   
+                        	Rowsindex++;
+                            if ($("[name='furniture_areas_n" + Rowsindex + "']").val() == "") {
+                                $(".prompt").text("");
+                                $("#tbl-except p .spMessage").text("请选择地区");
+                                IsNull = false;
+                            }
+                            else if ($("[name='StartStandard" + Rowsindex + "']").val() == "") {
+                            	
+                                $(".prompt").text("");
+                                $("#tbl-except p .spMessage").text("请输入文本");
+                                $("[name='StartStandard" + Rowsindex + "']").focus();
+                                IsNull = false;
+                            }
+                            else if (isNaN($("[name='StartStandard" + Rowsindex + "']").val())) {
+                            	alert( $("[name='StartStandard" + Rowsindex + "']").val());
+                                $(".prompt").text("");
+                                $("#tbl-except p .spMessage").text("请输入数字类型");
+                                $("[name='StartStandard" + Rowsindex + "']").focus();
+                                IsNull = false;
+                            }                         
+                            else if ($("[name='StartFee" + Rowsindex + "']").val() == "") {
+                                $(".prompt").text("");
+                                $("#tbl-except p .spMessage").text("请输入文本");
+                                $("[name='StartFee" + Rowsindex + "']").focus();
+                                IsNull = false;
+                            }
+                            else if (isNaN($("[name='StartFee" + Rowsindex + "']").val())) {
+                                $(".prompt").text("");
+                                $("#tbl-except p .spMessage").text("请输入数字类型");
+                                $("[name='StartFee" + Rowsindex + "']").focus();
+                                IsNull = false;
+                            }
+                            else if ($("[name='StartAddStandard" + Rowsindex + "']").val() == "") {
+                                $(".prompt").text("");
+                                $("#tbl-except p .spMessage").text("请输入文本");
+                                $("[name='StartAddStandard" + Rowsindex + "']").focus();
+                                IsNull = false;
+                            }
+                            else if (isNaN($("[name='StartAddStandard" + Rowsindex + "']").val())) {
+                                $(".prompt").text("");
+                                $("#tbl-except p .spMessage").text("请输入数字类型");
+                                $("[name='StartAddStandard" + Rowsindex + "']").focus();
+                                IsNull = false;
+                            }
+                            else if ($("[name='StartAddFee" + Rowsindex + "']").val() == "") {
+                                $(".prompt").text("");
+                                $("#tbl-except p .spMessage").text("请输入文本");
+                                $("[name='StartAddFee" + Rowsindex + "']").focus();
+                                IsNull = false;
+                            }
+                            else if (isNaN($("[name='StartAddFee" + Rowsindex + "']").val())) {
+                                $(".prompt").text("");
+                                $("#tbl-except p .spMessage").text("请输入数字类型");
+                                $("[name='StartAddFee" + Rowsindex + "']").focus();
+                                IsNull = false;
+                            }
+                        });
+                        var num=0;
+                        if (IsNull) {
+                        	
+                           /*  return true; */                         
+                            $("#myPressPaperTable tr").not("tr:eq(0)").each(function () {
+                            	num ++;
+                            	shipping_fee_ext +=$.trim($("[name='furniture_areas_name_n" + num + "']").val()+";"
+                            	+$("[name='StartStandard" + num + "']").val()+";"+$("[name='StartFee" + num + "']").val()
+                            	+";"+$("[name='StartAddStandard" + num + "']").val()+";"+$("[name='StartAddFee" + num + "']").val()+";0|");
+                            	
+                            })
+                        }else { return false; }
+                        
+                       
+                    }
+                    if(shipping_fee_ext == ''){
+                    	return false;
+                	}
+                    shipping_fee_ext= shipping_fee_ext.substring(0, shipping_fee_ext.length - 1)
+                    var shipping_fee_id = $("#shipping_fee_id").val();
+                  	$.ajax({
+        				type : "post",
+        				url : "ADMIN_MAIN/Express/TransportationEdit",
+        				async : true,
+        				data : {
+        					"shipping_fee_name" : shipping_fee_name,
+        					"shipping_fee_ext" : shipping_fee_ext,
+        					"shipping_fee_id" : shipping_fee_id
+        				},
+        				success : function(data) {     
+        				
+        					if (data["code"] > 0) {
+        						showMessage('success', "运费模板修改成功",'ADMIN_MAIN/Express/Transportation');
+        						
+        					}else{
+        						showMessage('error', "运费模板修改失败");
+        					}	
+        					
+        				}
+        		 }) 
+                    
+                }
+                // 点击取消的时候
+                function btnCancel() {
+                    window.location.href = "ADMIN_MAIN/Express/Transportation";
+                };
+                //添加成功 保存成功后
+                function afterOnSuccess() {
+                    //alert($("#HidUpdateTargetId").html());
+                    if ($("#HidUpdateTargetId").html() == "ok") {
+                        $(".Loading").removeClass("style03 style02").addClass("style01"); //黄色
+                        $("#operateTip").html("添加成功！").change();
+                        window.location.href = "ADMIN_MAIN/Express/Transportation";
+                    }
+                    else if ($("#HidUpdateTargetId").html() == "repeat") {
+                        $(".Loading").removeClass("style01 style02").addClass("style02"); //黄色
+                        $("#operateTip").html("不能添加重复的运费模板名称！").change();
+                        return;
+                    }
+                }
+                function afterOnFailure() {
+                    $(".Loading").removeClass("style01 style02").addClass("style03");
+                    $("#operateTip").html("添加失败！").change();
+                };
+                $(function () {
+                    $("#EnableInsurance").change(function () {
+                        if ($(this).attr("checked") == "checked") {
+                            $("#divEnable").css("display", "block");
+                        }
+                        else { $("#divEnable").css("display", "none"); }
+                    })
+                })
+                /**
+                 *删除默认模板
+                 */
+                 function deleteThisParentBox(event){
+                	//alert();
+                 		$(event).parent().remove();
+						$("#fee_box").prepend("<a onclick='addDefaultBox(this);'>添加默认模板</a>");
+                		
+                }
+                
+                function addDefaultBox(event){
+                	$(event).remove();
+                	var html = '<div id="PressPaper" style="border:1px solid #e6e6e6;width:713px;padding:10px;">';
+                	html +='<span>默认运费：</span><input type="text" id="NumberStartStandard" name="StartStandard0" value="1" class="w100"><span id="defaultUnit">件</span> <span class="l15">费用：</span><input type="text" id="NumberStartFee" name="StartFee0" class="w100"><span id="defaultMoney">元</span>';
+                	html +='<span class="l15">每增加：</span><input type="text" id="NumberAddStandard" name="StartAddStandard0" class="w100"><span id="defaultAddUnit">件</span> <span class="l15">费用增加：</span><input type="text" id="NumberAddFee" name="StartAddFee0" class="w100"><span id="defaultAddMoney">元</span>';
+                	html +='<a  class="l15"style="float:right; cursor:pointerheight: 32px;line-height: 32px;" onclick="deleteThisParentBox(this);">删除</a>';
+                    html +='</div>';                                  	
+                
+                	$("#fee_box").prepend(html);
+                }
+            </script>
+{/block}
+
+    
+ 

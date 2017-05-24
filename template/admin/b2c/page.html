@@ -1,0 +1,38 @@
+<div class="page">
+	<div class="page-left" style='display: none;'>
+		当前 <span id="pages"></span>/<span id="number"></span>页,总计 <span
+			id="sum"></span>条
+	</div>
+	<div class="page-select" style='display: none;'>
+		每页显示
+		<div class="btn-group dropup">
+			<button class="btn" id="ddlPageSize">15</button>
+			<button data-toggle="dropdown" class="btn dropdown-toggle"
+				onclick="ShowPage()">
+				<span class="caret"></span>
+			</button>
+			<ul class="dropdown-menu selectpage" id="numbers">
+				<!--<li><a href="javascript:void(0)" onclick="ShowNum(1)">1</a></li> -->
+				<li><a href="javascript:void(0)" onclick="ShowNum(15)">15</a></li>
+				<li><a href="javascript:void(0)" onclick="ShowNum(20)">20</a></li>
+				<li><a href="javascript:void(0)" onclick="ShowNum(30)">30</a></li>
+				<li><a href="javascript:void(0)" onclick="ShowNum(40)">40</a></li>
+				<li><a href="javascript:void(0)" onclick="ShowNum(50)">50</a></li>
+			</ul>
+		</div>
+		条
+	</div>
+	<div class="pagination pagination-right" id="turn-ul">
+		<ul>
+			<li class="" id="BegPage"><a href="javascript:void(0)"
+				onclick="FenPage(1)">|&lt;</a></li>
+			<li class="" id="LastPage"><a href="javascript:void(0)"
+				onclick="FenPage(2)">&lt;</a></li>
+			<li class="" id="TodePage"><a href="javascript:void(0)">1</a></li>
+			<li class="" id="NexPage"><a href="javascript:void(0)"
+				onclick="FenPage(3)">&gt;</a></li>
+			<li class="" id="EndPage"><a href="javascript:void(0)"
+				onclick="FenPage(4)">&gt;|</a></li>
+		</ul>
+	</div>
+</div>

@@ -1,0 +1,173 @@
+{extend name="shop/b2c/Login/registerBase"}
+{block name="main"}
+<script>
+/* public function formerror(var inputbody,var errormessage){
+	inputbody.css("border","1px solid red");
+	inputbody.parent().children(".error").css("color","red")text(errormessage);
+} */
+$(document).ready(function(){
+	$("#mobileregistermodel-username").change(function(){
+		if($(this).val().length >= 3 && $(this).val().length <=12 && $(this).val()!=''){
+			var user_name = $(this).val();
+			$(this).css("border","1px solid #ccc");
+			$("#usernameyz").css("color","black").text("");
+			$("#isset_username").attr("value","不存在");
+			$.ajax({
+				type: "GET",
+				url: "SHOP_MAIN/login/register",
+				data: {"username":user_name},
+				success: function(data){
+					if(data){
+						$("#mobileregistermodel-username").css("border","1px solid red");
+						$("#usernameyz").css("color","red").text("用户名已存在");
+						$("#isset_username").attr("value","存在");
+					}
+				} 
+			});
+		}
+	});
+	$("#btn_submit").click(function(){
+		var username = $("#mobileregistermodel-username").val();
+		var password = $("#password").val();
+		var repass = $("#repass").val();
+		var isset_username = $("#isset_username").attr("value");
+		var re =  /^(?!\d+$)[\da-zA-Z]*$/i;
+		
+		if(!(username.length >= 3 && username.length <=16 && re.test(username))){
+			$("#mobileregistermodel-username").trigger("focus");
+			$('#mobileregistermodel-username').css("border","1px solid red");
+			$("#usernameyz").css("color","red").text("用户名可以是字母或数字和字母组合，3到16位之间");
+			return false;
+		}
+		if(isset_username == "存在"){
+			$("#mobileregistermodel-username").trigger("focus");
+			$('#mobileregistermodel-username').css("border","1px solid red");
+			$("#usernameyz").css("color","red").text("用户名已存在");
+			return false;
+		}
+		if( !(password.length >=6 && password.length <=16 /* && repass == password */)){
+			$("#isset_username").attr("value","不存在");
+			$("#password").trigger("focus");
+			$("#password").css("border","1px solid red");
+			$("#yzpassword").css("color","red").text("密码为6到16位");
+			$('#mobileregistermodel-username').css("border","1px solid #ccc");
+			$("#usernameyz").css("color","red").text("");
+			return false;
+		}
+		if( !(repass.length >=6 && repass.length <=16 )){
+			$("#repass").trigger("focus");
+			$("#repass").css("border","1px solid red");
+			$("#qrrepass").css("color","red").text("重新确认密码");
+			$("#password").css("border","1px solid #ccc");
+			$("#yzpassword").css("color","red").text("");
+			return false;
+		}
+		if(!(repass == password)){
+			$("#qrrepass").css("color","red").text("两次密码输入不相同");
+			return false;
+		}
+		$("#EmailRegisterModel").submit();
+	});
+});
+</script>
+<!-- 红包消息 -->
+<div class="header w990">
+	<div class="logo-info">
+		<a href="SHOP_MAIN/index/index.html" class="logo"><img alt="" src="__UPLOAD__/{$web_info['logo']}" /></a>
+			<span class="findpw">欢迎注册</span>
+	</div>
+</div>
+<div class="reg-content">
+	<div class="w990">
+		<div class="reg-form">
+			<div class="reg-con">
+				<div class="reg-type">
+					<p class="login-info">我已经注册，现在就<a href="SHOP_MAIN/login/index.html" title="去登录" class="color">登录</a></p>
+					<ul class="clearfix">
+						<li class="active"><a href="javascript:void(0);">普通注册</a></li>
+						{if condition="$phone_info['is_use'] eq 1"}
+						<li><a href="SHOP_MAIN/login/mobile.html">手机注册</a></li>
+						{/if}
+						{if condition="$email_info['is_use'] eq 1"}
+						<li><a href="SHOP_MAIN/login/email.html">邮箱注册</a></li>
+						{/if}
+					</ul>
+				</div>
+				<div class="reg-wrap">
+					<div class="reg-wrap-con" style="background: url(__TEMP__/{$style}/public/images/register_bg_image.png) no-repeat right 70px;">
+						<!-- 普通注册 star -->
+						<form id="EmailRegisterModel" class="form-horizontal" name="EmailRegisterModel" action="SHOP_MAIN/login/register" method="post">
+							<input type="hidden" name="_csrf" value="Q2dXM2NPVXYbFDZYMT0TNycsLkklHQ1HAQsGAA5/OjAaHxtUG3s7Dg==">
+							<!-- 用户名 -->
+							<div class="form-group form-group-spe">
+								<label for="mobileregistermodel-mobile" class="input-left">
+									<span class="spark">*</span>
+									<span>用户名：</span>
+								</label>
+								<div class="form-control-box">
+									<input type="text" id="mobileregistermodel-username" class="form-control" name="username" placeholder="请输入您的用户号" />
+									<span id="usernameyz"></span>
+									<input type="hidden" value="不存在" id="isset_username"/>
+									<!-- <span class='state1'>请输入用户名</span> -->
+				   				</div>
+								<div class="invalid"></div>
+							</div>
+							<input style="display: none">
+							
+							<!-- 密码 -->
+							<div class="form-group form-group-spe">
+								<label for="emailregistermodel-password" class="input-left">
+									<span class="spark">*</span>
+									<span>密码：</span>
+								</label>
+								<div class="form-control-box">
+									<input type="password" id="password" class="form-control" name="password" autocomplete="off" placeholder="请输入密码">
+									<!--  <i class="fa fa-eye-slash pwd-toggle" data-id="password"></i>	-->	
+									<span id="yzpassword"></span>
+								</div>
+								<div class="invalid"></div>
+							</div>
+							
+							<!-- 密码 -->
+							<div class="form-group form-group-spe">
+								<label for="emailregistermodel-password" class="input-left">
+									<span class="spark">*</span>
+									<span>确认密码：</span>
+								</label>
+								<div class="form-control-box">
+									<input type="password" id="repass" class="form-control" name="qrpassword" autocomplete="off" placeholder="请输入确认密码">
+									<!--  <i class="fa fa-eye-slash pwd-toggle" data-id="password"></i>	-->	
+									<span id="qrrepass"></span>
+								</div>
+								<div class="invalid"></div>
+							</div>
+							
+							<div class="form-group m-10">
+								<label class="input-left">&nbsp;</label>
+								<div class="form-control-box">
+									<label for="remember1">
+										<input type="checkbox" value="0" name="remember" id="remember1" class="checkbox" checked="checked" />
+										<span>我已阅读并同意<a href="SHOP_MAIN/cms/articleClassInfo.html?article_id=178" class="user_protocol">《用户注册协议》</a></span>
+									</label>
+								</div>
+							</div>
+							
+							<div class="reg-btn">
+								<div class="form-group form-group-spe">
+									<label for="" class="input-left"></label>
+									<div class="form-control-box">
+					  					<input type="submit" class="btn-img btn-entry bg-color" id="btn_submit" name="btn_submit" value="同意协议并注册">
+									</div>
+									<div class="invalid"></div>
+								</div>
+							</div>
+						</form>
+						<!-- 普通注册 end -->
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+{/block}
+{/extend}

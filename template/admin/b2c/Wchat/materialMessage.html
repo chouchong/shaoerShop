@@ -1,0 +1,136 @@
+{extend name="admin/b2c/base" /}
+{block name="resources"}
+<style>
+ul.mater{border:1px solid #e7e7eb;border-radius:5px;margin:0;}
+ul.mater li{padding:5px;border-bottom:1px solid #e7e7eb;}
+ul.mater li:first-child{padding:13px 5px;}
+ul.mater li:last-child{border-bottom:0px solid #e7e7eb;}
+.type_name{display:inline-block;background:#01b044;color:#fff;padding:5px 3px;margin-right:10px;border-radius:3px;}
+.style0list table tr td{vertical-align:middle;}
+.style0list table tr td:frist-child{text-align:left;}
+</style>
+{/block}
+{block name="right_tab"}
+<li><a class="nscs-table-handle_green" href="ADMIN_MAIN/Wchat/addMedia.html"><i class="fa fa-plus-circle"></i>&nbsp;添加消息</a></li>
+{/block}
+{block name="main"}
+<div class="mod-table">
+	<div class="mod-table-head">
+		<table class="mytable">
+		<tr><th width="10%"><input type="text" id = 'search_text' placeholder="请输入消息名称" /><input type="button" onclick="searchData()" value="搜索" /></th></tr>
+		</table>
+		<div class="style0list">
+			<table>
+				<colgroup>
+					<col style="width: 50%;">
+					<col style="width: 30%;">
+					<col style="width: 20%;">
+				</colgroup>
+				<thead>
+					<tr align="center">
+						<th style="text-align:left;">标题</th>
+						<th>创建时间</th>
+						<th>操作</th>
+					</tr>
+				</thead>
+				<colgroup>
+					<col style="width: 50%;">
+					<col style="width: 30%;">
+					<col style="width: 20%;">
+				</colgroup>
+				<tbody></tbody>
+			</table>
+		</div>
+	</div>
+</div>
+<input type="hidden" id="type" value="{$type}">
+{/block}{block name="script"}
+{include file="admin/b2c/openDialog" /}
+{include file="admin/b2c/pageCommon" /}
+<script type="text/javascript">
+//查询用户列表
+	function LoadingInfo(pageIndex) {
+		var search_text = $("#search_text").val();
+		var type = $("#type").val();
+		$.ajax({
+			type : "post",
+			url : "ADMIN_MAIN/Wchat/materialMessage",
+			async : true,
+			data : {
+				"pageIndex" : pageIndex, "search_text" : search_text, "type" : type
+			},
+			success : function(data) {
+				$("#page_count").val(data["page_count"]);
+				$("#pageNumber a").remove();
+				var html = '';
+				if (data["data"].length > 0) {
+					for (var i = 0; i < data["data"].length; i++) {
+						if(data['data'][i]['type'] == 1){
+							var type_name = '文本 ';
+						}else if(data['data'][i]['type'] == 2){
+							var type_name = '单图文 ';
+						}else if(data['data'][i]['type'] == 3){
+							var type_name = '多图文 ';
+						}
+						html += '<tr align="center">';
+						/* html += '<td>' + data["data"][i]["uid"] + '</td>'; */
+						html += '<td style="text-align:left;"><ul class="mater">';
+						html += '';
+						for(var l=0; l<data['data'][i]['item_list'].length; l++){
+							var k = l+1;
+							html += '<li><span class="type_name">'+ type_name + k+' </span><a href="#">'+data['data'][i]['item_list'][l]['title']+'</a></li>';
+						}
+						html += '';
+						html += '</ul></td>';
+						html += '<td>' + data["data"][i]["create_time"] + '</td>';
+						html += '<td><a href="ADMIN_MAIN/Wchat/updateMedia.html?media_id=' + data["data"][i]["media_id"] + '">修改</a>&nbsp;&nbsp; ';
+						html += '<a href="javascript:void(0);" onclick="deleteWeixinMedia(' + data["data"][i]["media_id"] + ')">删除</a></td>';
+						html += '</tr>';
+					}
+				} else {
+					html += '<tr align="center"><th colspan="4">暂无符合条件的数据记录</th></tr>';
+				}
+				$(".style0list tbody").html(html);
+				var totalpage = $("#page_count").val();
+				if (totalpage == 1) {
+					changeClass("all");
+				}
+				var $html = pagenumShow(jumpNumber,totalpage,{$pageshow})
+				$("#pageNumber").append($html);
+			}
+		});
+	}
+	//全选
+	function CheckAll(event){
+		var checked = event.checked;
+		$(".style0list tbody input[type = 'checkbox']").prop("checked",checked);
+	}
+	
+	function deleteWeixinMedia(media_id){
+		$( "#dialog" ).dialog({
+            buttons: {
+                "确定,#e57373": function() {
+                    $(this).dialog('close');
+            		$.ajax({
+            			type : "post",
+            			url : "ADMIN_MAIN/Wchat/deleteWeixinMedia",
+            			data : {"media_id" : media_id},
+            			success : function(res){
+            				if(res>0){
+            					showMessage('success', "操作成功", "ADMIN_MAIN/Wchat/materialMessage");
+            				}else{
+            					showMessage('error', "操作失败");
+            				}
+            			}
+            		})
+                },
+                "取消": function() {
+                    $(this).dialog('close');
+                    return 0;
+                }
+            },
+            contentText:"确定要删除吗",
+		});
+	}
+</script>
+{/block}

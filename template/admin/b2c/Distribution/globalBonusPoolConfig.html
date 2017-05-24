@@ -1,0 +1,102 @@
+{extend name="admin/b2c/base" /}
+{block name="resources"/}
+<link rel="stylesheet" type="text/css" href="ADMIN_CSS/defau.css">
+<style>
+.table-input{
+	height:12px !important;
+	line-height:12px !important;
+	width:30px;
+	margin-bottom:0px !important;
+}
+</style>
+{/block}
+{block name="main"}
+<div class="set-style">
+	<dl>
+		<dt>是否开启全球分红:</dt>
+		<dd>			
+					{if condition="$shop_config_info.is_global_enable eq 1 "} 
+					<input id="is_global_enable" class="checkbox" type="checkbox" checked="checked" />					
+					{else /}
+					<input id="is_global_enable" class="checkbox" type="checkbox" />
+					{/if}
+					<span class="help-inline" id="is_menuPrompt" style="display: none;"></span>
+		</dd>
+	</dl>	
+</div>
+<div class="mod-table">
+	<div class="mod-table-head">
+		<div class="con style0list">
+			<table>
+				<colgroup>
+					<col style="width: 10%;">
+					<col style="width: 15%;">
+					<col style="width: 15%;">
+					<col style="width: 15%;">
+				</colgroup>
+				<thead>
+					<tr>						
+						<th>等级名称</th>
+						<th>全球分红分值</th>
+						<th>全球分红权重</th>
+						<th>创建时间</th>
+					</tr>
+				</thead>
+				<colgroup>
+					<col style="width: 10%;">
+					<col style="width: 15%;">
+					<col style="width: 15%;">
+					<col style="width: 15%;">
+				</colgroup>
+				<tbody  id="partner_global">
+				{foreach name="partner_level_list" item="partner_level_info" }
+				    <tr align="center" data-level_id={$partner_level_info.level_id}>
+						<td>{$partner_level_info.level_name}</td>
+						<td><input  class="table-input" type="text" value="{$partner_level_info.global_value}" /></td>
+						<td><input  class="table-input"  type="text" value="{$partner_level_info.global_weight}" /></td>
+						<td>{$partner_level_info.create_time}</td>
+					</tr>					
+				{/foreach}
+				</tbody>
+			</table>
+		</div>
+	</div>
+	<button class="edit_button" onclick="updateGlobalBonusPoolConfig();">提交</button>
+</div>
+{include file="admin/b2c/openDialog" /}
+<script>		
+function updateGlobalBonusPoolConfig(){
+	if($("#is_global_enable").prop("checked")){
+		var is_open = 1;
+	}else{
+		var is_open = 0;
+	}
+	var trObj = $("#partner_global");
+	var partner_level_string = "";
+	$("#partner_global tr").each(function() {
+		var level_id = $(this).data("level_id");
+		var global_value = $(this).children().eq(1).children("input").val();
+		var global_weight = $(this).children().eq(2).children("input").val();
+		partner_level_string = partner_level_string + ";" + level_id + "," + global_value + "," + global_weight;
+	});
+	partner_level_string = partner_level_string.substring(1, partner_level_string.length );
+	$.ajax({
+		type:"post",
+		url:"ADMIN_MAIN/Distribution/updateGlobalBonusPoolConfig",
+		data:{
+			'is_open':is_open,
+			'partner_level_string':partner_level_string
+		},
+		async:true,
+		success:function (data) {
+			if (data["code"] > 0) {
+				showMessage('success', data["message"],"ADMIN_MAIN/Distribution/globalBonusPoolConfig");
+			}else{
+				showMessage('error', data["message"]);
+			}	
+		}
+	});
+}
+
+</script>
+{/block}

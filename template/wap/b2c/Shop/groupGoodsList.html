@@ -1,0 +1,125 @@
+<link rel="stylesheet" type="text/css" href="__TEMP__/{$style}/public/css/components.css">
+<link rel="stylesheet" type="text/css" href="__TEMP__/{$style}/public/css/group_goods_list.css">
+<!-- 搜索框样式 -->
+<div class="custom-tag-list clearfix">
+	<div class="mask" id="grouGoodsListmask"></div>
+	<div class="custom-tag-list-menu-block" >
+		<div style="height: 294px; display: none;"></div>
+		<ul class="custom-tag-list-side-menu" style="position: relative;" id='goods_group'>
+		</ul>
+	</div>
+	<div class="two-list-menu">
+		<ul  id='two_menu'>
+			<li id="two_total"><a href="javascript:;">全部</a></li>
+		</ul>
+	</div>
+
+	<div class="custom-tag-list-goods" id='good_list'></div>
+	{if condition="$carcount neq 0"}
+		<a class="get_into_cart select" href="APP_MAIN/Goods/cart.html" ></a>
+	{else /}
+		<a class="get_into_cart" href="APP_MAIN/Goods/cart.html"></a>
+	{/if}
+	
+	<!--current-->
+	<input type="hidden" id="uid"  value="{$uid}"/>
+</div>
+<script>
+
+//执行完列表后加载事件 
+function load(){
+	$('#goods_group li:first-child>a').addClass('selected');
+	//右侧选中事件
+	$("#goods_group a").click(function(){
+		$('#goods_group li>a').removeClass('selected');
+		$(this).addClass('selected');
+	
+		$('.two-list-menu').show();
+	});	
+	$('.custom-tag-list .mask').click(function(){
+		$(this).hide();
+		$('.two-list-menu').hide();
+	})
+}
+//商品二级菜单显示
+function GetTwoGroupList(pid,group_name){
+	$('.two-list-menu li').hide();
+	if($('[pid="'+pid+'"]').length==0){
+		getgoodlist(pid,group_name);
+	}else{
+		$('#grouGoodsListmask').show();
+		$('.two-list-menu li#two_total a').text(group_name);
+		$('.two-list-menu li#two_total').show();
+		$('.two-list-menu li#two_total a').attr('onclick','getgoodlist('+pid+',\''+group_name+'\')');
+		$('[pid="'+pid+'"]').show();	
+	}
+/* 	$('.two-list-menu').css("height","93%");	
+	var prentHeight=$('.two-list-menu').height();
+	var countHeight=($('[pid="'+pid+'"]').length+1)*58;
+	if(countHeight<prentHeight){
+		$('.two-list-menu').css("height",countHeight);	
+	} */
+}
+
+$.ajax({
+	type:"post",
+	url : "APP_MAIN/Components/goodsGroupList",
+	async : true,
+	success : function(data){
+		//alert(JSON.stringify(data));
+			var onehtml='';
+			var twohtml='';
+			var default_group_id=0;
+		 	for(i=0;i<data.length;i++){
+				if(data[i]['pid']==0){
+					if(default_group_id==0){
+						default_group_id=data[i]['group_id'];
+						getgoodlist(default_group_id,''+data[i]['group_name']+'');
+					}
+					onehtml +='<li class="" val='+data[i]['group_id']+'><a onclick="GetTwoGroupList('+data[i]['group_id']+',\''+data[i]['group_name']+'\')"><span>'+data[i]['group_name']+'</span></a></li>';	
+				}else{
+					twohtml+='<li val='+data[i]['group_id']+' pid="'+data[i]['pid']+'"><a href="javascript:getgoodlist('+data[i]['group_id']+',\''+data[i]['group_name']+'\')"><span>'+data[i]['group_name']+'</span></a></li>';	
+				}
+		 	} 
+		 	$('#goods_group').append(onehtml);
+		 	$('#two_menu').append(twohtml);
+		 	load();
+		}
+});
+
+
+//通过商品分组ID获取分组下商品的信息
+function getgoodlist(group_id,group_name){
+	$('#grouGoodsListmask').hide();
+	$('.two-list-menu').hide();
+	$('.two-list-menu li').hide();
+	$.ajax({
+		type:"post",
+		url : "APP_MAIN/Components/getGroupGoodsList",
+		async : true,
+		data : {'group_id':group_id
+		},
+		beforeSend:function(){
+			showLoadMaskLayer();
+		},
+		success : function(data){
+			$('#good_list').children().remove();
+			var html = '';
+			html+='<p>'+group_name+'</p><ul class="custom-tag-list-goods-list">';
+			for(i=0;i<data.length;i++){
+				html+='<li class="custom-tag-list-single-goods clearfix"><a href="APP_MAIN/Goods/goodsDetail.html?id='+data[i]['goods_id']+'" class="custom-tag-list-goods-img">';
+				html+='<img class="js-lazy" src="__ROOT__/'+data[i]['picture_info']['pic_cover_micro']+'" style="display: block;"></a>';
+				html+='	<div class="custom-tag-list-goods-detail">';
+				html+='<a href="APP_MAIN/Goods/goodsDetail.html?id='+data[i]['goods_id']+'" class="custom-tag-list-goods-title">'+data[i]['goods_name']+'</a>';
+				html+='		<span class="custom-tag-list-goods-price">￥'+data[i]['promotion_price']+'</span>';
+				html+='<a class="custom-tag-list-goods-buy js-custom-tag-list-goods-buy" href="javascript:CartGoodsInfo('+data[i]['goods_id']+')" data-buyway="1" data-alias="m2nx2p6x" data-postage="0" data-id="22569525" data-isvirtual="0"><img	src="__TEMP__/{$style}/public/images/goodsList_01.png" /></a>';
+				html+='	</div></li>';
+			}
+			html+='</ul>';
+			$('#good_list').html(html);
+			hiddenshowLoadMaskLayer();
+		}
+	});
+	
+}
+</script>

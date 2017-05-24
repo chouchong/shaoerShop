@@ -1,0 +1,226 @@
+{extend name="admin/b2c/base" /} 
+{block name="resources"/}
+<script type="text/javascript" src="__STATIC__/My97DatePicker/WdatePicker.js"></script>
+<style>
+.btnstyle{
+	color: #ffffff !important;
+	background: green;
+	display: block;
+/* 	width: 60%; */
+	margin: 0 auto;
+	margin-bottom: 5px;
+}
+.btn_offline_pay{background: #FF8400;}
+.product-img{float:left;}
+.product-infor{float:left;margin-left: 10px;width:60%;}
+.style0list table{border:1px solid #E3E3E3;}
+.style0list  tbody td {border-right: 1px solid #E3E3E3;}
+.title-tr td input[type="checkbox"]{margin:0 0 0 7px;}
+.title-tr td span{margin-left:10px;}
+.btn{
+	padding-top: 3px;
+    padding-bottom: 3px;
+    text-align: center;
+}
+</style>
+{/block}
+{block name="main"}
+<table class="mytable">
+	<tr>
+		<th style="line-height:33px;">
+			下单时间：
+			<input type="text" id="startDate" class="input-medium" placeholder="请选择开始日期" onclick="WdatePicker()" />
+			&nbsp;-&nbsp;
+			<input type="text" id="endDate" placeholder="请选择结束日期" class="input-medium" onclick="WdatePicker()" />
+			收件人姓名：<input id="userName" class="input-small" type="text" value="">
+			订单编号：<input id="orderNo" class="input-medium" type="text" value=""  style="display:inline-block">					
+		</th>
+		<th><input type="hidden" id="order_status" value="{$status}"></th>
+	</tr>
+</table>
+<table class="mytable">
+	<tr>
+		<th>
+			收货人手机号:<input id="receiverMobile" class="input-small" type="text" value="">
+			订单状态:
+			<select id="order_status">
+				<option value="">全部</option>
+				<option value="0">待付款</option>
+				<option value="1">待发货</option>
+				<option value="2">待收货</option>
+				<option value="3">已收货</option>
+				<option value="4">交易成功</option>
+				<option value="5">已关闭</option>
+				<option value="-1">退款中</option>
+				<option value="-2">已退款</option>
+			</select>
+			支付方式:
+			<select id="payment_type">
+				<option value="">全部</option>
+				<option value="1">微信</option>
+				<option value="2">支付宝</option>
+				<option value="10">线下支付</option>
+			</select>							
+			<input type="button" onclick="searchData()" value="搜索" />
+		</th>
+	</tr>
+</table>
+<div class="style0list">
+	<table>
+		<colgroup>
+			<col width="2%">
+			<col width="22%">
+			<col width="12%">
+			<col width="12%">
+			<col width="10%">
+			<col width="9%">
+			<col width="8%">
+			<col width="10%">
+			<col width="14%">
+		</colgroup>
+		<thead>
+			<tr align="center">
+				<th><label style="margin-left: 5px;"> <input type="checkbox" onclick="CheckAll(this)"></label></th>
+				<th>商品信息</th>
+				<th>商品清单</th>
+				<th>买家</th>
+				<th>收货信息</th>
+				<th>订单金额</th>
+				<th>店铺</th>
+				<th>交易状态</th>
+				<th>操作</th>
+			</tr>
+		</thead>
+		<tbody></tbody>
+	</table>
+</div>
+{/block} 
+{block name="script"} 
+{include file="admin/b2c/pageCommon"/}
+{include file="admin/b2c/openDialog" /}
+{include file="admin/b2c/Order/orderAction"/}
+{include file="admin/b2c/Order/orderRefundAction"/}
+<script type="text/javascript">
+function searchData(){
+	LoadingInfo(1);
+}
+
+function LoadingInfo(pageIndex) {
+	var start_date = $("#startDate").val();
+	var end_date = $("#endDate").val();
+	var user_name = $("#userName").val();
+	var order_no = $("#orderNo").val();
+	var order_status = $("#orderStatus").val();	
+	var receiver_mobile = $("#receiverMobile").val();
+	var order_status = $("#order_status").val();
+	var payment_type = $("#payment_type").val();
+	$.ajax({
+		type : "post",
+		url : "ADMIN_MAIN/Order/orderList",
+		data : {
+			"pageIndex" : pageIndex, "start_date" : start_date, "end_date" : end_date, "user_name":user_name, "order_no":order_no, "order_status":order_status, "receiver_mobile":receiver_mobile, "order_status" : order_status,"payment_type":payment_type
+		},
+		success : function(data) {
+			$("#page_count").val(data["page_count"]);
+			$("#pageNumber a").remove();
+			var html = '';
+			if (data["data"].length > 0) {
+				for (var i = 0; i < data["data"].length; i++) {
+					html +="<tr><td  colspan='9' style='border-left: 1px solid transparent;height:10px;padding:0px;border-right: 1px solid transparent;'></td></tr>";
+					html += '<tr class="title-tr">';
+					html += '<td colspan="9"><input id="'+data["data"][i]["out_trade_no"]+'" type="checkbox"  onclick="CheckThis()" value="'+data["data"][i]["order_id"]+'" name="sub">';
+					html +='<span>订单编号：'+data["data"][i]["order_no"]+' 交易号：'+data["data"][i]["out_trade_no"]+'</span><span>下单时间：'+data["data"][i]["create_time"]+'</span></td></tr>';
+					html += '<tr><td colspan="2" style="border-right:0;">';
+					html += '<div class="product-img"><img src="__ROOT__/'+data["data"][i]["order_item_list"][0]["picture"]['pic_cover_micro']+'"></div>';
+					html += '<div class="product-infor">';
+					html += '<a href="APP_MAIN/Goods/goodsDetail.html?id='+data["data"][i]["order_item_list"][0]["goods_id"]+'" target="_blank">'+data["data"][i]["order_item_list"][0]["goods_name"]+'</a>';
+
+					html += '<p class="specification"><span>'+data["data"][i]["order_item_list"][0]["sku_name"]+'</span></p></div>';
+					html += '</div></td>';
+					html += '<td style="border-right:1px solid #E3E3E3;">';
+					//html += '<div class="cell" style="display: inline-block;"><span>'+data["data"][i]["order_item_list"][t]["goods_name"]+'</span></div>';
+					html += '<div class="cell" style="display: inline-block;"><span>'+data["data"][i]["order_item_list"][0]["price"]+'元</span></div>';
+					html += '<div class="cell" style="display: inline-block;float:right">'+data["data"][i]["order_item_list"][0]["num"]+'件</div>';
+					if(data["data"][i]["order_item_list"][0]['adjust_money'] != 0){
+						html += '<div class="cell" style="display: inline-block;"><span>(调价：'+data["data"][i]["order_item_list"][0]["adjust_money"]+'元)</span></div>';
+					}
+// 						if((data["data"][i]["order_item_list"][0]['refund_status'] != 0) && (data["data"][i]["order_item_list"][0]['refund_operation'] != ''))
+					if(	data["data"][i]["order_item_list"][0]['refund_status'] != 0){
+						html +='<br><a href="ADMIN_MAIN/Order/orderRefundDetail.html?itemid='+data["data"][i]["order_item_list"][0]["order_goods_id"]+'">'+data["data"][i]["order_item_list"][0]["status_name"]+'</a>';
+						for(var m = 0; m < data["data"][i]["order_item_list"][0]["refund_operation"].length; m++){
+							html += '<a class="btn btn-info shipping btnstyle" onclick="refundOperation(\''+data["data"][i]["order_item_list"][0]["refund_operation"][m]['no']+'\','+data["data"][i]["order_id"]+','+data["data"][i]["order_item_list"][0]['order_goods_id']+')" href="javascript:void(0)" >'+data["data"][i]["order_item_list"][0]["refund_operation"][m]['name']+'</a>';
+						}
+					}
+					html += '</td>';
+					var row=1;//订单数量，用于设置跨行
+					if(data["data"][i]["order_item_list"].length!=null)
+					{
+						row=data["data"][i]["order_item_list"].length;
+					}
+					html += '<td rowspan="'+row+'" style="text-align:center"><div class="cell">'+data["data"][i]["user_name"]+'</div></td>';
+					html += '<td rowspan="'+row+'" style="text-align:center">';
+
+					
+					//原始地址
+					var original_address = data["data"][i]["receiver_province_name"]+data["data"][i]["receiver_city_name"]+data["data"][i]["receiver_district_name"]+data["data"][i]["receiver_address"];
+					var address = original_address;//处理过的地址
+					if(address.length>10){
+						address = address.substr(0,7)+"...";
+					}
+					html += '<div class="cell" style="text-align:left;"><span class="expressfee">收货人姓名：'+data["data"][i]["receiver_name"]+'</span><br/><span class="expressfee" title="'+original_address+'">收货地址:'+address+'</span>';
+					html += '<br/><span class="expressfee">收货人手机号:'+data["data"][i]["receiver_mobile"]+'</span>';
+					html += '</div></td>';
+					html += '<td rowspan="'+row+'" style="text-align:center">';
+					html += '<div class="cell"><b class="netprice" style="color:#666;">'+data["data"][i]["order_money"]+'</b><br/><span class="expressfee">(含快递:'+data["data"][i]["shipping_money"]+')</span></div></td>';
+					html += '<td rowspan="'+row+'" style="text-align:center">'+data["data"][i]["shop_name"]+'</td>';						
+					html += '<td rowspan="'+row+'"><div class="business-status" style="text-align:center">'+data["data"][i]["status_name"]+'<br></div></td>';
+					html += '<td rowspan="'+row+'" style="text-align:center;">';
+					html += '<a class="btn btn-info shipping btnstyle" style="background:#27a9e3;" href="ADMIN_MAIN/Order/orderDetail.html?order_id='+data["data"][i]["order_id"]+'">详情</a>';
+					if(data["data"][i]["operation"] != ''){
+						for(var m = 0; m < data["data"][i]["operation"].length; m++){
+								html += '<a class="btn btn-info shipping btnstyle" style="background:'+data["data"][i]["operation"][m]["color"]+'" onclick="operation(\''+data["data"][i]["operation"][m]['no']+'\','+data["data"][i]["order_id"]+')" href="javascript:void(0)" >'+data["data"][i]["operation"][m]['name']+'</a>';
+						}
+					}
+					html +='</td></tr>';
+					//循环订单项
+					for(var j = 1; j < data["data"][i]["order_item_list"].length; j++){
+						html += '<tr calss="no-rightborder"><td colspan="2" style="border-right:0;">';
+						html += '<div class="product-img"><img src="__ROOT__/'+data["data"][i]["order_item_list"][j]["picture"]['pic_cover_micro']+'"></div>';
+						html += '<div class="product-infor">';
+						html += '<a class="name" href="APP_MAIN/Goods/goodsDetail.html?id='+data["data"][i]["order_item_list"][j]["goods_id"]+'" target="_blank">'+data["data"][i]["order_item_list"][j]["goods_name"]+'</a>';
+						html += '<p class="specification"><span>'+data["data"][i]["order_item_list"][j]["sku_name"]+'</span></p></div>';
+						html += '</div></td>';
+						html += '<td style="border-left:0px solid #fff">';//商品信息与商品清单的分割线
+						//html += '<div class="cell" style="display: inline-block;"><span>'+data["data"][i]["order_item_list"][t]["goods_name"]+'</span></div>';
+						html += '<div class="cell" style="display: inline-block;"><span>'+data["data"][i]["order_item_list"][j]["price"]+'元</span></div>';
+						html += '<div class="cell" style="display: inline-block;float:right">'+data["data"][i]["order_item_list"][j]["num"]+'件</div>';
+						if(data["data"][i]["order_item_list"][j]['adjust_money'] != 0){
+							html += '<div class="cell" style="display: inline-block;"><span>(调价：'+data["data"][i]["order_item_list"][j]["adjust_money"]+'元)</span></div>';
+						}
+// 							if((data["data"][i]["order_item_list"][j]['refund_status'] != 0) && (data["data"][i]["order_item_list"][j]['refund_operation'] != ''))
+						if(	data["data"][i]["order_item_list"][j]['refund_status'] != 0)
+						{
+							html +='<br><a href="ADMIN_MAIN/Order/orderRefundDetail.html?itemid='+data["data"][i]["order_item_list"][j]["order_goods_id"]+'">'+data["data"][i]["order_item_list"][j]["status_name"]+'</a>';
+							for(var m = 0; m < data["data"][i]["order_item_list"][j]["refund_operation"].length; m++){
+								html += '<a style="background:green;display: block;width: 60%;margin: 0 auto;margin-bottom:5px;color:#fff;" class="btn btn-info shipping"  style="border-radius: 0px;" onclick="refundOperation(\''+data["data"][i]["order_item_list"][j]["refund_operation"][m]['no']+'\','+data["data"][i]["order_id"]+','+data["data"][i]["order_item_list"][j]['order_goods_id']+')" href="javascript:void(0)" >'+data["data"][i]["order_item_list"][j]["refund_operation"][m]['name']+'</a>';
+							}
+						}
+						html += '</td>';
+						html += '</tr>';
+					}
+				}
+			} else {
+				html += '<tr align="center"><th colspan="9">暂无符合条件的订单</th></tr>';
+			}
+			$(".style0list tbody").html(html);
+			var totalpage = $("#page_count").val();
+			if (totalpage == 1) {
+				changeClass("all");
+			}
+			var $html = pagenumShow(jumpNumber,totalpage,{$pageshow})
+			$("#pageNumber").append($html);
+		}
+	});
+}
+</script>
+{/block}

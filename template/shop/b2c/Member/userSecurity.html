@@ -1,0 +1,297 @@
+{extend name="shop/b2c/Member/base" /}
+
+{block name="main"}
+
+{if condition="$atc eq ''"}
+	<!-- 账户安全主页 -->
+  <div class="user-right" id="user_security">
+    <div class="box"> 
+      <h5 class="user-title user-title-t"> <span> 账户安全</span></h5>
+      <div class="blank"></div>
+      <div id="safe05">
+      
+      	<!-- 密码修改 -->
+        <div class="mc">
+          <div class="fore1"> <s class="fore1_3"></s><strong>登录密码</strong> </div>
+          <div class="fore2"> <span class="ftx-03">互联网账号存在被盗风险，建议您定期更改密码以保护账户安全。</span> <span style="color: #E31939;"></span> </div>
+          <div class="fore3">
+            <input type="button" value="修改" onclick="window.location.href='SHOP_MAIN/member/usersecurity?atc=user_pwd'" class="main-btn main-btn-large" />
+          </div>
+        </div>
+         
+         <!-- 邮箱 -->
+        <div class="mc">
+       	 {if condition="$member_info['user_info']['user_email'] neq ''"}
+          <div class="fore1"> <s class="fore1_3"></s> <strong>邮箱绑定</strong> </div>
+          <div class="fore2"> <span class="ftx-03">您验证的邮箱：{$member_info['user_info']['user_email']}</span> </div>
+          <div class="fore3"> 
+               <input type="button" value="修改" onclick="window.location.href='SHOP_MAIN/member/usersecurity?atc=user_email'" class="main-btn main-btn-large" />
+          </div>
+         {else/}
+          <div class="fore1"> <s class="fore1_1"></s> <strong>邮箱绑定</strong> </div>
+          <div class="fore2"> <span tyle="color: #ED5854;">验证后，可用于快速找回登录密码及支付密码</span> </div>
+          <div class="fore3"> 
+               <a href="SHOP_MAIN/member/usersecurity.html?atc=user_email" class="btn btn-7">绑定邮箱</a> 
+          </div>
+          {/if}
+        </div>
+        
+        <!-- 手机 -->
+        <div class="mc">
+          {if condition="$member_info['user_info']['user_tel'] neq ''"}
+          <div class="fore1"> <s class="fore1_3"></s> <strong>手机绑定</strong> </div>
+          <div class="fore2"> <span class="ftx-03">您绑定的手机号：{$member_info['user_info']['user_tel']}</span> </div>
+          <div class="fore3">
+          	 <input type="button" value="修改" onclick="window.location.href='SHOP_MAIN/member/usersecurity?atc=user_mobile'" class="main-btn main-btn-large" /> 
+          </div>
+          {else/}
+          <div class="fore1"> <s class="fore1_1"></s> <strong>手机验证</strong> </div>
+          <div class="fore2"> <span style="color: #ED5854;">验证后，可用于快速找回登录密码及支付密码，接收账户余额变动提醒</span> </div>
+          <div class="fore3"> <a href="SHOP_MAIN/member/usersecurity.html?atc=user_mobile" class="btn btn-7">绑定手机</a> </div>
+          {/if}
+        </div>
+      </div>   
+    </div>
+  </div>
+{elseif condition="$atc eq 'user_pwd'" /}
+ <div class="user-right" id='user_pwd'>
+    <div class="box"> 
+            <h5 title="修改登录密码" class="user-title user-title-t"> <span>修改登录密码</span> </h5>
+            <div class="blank"></div>
+      <div id="find_pw3">
+        <div class="find_con">
+         <div id="sflex04" class="stepflex stepflex_te">
+	            <dl class="normal doing">
+	              <dt class="s-num">1</dt>
+	              <dd class="s-text"> 密码修改 <s></s> <b></b> </dd>
+	            </dl>
+	            <dl class="last">
+	              <dt class="s-num">&nbsp;</dt>
+	              <dd class="s-text"> 完成 <s></s> <b></b> </dd>
+	            </dl>
+          </div>
+          <div id="find-box" class="uc_box">
+              <div id="error_container"></div>
+              <div class="item">
+                <label class="con_un">原密码:</label>
+                <input name="old_password" id="old_password" type="password" tabindex="1" placeholder="请输入原密码" class="text" />
+                <span class="error">不可为空!</span>
+              </div>
+
+              <div class="item">
+                <label class="con_un">新密码:</label>
+                <input name="newpassword" id="newpassword" type="password" tabindex="1" placeholder="请输入密码" class="text" />
+                <span class="error">不可为空!</span>
+              </div>
+              <div class="item">
+                <label class="con_un">确认密码:</label>
+                <input name="newpassword1" id="newpassword1" type="password" tabindex="2" placeholder="请再次确认密码" class="text" />
+                <span class="error">不可为空!</span>
+              </div>
+              
+              <div class="item">
+                <label class="con_un">&nbsp;</label>
+                <input type="hidden" name="act" value="password_reset_success" />
+                <input type="button" id="btn_submit" name="btn_submit" class="main-btn main-btn-large" value="提交" onclick="modifyPwd()"/>
+              </div>
+          </div>
+        </div>
+       </div>
+     </div> 
+     <script type="text/javascript">
+		function modifyPwd(){
+			var old_password=$('#old_password').val();
+			var new_password=$('#newpassword').val();
+			var new_password1=$('#newpassword1').val();
+			var flag=true;
+			$('#user_pwd input[type="password"]').each(function(){
+				if($(this).val()==''){
+					$(this).parent().children('.error').show();;
+					flag=false;
+				}else{
+					$(this).parent().children('.error').hide();
+				}				
+			});
+			if(!flag){
+				return false;
+			}
+			$.ajax({
+                 url: "SHOP_MAIN/Member/modifyPassword",
+                 data: { "new_password":new_password,"old_password":old_password },
+                 type: "post",
+                 success: function (res) {
+                     if (res['code']> 0) {
+                    	 $('#user_pwd #find-box').html('<div class="find_box_end"><p> <i></i> 密码修改成功！ </p><p class="on_go"> <a href="SHOP_MAIN/member/usersecurity.html" title="立即购物" class="back">返回账户安全中心&gt;&gt;</a> </p></div>'); 
+                         $('#user_pwd #sflex04 .normal').removeClass('doing');
+                         $('#user_pwd #sflex04 .normal').removeClass('done');
+                         $('#user_pwd #sflex04 .last').addClass('doing');
+                     } else {
+                         alert(res["message"]);
+                     }
+                 }
+             })
+		}
+	 </script>  
+</div>
+{elseif condition="$atc eq 'user_mobile'"/}
+	<!-- 手机号绑定 -->
+  <div class="user-right" id="user_mobile" >
+    <div class="box"> 
+      <h5 title="手机绑定" class="user-title user-title-t"> <span>手机绑定</span> </h5>
+       
+      <div class="blank"></div>
+      <div id="find_pw3">
+        <div class="find_con"> 
+           <div id="sflex04" class="stepflex stepflex_te">
+	            <dl class="normal doing">
+	              <dt class="s-num">1</dt>
+	              <dd class="s-text"> 手机绑定 <s></s> <b></b> </dd>
+	            </dl>
+	            <dl class="last">
+	              <dt class="s-num">&nbsp;</dt>
+	              <dd class="s-text"> 完成 <s></s> <b></b> </dd>
+	            </dl>
+          </div>
+            <div id="find-box" class="uc_box" >
+              <div id="error_container"></div>
+              <div class="item">
+                <label class="con_un">手机号码：</label>
+                <input name="mobile" id="mobile" type="text" tabindex="1" placeholder="请输入手机号码" class="text">
+                <span class="error">不可为空!</span>
+              </div>
+              <div class="item">
+                <label class="con_un">手机验证码：</label>
+                <input name="mobile_code" id="mobile_code" type="text" tabindex="2" placeholder="请输入手机验证码" class="text text_te">
+                <input id="sendOutCode" name="code_mobile" type="button" value="获取手机验证码" bvalue='获取手机验证码' class="code" >
+                <span class="error">不可为空!</span>
+              </div> 
+              <div class="item">
+                <label class="con_un">&nbsp;</label>
+                <input type="hidden" name="act" value="mobile_binding_success">
+                <input type="button" id="btn_submit" name="btn_submit" class="main-btn main-btn-large" value="提交" onclick="bindingMobile()">
+              </div>
+              
+          </div>
+        </div>
+ <script type="text/javascript">
+ 	//手机绑定
+    function bindingMobile(){
+    	var mobile=$('#mobile').val();
+    	var mobile_code=$('#mobile_code').val();
+    	
+    	if(mobile==''){
+    		$('#mobile').parent().children('.error').show();
+    		return false;
+    	}
+    	$('#mobile').parent().children('.error').hide();
+    	
+    	if(mobile_code==''){
+    		$('#mobile_code').parent().children('.error').show();
+    		return false;
+    	}
+    	$('#mobile_code').parent().children('.error').hide()
+    	 $.ajax({
+             url: "SHOP_MAIN/Member/modifyMobile",
+             data: {"mobile": mobile,"mobile_code":mobile_code},
+             type: "post",
+             success: function (res) {
+            	 //alert(JSON.stringify(res));
+                 if (res["code"] > 0) {
+                	$('#user_mobile #find-box').html('<div class="find_box_end"><p> <i></i> 手机绑定成功！ </p><p class="on_go"> <a href="SHOP_MAIN/member/usersecurity.html" title="立即购物" class="back">返回账户安全中心&gt;&gt;</a> </p></div>'); 
+                    $('#user_mobile #sflex04 .normal').removeClass('doing');
+                    $('#user_mobile #sflex04 .normal').removeClass('done');
+                    $('#user_mobile #sflex04 .last').addClass('doing');
+                 } else {
+                     $.msg(res["message"]);
+                 }
+             }
+         })
+    }
+ 
+
+ </script> 
+</div>
+
+    </div>
+  </div>
+{elseif condition="$atc eq 'user_email'"/}  
+  <!-- 邮箱绑定 -->
+  <div class="user-right" id="user_email" >
+    <div class="box"> 
+            <h5 title="邮箱绑定" class="user-title user-title-t"> <span>邮箱绑定</span> </h5>
+       
+       
+            <div class="blank"></div>
+      <div id="find_pw3">
+        <div class="find_con"> 
+                    <div id="sflex04" class="stepflex stepflex_te">
+            <dl class="normal doing">
+              <dt class="s-num">1</dt>
+              <dd class="s-text"> 邮箱绑定 <s></s> <b></b> </dd>
+            </dl>
+            <dl class="last">
+              <dt class="s-num">&nbsp;</dt>
+              <dd class="s-text"> 完成 <s></s> <b></b> </dd>
+            </dl>
+          </div>
+          <div id="find-box" class="uc_box">
+              <div id="error_container"></div>
+              <div class="item">
+                <label class="con_un">您的邮箱地址：</label>
+                <input name="email" id="email" type="text" tabindex="1" placeholder="请输入邮箱地址" class="text">
+                 <span class="error">不可为空!</span>
+              </div>
+              <div class="item">
+                <label class="con_un">邮箱验证码：</label>
+                <input name="email_code" id="email_code" type="text" tabindex="2" placeholder="请输入邮箱验证码" class="text text_te">
+                <input id="sendOutCode" name="code_email" type="button" value="获取邮箱验证码" bvalue='获取邮箱验证码'  class="code"  >
+                <span class="error">不可为空!</span>
+              </div> 
+              <div class="item">
+                <label class="con_un">&nbsp;</label>
+                <input type="hidden" name="act" value="email_binding_success">
+                <input type="button" id="btn_submit" name="btn_submit" class="main-btn main-btn-large" value="提交" onclick="bindingEmail()">
+              </div>
+          </div>
+        </div>
+        <script type="text/javascript">
+    	//邮箱绑定
+        function bindingEmail(){
+        	var email=$('#email').val();
+        	var email_code=$('#email_code').val();
+        	if(email==''){
+        		$('#email').parent().children('.error').show();;
+        		return false;
+        	}
+        	$('#email').parent().children('.error').hide();
+        	
+        	if(email_code==''){
+        		$('#email_code').parent().children('.error').show();
+        		return false;
+        	}
+        	$('#email_code').parent().children('.error').hide()
+        	$.ajax({
+                url: "SHOP_MAIN/Member/modifyEmail",
+                data: { "email": email,'email_code':email_code },
+                type: "post",
+                success: function (res) {
+                    if (res["code"]== 1) {
+                    	$('#user_email #find-box').html('<div class="find_box_end"><p> <i></i> 邮箱绑定成功！ </p><p class="on_go"> <a href="SHOP_MAIN/member/usersecurity.html" title="立即购物" class="back">返回账户安全中心&gt;&gt;</a> </p></div>'); 
+                        $('#user_email #sflex04 .normal').removeClass('doing');
+                        $('#user_email #sflex04 .normal').removeClass('done');
+                        $('#user_email #sflex04 .last').addClass('doing');
+                    } else {
+                    	 $.msg(res["message"]);
+                    }
+                }
+            })
+        }
+     
+        </script> 
+      </div>
+
+    </div>
+  </div>
+ {/if}
+ <script type="text/javascript" src="__TEMP__/{$style}/public/js/verification_code.js"></script>
+{/block}

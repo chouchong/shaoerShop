@@ -1,0 +1,24 @@
+<div class="brand-floor ">
+	{if condition="$total_count eq 0"}
+	<div class="tip-box">
+		<i class="tip-icon"></i>
+		<div class="tip-text">抱歉！没有您想要的结果……</div>
+	</div>
+	{else /}
+	<ul>
+		{volist name="list" id="new"}
+		<li>
+			<a href="SHOP_MAIN/goods/goodslist.html?brand_id={$new.brand_id}">
+				<img src="__UPLOAD__/{$new.brand_ads}" style="width:285px !important;height:362px !important; " />
+			</a>
+			<div class="foot_sale">
+				<img src="__UPLOAD__/{$new.brand_pic}" />
+				<div>
+					<a href="SHOP_MAIN/goods/goodslist.html?brand_id={$new.brand_id}" target="_blank" title="{$new.brand_name}">{$new.brand_name}</a>
+				</div>
+			</div>
+		</li>
+		{/volist}
+	</ul>
+	{/if}
+</div>

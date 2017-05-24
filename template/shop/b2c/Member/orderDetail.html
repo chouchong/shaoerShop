@@ -1,0 +1,328 @@
+{extend name="shop/b2c/Member/base" /}
+{block name="resources"}
+<!-- 添加css、字体文件文件 -->
+<style type="text/css">
+.tab_right{padding: 10px 30px;width:43%;  display: inline-block;border:solid 1px #EEE;min-height: 174px;}
+.tab_right dl{font-size: 0;display: block;margin-bottom: 5px;border-bottom: dotted 1px #E7E7E7;}
+.tab_right dl dd{font: normal 16px/32px "microsoft yahei", Arial;color: #333;vertical-align: top;letter-spacing: normal;word-spacing: normal;display: inline-block;}
+.tab_right ul{margin-left: 40px;}
+.user-right .box ul li {float: none;}
+.mall-msg {font-size: 12px;font-weight: 600;color: #999;position: absolute;z-index: 1;bottom:295px;right: 120px;}
+ .mall-msg a{color: #06C;}
+</style>
+{/block}
+{block name="main"}
+ <div class="user-right">
+    	<div class="box">
+          		  <script type="text/javascript">
+            $(document).ready(function () {
+            setInterval("ajaxstatus()", 1000);
+            });
+            function ajaxstatus() {
+                if ($("#chat_order_id").val() != 0 &&  $("#pay_status").val() <2) {
+                    $.ajax({
+	                    url: "user.php?act=query_pay_status&order_id=" + escape($("#chat_order_id").val()),
+	                    type: "GET",
+	                    dataType:"json",
+	                    data: "",
+	                    success: function (data) {
+	                        if (data ==1) {
+	                            window.location.href = "user.php?act=order_list"; 
+	                        }
+	                    }
+                    });
+                }
+            } 
+          </script>  
+          <input type="hidden" id="pay_status" name="pay_status" value="0 "/>
+          
+          <input type="hidden" id="chat_order_id" name="chat_order_id" value="47 "/>
+          <div class="tabmenu">
+              <ul class="tab pngFix">
+                <li class="first active">订单详情</li>
+              </ul>
+          </div>
+          <div style="float:left;width:50%;    display: inline-block;">
+          <table width="100%" border="0" cellpadding="10" cellspacing="1" bgcolor="#eeeeee" class="order_detail">
+            <tr>
+              <td width="20%" align="right" bgcolor="#ffffff">订单编号：</td>
+              <td align="left" bgcolor="#ffffff">{$order.out_trade_no}
+                </td>
+            </tr>
+            <tr>
+              <td align="right" bgcolor="#ffffff">订单状态：</td>
+              <td align="left" bgcolor="#ffffff">{$order.status_name}</td>
+            </tr>
+            <tr>
+              <td align="right" bgcolor="#ffffff">付款状态：</td>
+              <td align="left" bgcolor="#ffffff">
+              {$order.pay_status_name}
+              </td>
+            </tr>
+            <tr>
+              <td align="right" bgcolor="#ffffff">配送状态：</td>
+              <td align="left" bgcolor="#ffffff">
+              {$order.shipping_status_name}
+              </td>
+            </tr> 
+             <tr>
+              <td align="right" bgcolor="#ffffff">收货信息：</td>
+              <td align="left" bgcolor="#ffffff">
+          {$order.receiver_name} {$order.receiver_mobile} {$order.receiver_address}
+              </td>
+            </tr> 
+          </table>
+          </div>
+          {if condition="$order.order_status eq 0"}
+          <div class="tab_right">
+                    <dl>
+                       <span><img src="__TEMP__/{$style}/public/images/order.jpg" style="width: 30px;height: 30px;margin-left: 30px;margin-right: 10px;"/></span>
+			           <dd>订单状态： 订单已经提交，等待买家付款</dd>
+			        </dl>   
+			<ul>
+				<li>1. 您尚未对该订单进行支付，请支付订单以确保商家及时发货。</li>
+				<li>2. 如果您不想购买此订单的商品，请选择取消订单操作。</li>
+				<li>3. 如果您未对该笔订单进行支付操作，系统将于 2017-10-1 自动关闭该订单。</li>
+			</ul>
+			<div class="mall-msg">有疑问可咨询 <a href="javascript:;" >平台服务</a></div>
+          </div>
+          {/if}
+          {if condition="$order.order_status eq 1"}
+          <div class="tab_right">
+                    <dl>
+                       <span><img src="__TEMP__/{$style}/public/images/order.jpg" style="width: 30px;height: 30px;margin-left: 30px;margin-right: 10px;"/></span>
+			           <dd>订单状态： 待发货，请耐心等待...</dd>
+			        </dl>   
+			<ul >
+				<li>1. 如果您不想购买此订单的商品，请在七天内联系卖家选择退货。</li>
+				<li>2、如果卖家没有解决你的上述问题，你可以在交易成功后的15天内发起售后维权，要求客服介入处理。</li>
+			</ul>
+			<div class="mall-msg">有疑问可咨询 <a href="javascript:;" >平台服务</a></div>
+          </div>
+          {/if}
+          {if condition="$order.order_status eq 2"}
+          <div class="tab_right">
+                    <dl>
+                       <span><img src="__TEMP__/{$style}/public/images/order.jpg" style="width: 30px;height: 30px;margin-left: 30px;margin-right: 10px;"/></span>
+			           <dd>订单状态： 已发货，请耐心等待...</dd>
+			        </dl>   
+			<ul>
+				<li>1. 如果您不想购买此订单的商品，请在七天内联系卖家选择退货。</li>
+				<li>2、如果卖家没有解决你的上述问题，你可以在交易成功后的15天内发起售后维权，要求客服介入处理。</li>
+			</ul>
+			<div class="mall-msg">有疑问可咨询 <a href="javascript:;" >平台服务</a></div>
+          </div>
+          {/if}
+          {if condition="$order.order_status eq 3"}
+          <div class="tab_right">
+                    <dl>
+                       <span><img src="__TEMP__/{$style}/public/images/order.jpg" style="width: 30px;height: 30px;margin-left: 30px;margin-right: 10px;"/></span>
+			           <dd>订单状态： 已收货</dd>
+			        </dl>   
+			<ul >
+			    <li>1、交易已成功，如果你还未收到货物，或者收到的货物无法正常使用，请及时联系卖家协商处理。</li>
+				<li>2、如果卖家没有解决你的上述问题，你可以在交易成功后的15天内发起售后维权，要求客服介入处理。</li>
+			</ul>
+			<div class="mall-msg">有疑问可咨询 <a href="javascript:;" >平台服务</a></div>
+          </div>
+          {/if}
+          {if condition="$order.order_status eq 4"}
+          <div class="tab_right">
+                    <dl>
+                       <span><img src="__TEMP__/{$style}/public/images/order.jpg" style="width: 30px;height: 30px;margin-left: 30px;margin-right: 10px;"/></span>
+			           <dd>订单状态： 已完成</dd>
+			        </dl>   
+			<ul >
+				<li>1、交易已成功，如果你还未收到货物，或者收到的货物无法正常使用，请及时联系卖家协商处理。</li>
+				<li>2、如果卖家没有解决你的上述问题，你可以在交易成功后的15天内发起售后维权，要求客服介入处理。</li>
+			</ul>
+			<div class="mall-msg">有疑问可咨询 <a href="javascript:;" >平台服务</a></div>
+          </div>
+          {/if}
+          {if condition="$order.order_status eq 5"}
+          <div class="tab_right">
+                    <dl>
+                       <span><img src="__TEMP__/{$style}/public/images/order.jpg" style="width: 30px;height: 30px;margin-left: 30px;margin-right: 10px;"/></span>
+			           <dd>订单状态： 已关闭</dd>
+			        </dl>   
+			<ul >
+			
+			</ul>
+			<div class="mall-msg">有疑问可咨询 <a href="javascript:;" >平台服务</a></div>
+          </div>
+          {/if}
+          {if condition="$order.order_status eq -1"}
+          <div class="tab_right">
+                    <dl>
+                       <span><img src="__TEMP__/{$style}/public/images/order.jpg" style="width: 30px;height: 30px;margin-left: 30px;margin-right: 10px;"/></span>
+			           <dd>订单状态：退款中</dd>
+			        </dl>   
+			<ul>
+				<li>1、退款中，如果你还未收到钱，或者收到的钱数目不对，请及时联系卖家协商处理。</li>
+				<li>2、如果卖家没有解决你的上述问题，你可以在交易成功后的15天内发起售后维权，要求客服介入处理。</li>
+			</ul>
+			<div class="mall-msg">有疑问可咨询 <a href="javascript:;" >平台服务</a></div>
+          </div>
+          {/if}
+          {if condition="$order.order_status eq -2"}
+          <div class="tab_right">
+                    <dl>
+                       <span><img src="__TEMP__/{$style}/public/images/order.jpg" style="width: 30px;height: 30px;margin-left: 30px;margin-right: 10px;"/></span>
+			           <dd>订单状态： 已退款</dd>
+			        </dl>   
+			<ul>
+			
+			</ul>
+			<div class="mall-msg">有疑问可咨询 <a href="javascript:;" >平台服务</a></div>
+          </div>
+          {/if}
+          <br/>
+                    <table width="100%" border="0" cellpadding="10" cellspacing="1" bgcolor="#eeeeee" >
+             
+                      </table>
+          <div class="blank"></div>
+           <div class="tabmenu">
+              <ul class="tab pngFix">
+                <li class="first active">商品列表</li>
+              </ul>
+          </div>
+          <table width="100%" border="0" cellpadding="10" cellspacing="1" bgcolor="#eeeeee">
+            <tr>
+              <th width="32%" align="center" bgcolor="#ffffff">商品名称</th>
+              <th width="13%" align="center" bgcolor="#ffffff">属性</th>
+              <!--<th>市场价：</th>-->
+              <th width="15%" align="center" bgcolor="#ffffff">商品价格</th>
+              <th width="9%" align="center" bgcolor="#ffffff">购买数量</th>
+              <th width="17%" align="center" bgcolor="#ffffff">小计</th>
+              <!-- 
+              <th width="21%" align="center" bgcolor="#ffffff">申请退换货</th>
+               -->
+            </tr>
+              {volist name="order['order_goods']" id="goodsData"}
+            <tr>
+            
+              <td bgcolor="#ffffff" > 
+                <a href="" target="_blank">{$goodsData.goods_name}</a> 
+              </td>
+              <td align="center" bgcolor="#ffffff">
+                        {if condition = "$goodsData['sku_name'] neq ''"}
+                           {$goodsData.sku_name}
+                        {/if}</td>
+              <!--<td align="right">¥95.00</td>-->
+              <td align="center" bgcolor="#ffffff">￥{$goodsData.price}</td>
+              <td align="center" bgcolor="#ffffff">{$goodsData.num}</td>
+              <td align="center" bgcolor="#ffffff">{$goodsData.goods_money}</td>
+             <!-- 
+              <td align="center" bgcolor="#ffffff">
+                                                                                </td>
+            </tr>
+             -->
+             </tr>
+                {/volist}
+			
+                        <tr>
+              <td colspan="8" bgcolor="#ffffff" align="right"> 商品总价:￥{$order.goods_money}  </td>
+            </tr>
+          </table>
+          <div class="blank"></div>
+          <div class="tabmenu">
+              <ul class="tab pngFix">
+                <li class="first active">费用总计</li>
+              </ul>
+          </div>
+          <table width="100%" border="0" cellpadding="10" cellspacing="1" bgcolor="#eeeeee">
+            <tr>
+              <td align="right" bgcolor="#ffffff"> 商品总价: ￥{$order.goods_money}  
+                 
+              + 配送费用: ￥{$order.shipping_money} －  优惠：￥{$order.promotion_money}
+                 
+                </td>
+            </tr>
+                        <tr>
+              <td align="right" bgcolor="#ffffff">订单总计: ￥{$order.order_money}  可用余额: ￥{$order.user_platform_money}  应付款金额: ￥{$order.pay_money}
+                                </td>
+            </tr>
+                      </table>
+          <div class="blank"></div>
+
+         <!-- <div class="tabmenu">
+              <ul class="tab pngFix">
+                <li class="first active">收货人信息</li>
+              </ul>
+          </div>
+                
+            <table width="100%" border="0" cellpadding="10" cellspacing="1" bgcolor="#eeeeee">
+              <tr>
+                <td width="15%" align="right" bgcolor="#ffffff">收货人姓名： </td>
+                <td colspan="3" align="left" bgcolor="#ffffff">{$order.receiver_name}</td>
+              </tr>
+              <tr>
+                <td align="right" bgcolor="#ffffff">详细地址： </td>
+                <td align="left" bgcolor="#ffffff">{$order.receiver_address}</td>
+              </tr>
+              <tr>
+                <td align="right" bgcolor="#ffffff">手机号：</td>
+                <td align="left" bgcolor="#ffffff">{$order.receiver_mobile}</td>
+              </tr>
+           
+            </table>
+       
+                    <div class="blank"></div>
+          <div class="tabmenu">
+              <ul class="tab pngFix">
+                <li class="first active">支付方式</li>
+              </ul>
+          </div> -->
+          <!-- <table width="100%" border="0" cellpadding="10" cellspacing="1" bgcolor="#eeeeee">
+            <tr>
+              <td bgcolor="#ffffff"> 所选支付方式: 白条支付。应付款金额: <strong>{$order.pay_money}</strong><br />
+                根据京东白条理念自主开发支付方式程序 </td>
+            </tr>
+                        <tr>
+              <td bgcolor="#ffffff" align="right">
+                
+                <form name="payment" method="post" action="">
+                  改用其他在线支付方式:
+                  <select name="pay_code" onchange="choose_payment(this.value)">
+                                        <option value="weixin"> 微信支付(手续费:¥0.00) </option>
+                                        <option value="alipay"> 支付宝(手续费:5%) </option>
+                                        <option value="alipay_bank"> 支付宝-网银直连(手续费:¥0.00) </option>
+                  </select>
+                
+                  <input type="submit" name="Submit" class="main-btn main-btn-large" value="确定" />
+                </form>
+                </td>
+            </tr>
+                      </table> 
+          <div class="blank"></div>
+           <div class="tabmenu">
+              <ul class="tab pngFix">
+                <li class="first active">其它信息</li>
+              </ul>
+          </div>
+          <table width="100%" border="0" cellpadding="10" cellspacing="1" bgcolor="#eeeeee">
+                        <tr>
+              <td width="15%" align="right" bgcolor="#ffffff">配送方式：</td>
+              <td colspan="3" width="85%" align="left" bgcolor="#ffffff" id="shipping_name">城际快递</td>
+            </tr>
+                        
+            <tr>
+              <td width="15%" align="right" bgcolor="#ffffff">支付方式：</td>
+              <td colspan="3" align="left" bgcolor="#ffffff">白条支付</td>
+            </tr>
+            <tr>
+              <td width="15%" align="right" bgcolor="#ffffff">缺货处理：</td>
+              <td colspan="3" align="left" bgcolor="#ffffff">等待所有商品备齐后再发</td>
+            </tr>
+          </table> -->
+      
+        </div>
+    </div>
+</div>
+
+
+
+{/block}
+{block name="javascript"}
+
+{/block}

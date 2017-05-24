@@ -1,0 +1,170 @@
+{extend name="admin/b2c/base" /}
+{block name="resources"/}
+<link rel="stylesheet" type="text/css" href="ADMIN_CSS/product.css">
+<style type="text/css">
+.fun-a {
+	margin-top: 0px;
+	padding: 6px 15px 0 15px;
+}
+.style0list tbody td a{
+	    margin-left: 8px;
+	}
+.num{width:40px;text-align:center;}	
+.cell_total{text-overflow:ellipsis;white-space:nowrap;overflow:hidden;width:250px;display: block;}
+.style0list table input {
+	margin-bottom: 0px;
+}
+
+.style0list table input.sort {
+	width: auto;
+	text-align: center;
+}
+
+.style0list tbody td {
+	line-height: 28px;
+}
+.cell_total{
+	width:190px;
+}
+</style>
+{/block}
+{block name="right_tab"}
+<li><a class="nscs-table-handle_green" href="ADMIN_MAIN/Config/addShopNavigation.html" ><i class="fa fa-plus-circle"></i>&nbsp;添加导航栏</a></li>
+{/block}
+{block name="main"}
+<div class="mod-table">
+	<div class="con style0list">
+			<table>
+				 <colgroup>
+                    <col style="width: 1%">
+                    <col style="width: 8%;">
+                    <col style="width: 15%;">
+                    <col style="width: 20%;">
+                    <col style="width: 10%;">
+                    <col style="width: 20%;">
+                      <col style="width:auto">
+                    </colgroup>
+				<thead>
+					<tr align="center">
+						  <th><label><input value="" name="" id="ckall" type="checkbox" onClick="CheckAll(event)"></label></th>
+                          <th class="x-tab"><div class="iconbg-arrow up">排序</div></th>
+                          <th class="x-tab"><div class="iconbg-arrow up">导航名称</div></th>
+                          <th class="x-tab"><div class="iconbg-arrow up">链接地址</div></th>
+                          <th class="x-tab"><div class="iconbg-arrow up">所在位置</div></th>
+                          <th class="x-tab"><div class="iconbg-arrow up">创建时间</div></th>
+					      <th class="x-tab">操作</th>
+					</tr>
+				</thead>
+				<tbody>
+				</tbody>
+			</table>
+		</div>
+</div>
+{/block} {block name="script"}
+{include file="admin/b2c/pageCommon" /}
+{include file="admin/b2c/openDialog" /}
+
+<script type="text/javascript">
+
+//分页数据
+ function LoadingInfo(pageIndex) {
+	var search_text = $("#search_text").val();
+	$.ajax({
+		type : "post",
+		url : "ADMIN_MAIN/Config/shopNavigationList",
+		async : true,
+		data : {
+			"pageIndex" : pageIndex
+		},
+		success : function(data) {
+			$("#page_count").val(data["page_count"]);
+			$("#pageNumber a").remove();
+			var html = '';
+			if (data["data"].length > 0) {
+				for (var i = 0; i < data["data"].length; i++) {
+					html += '<tr align="center">';
+					html += '<td><div class="cell"><label ><input name="sub" type="checkbox" value="'+ data['data'][i]['nav_id']+'" ></label></div></td>';
+					html += '<td><input type="number" min="0" value="'+ data["data"][i]["sort"]+'"  nav_id="'+ data['data'][i]['nav_id']+'" class="num" ></td>';	
+					html += '<td class="cell_total" title="'+data["data"][i]["nav_title"]+'">' + data["data"][i]["nav_title"]+ '</td>';
+					html += '<td>' + data["data"][i]["nav_url"]+ '</td>';
+				
+					if(data["data"][i]["type"]==1){
+						html += '<td>头部</td>';	
+					}else if(data["data"][i]["type"]==2){ 
+						html += '<td>中部</td>';
+					}else if(data["data"][i]["type"]==3){ 
+						html += '<td>底部</td>';
+					}else{ 
+						html += '<td>&nbsp;</td>';
+					}
+					html += '<td>' + data["data"][i]["create_time"]+ '</td>';
+			        html += '<td><a href="ADMIN_MAIN/Config/updateShopNavigation.html?nav_id='+ data['data'][i]['nav_id']+'">修改</a><a style="cursor: pointer;" onclick="deleteArticle('+data['data'][i]['nav_id']+')">删除</a></td> ';
+				    html += '</tr>';
+				}
+			} else {
+				html += '<tr align="center"><th colspan="9">暂无分类</th></tr>';
+			}
+			$(".style0list tbody").html(html);
+			var totalpage = $("#page_count").val();
+			if (totalpage == 1) {
+				changeClass("all");
+			}
+			var $html = pagenumShow(jumpNumber,totalpage,{$pageshow})
+			$("#pageNumber").append($html);
+			load();
+		}
+	});
+}	
+ 
+//删除菜单
+function deleteArticle(nav_id){
+	$( "#dialog" ).dialog({				
+        buttons: {
+            "确定,#e57373": function() {
+                $(this).dialog('close');
+                $.ajax({
+    				type : "post",
+    				url : "ADMIN_MAIN/Config/delShopNavigation",
+    				async : true,
+    				data : {
+    					"nav_id" : nav_id
+    				},
+    				success : function(data) {
+    					if (data["code"] > 0) {
+    						showMessage('success', data["message"]);
+    						LoadingInfo(1);
+    					}else{
+    						showMessage('error', data["message"]);
+    					}
+    				}
+    				})
+            },
+            "取消": function() {
+                $(this).dialog('close');
+            }
+        },
+        contentText:"是否删除菜单？",
+    });
+}
+/*修改排序*/
+function load(){
+	$('.num').change(function(){
+		var nav_id = $(this).attr('nav_id');
+		var sort = $(this).val();
+		$.ajax({
+			type:"post",
+			url:"ADMIN_MAIN/Config/modifyShopNavigationSort",
+			data:{'nav_id':nav_id,'sort':sort},
+			async:true,
+			success: function (data) {
+				if(data['code'] > 0){
+					/* showMessage('success', data["message"]); */
+				}else{
+					showMessage('error', data["message"]);
+				}
+			}
+		}); 
+	});
+}
+</script>
+{/block}

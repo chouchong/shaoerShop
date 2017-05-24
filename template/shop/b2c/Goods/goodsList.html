@@ -1,0 +1,26 @@
+{extend name="shop/b2c/base" /}
+{block name="resources"}
+<!-- 添加css、字体文件文件 -->
+<link type="text/css" rel="stylesheet" href="__TEMP__/{$style}/public/css/ns_category.css">
+<link rel="stylesheet" type="text/css" href="__TEMP__/{$style}/public/css/ns_shop_common.css">
+{/block}
+{block name="main"}
+<div class="w1210">
+	<div class="breadcrumb clearfix">
+		<a href="SHOP_MAIN.html" class="index">首页&nbsp;&gt;&nbsp;</a>
+		<span class="last js-nav">{$category_name}</span>
+	</div>
+	{if condition="$category_id!=0"}
+	{include file='shop/b2c/Goods/controlGoodsCategoryConditions' /}
+	{/if}
+	<div class="content-wrap category-wrap clearfix">
+	{include file='shop/b2c/Goods/controlGoodsLeft' is_new_recommend='1' is_sale_ranking='1' /}
+	<!--is_new_recommend新品推荐显示 is_sale_ranking销售排行显示-->
+	{include file='shop/b2c/Goods/controlGoodList' /}
+	</div>	
+	{include file='shop/b2c/controlLoveOrHistory' /}
+</div>
+{/block}
+{block name="javascript"}
+<script type="text/javascript" src="__TEMP__/{$style}/public/js/ns_category.js"></script>
+{/block}

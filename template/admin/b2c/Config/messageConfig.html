@@ -1,0 +1,175 @@
+{extend name="admin/b2c/base" /}
+{block name="resources"}
+<style>
+.btn-test{
+	font-family: "microsoft yahei";
+	border-radius: 4px;
+	padding: 5px 20px;
+	background-color: #51A351;
+	color: #FFF;
+	margin: 0 10px;
+	border: none;
+}
+</style>
+{/block}
+{block name="main"}
+{if condition="$type == 'email'"}
+<!-- 邮箱设置 -->
+<div class="set-style">
+	<dl>
+		<dt>是否开启：</dt>
+		<dd>
+				<input id="email_is_use" type="checkbox" class="checkbox" {if condition="$email_message.is_use=='1'"}checked="checked"{/if}/>
+		</dd>
+	</dl>
+	<dl>
+		<dt>SMTP服务器：</dt>
+		<dd>
+			<input id="email_host" type="text" value="{$email_message['oauth_value']['email_host']}" />
+		</dd>
+	</dl>
+	<dl>
+		<dt>SMTP端口：</dt>
+		<dd>
+			<input id="email_port" type="text" value="{$email_message['oauth_value']['email_port']}" />
+		</dd>
+	</dl>
+	<dl>
+		<dt>发信人邮件地址：</dt>
+		<dd>
+			<input id="email_addr" type="text" value="{$email_message['oauth_value']['email_addr']}" />
+		</dd>
+	</dl>
+	<dl>
+		<dt>SMTP身份验证用户名：</dt>
+		<dd>
+			<input id="email_id" type="text" value="{$email_message['oauth_value']['email_id']}" />
+		</dd>
+	</dl>
+	<dl>
+		<dt>SMTP身份验证码：</dt>
+		<dd>
+			<input id="email_pass" type="text" value="{$email_message['oauth_value']['email_pass']}" />
+		</dd>
+	</dl>
+	<dl>
+		<dt>测试接收邮件地址：</dt>
+		<dd>
+			<input id="email_test" type="text" />
+			<button class="btn-test" onclick="testSend()">测试发送</button>
+		</dd>
+	</dl>
+	<button class="edit_button" onclick="setConfigAjax();">提交</button>
+</div>
+<script>
+function setConfigAjax(){
+	var is_use = 0;
+	if($("#email_is_use").is(':checked')){
+		var is_use = 1;
+	}
+	var email_host = $("#email_host").val();
+	var email_port = $("#email_port").val();
+	var email_addr = $("#email_addr").val();
+	var email_id = $("#email_id").val();
+	var email_pass = $("#email_pass").val();
+	$.ajax({
+		type:"post",
+		url:"ADMIN_MAIN/Config/setEmailMessage",
+		data:{
+			'is_use':is_use,
+			'email_host':email_host,
+			'email_port':email_port,
+			'email_addr':email_addr,
+			'email_id':email_id,
+			'email_pass':email_pass,
+		},
+		success:function (data) {
+			if (data["code"] > 0) {
+				showMessage('success', data["message"],'');
+			}else{
+				showMessage('error', data["message"]);
+			}
+		}
+	});
+}
+
+function testSend(){
+	var email_test = $("#email_test").val();
+	$.ajax({
+		type:"post",
+		url:"ADMIN_MAIN/Config/testSend",
+		data:{
+			'email_test':email_test,
+		},
+		async:true,
+		success:function (data) {
+			if (data["code"] > 0) {
+				showMessage('success', data["message"]);
+			}else{
+				showMessage('error', data["message"]);
+			}
+		}
+	});
+}
+</script>
+{else/}
+
+<div class="set-style">
+	<dl>
+		<dt>是否开启：</dt>
+		<dd>
+				<input id="sms_is_use" type="checkbox" class="checkbox" {if condition="$mobile_message.is_use=='1'"}checked="checked"{/if}/>
+		</dd>
+	</dl>
+	<dl>
+		<dt>APP_KEY：</dt>
+		<dd>
+			<input id="app_key" type="text" value="{$mobile_message['oauth_value']['appKey']}" />
+		</dd>
+	</dl>
+	<dl>
+		<dt>SECRET_KEY：</dt>
+		<dd>
+			<input id="secret_key" type="text" value="{$mobile_message['oauth_value']['secretKey']}" />
+		</dd>
+	</dl>
+	<dl>
+		<dt>短信内容签名：</dt>
+		<dd>
+			<input id="free_sign_name" type="text" value="{$mobile_message['oauth_value']['freeSignName']}" />
+		</dd>
+	</dl>
+	<button class="edit_button" onclick="setConfigAjax();">提交</button>
+</div>
+<script>
+
+function setConfigAjax(){
+	var is_use = 0;
+	if($("#sms_is_use").is(':checked')){
+		var is_use = 1;
+	}
+	var app_key = $("#app_key").val();
+	var secret_key = $("#secret_key").val();
+	var free_sign_name = $("#free_sign_name").val();
+	$.ajax({
+		type:"post",
+		url:"ADMIN_MAIN/Config/setMobileMessage",
+		data:{
+			'is_use':is_use,
+			'app_key':app_key,
+			'secret_key':secret_key,
+			'free_sign_name':free_sign_name,
+		},
+		success:function (data) {
+			if (data["code"] > 0) {
+				showMessage('success', data["message"],'');
+			}else{
+				showMessage('error', data["message"]);
+			}
+		}
+	});
+}
+</script>
+{/if}
+{include file="admin/b2c/openDialog" /}
+{/block}

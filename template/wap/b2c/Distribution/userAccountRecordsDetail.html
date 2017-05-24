@@ -1,0 +1,101 @@
+{extend name="wap/b2c/base" /}
+{block name="resources"}
+<link rel="stylesheet" type="text/css" href="__TEMP__/{$style}/public/css/foundation.css">
+<link rel="stylesheet" type="text/css" href="__TEMP__/{$style}/public/css/common-v4.4.css">
+<link rel="stylesheet" type="text/css" href="__TEMP__/{$style}/public/css/components.css">
+<style>
+tr {
+    overflow: hidden;
+    border-bottom: 1px solid #ddd;
+    float: left;
+    width: 100%;
+    background: #FFFFFF;
+}
+tr td:last-child {
+    width: 100%;
+}
+tr td {
+    padding: 0.5625rem 0.625rem ;
+    font-size: 0.875rem;
+    color: #222222;
+	  float: left;
+}
+
+tr td:last-child p {
+    line-height: 22px;
+    margin-bottom: 0px;
+    width: 100%;
+    font-size: 16px;
+}
+tr td:last-child p:last-child {
+    float: left;
+    color: #666666;
+    font-size: 12px;
+}
+tr td:last-child .text-name {
+    float: left;
+    color: #2d2d2d;
+    font-size: 14px;
+}
+tr td:last-child .text-money {
+    float: right;
+    font-size: 14px;
+    color: #FF7C56;
+}
+tr td:last-child .text-2{
+    color: #909090;
+    font-size: 12px;
+}
+
+.disorder-none .icon-none {
+    display: block;
+    width: 115px;
+    height: 110px;
+    margin: 60px auto 15px auto;
+    background:url(__TEMP__/{$style}/public/images/money_cry.png) no-repeat;
+    background-size: 100px 100px;
+}
+.disorder-none{width:100%;text-align:center;}
+.tabs-content {
+    margin-top: 43px;
+	margin-bottom: 10px;
+}
+table tr:nth-of-type(even) {
+    background: #FFFFFF;
+}
+</style>
+<style>
+</style>	
+{/block} 
+
+{block name="main"}
+<section class="head">
+	<a class="head_back" onclick="window.history.go(-1)"
+		href="javascript:void(0)"><i class="icon-back"></i></a>
+	<div class="head-title">{$type_name}明细</div>
+</section>
+    <div class="tabs-content">
+      
+        <div class="content_01"  style="overflow:hidden;"></div>
+              <div id="withdraw"> 
+              {if condition="$account_records_detail eq null"}
+				<div class="nothing-data" align="center">
+					<img src="__TEMP__/{$style}/public/images/wap_nodata.png"/>
+					<div>您还没有佣金！</div>
+				</div>
+			  {else/}
+	              <table width="100%">
+	              {volist name="account_records_detail" id="vo"}
+	                   <tr><td>
+								<p><span class="text-name">{$vo.type_name}</span><span class="text-money">¥{$vo.money}</span></p>
+								<p><span class="text-2">{$vo.create_time}</span></p>
+					</td></tr>
+	              {/volist}
+	              </table>
+	           {/if}   
+              </div>
+    </div>
+{/block}
+{block name="bottom"}{/block}
+{block name="javascript"}
+{/block}

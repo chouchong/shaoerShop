@@ -1,0 +1,26 @@
+<!--
+	创建时间：2017年2月7日 12:24:13
+	功能描述：友情链接
+-->
+<!--友情链接-->
+<div class="links-box w1210">
+	<div class="links-title">
+		<span>友情链接</span>
+	</div>
+	<div class="links-content"></div>
+	<script type="text/javascript">
+		$.ajax({
+			type:"post",
+			url:"SHOP_MAIN/Components/linkList",
+			async:false,
+			dataType:'json',
+			success:function(data){
+				var linkhtml='';
+				for(var i=0;i<data.length;i++){
+					linkhtml+='<a href="'+data[i]['link_url']+'" target="_blank" title="">'+data[i]['link_title']+'</a>';
+				}
+				$('.links-content').html(linkhtml);
+			}
+		});
+	</script>
+</div>

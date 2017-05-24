@@ -1,0 +1,111 @@
+{extend name="admin/b2c/base" /}
+{block name="resources"/}
+<style>
+.table-input{
+	height:12px !important;
+	line-height:12px !important;
+	width:30px;
+	margin-bottom:0px !important;
+}
+</style>
+ {/block}
+{block name="right_tab"}
+<li><a class="nscs-table-handle_green" href="ADMIN_MAIN/Distribution/addPartnerLevel"><i class="fa fa-plus-circle"></i>&nbsp;添加</a></li> 
+{/block}
+{block name="main"}
+<div class="set-style">
+	<dl>
+		<dt>是否开启股东分红:</dt>
+		<dd>			
+					{if condition="$shop_config_info.is_partner_enable eq 1 "} 
+					<input id="is_partner_enable" type="checkbox" class="checkbox" checked="checked" />					
+					{else /}
+					<input id="is_partner_enable" type="checkbox" class="checkbox" />
+					{/if}
+					<span class="help-inline" id="is_menuPrompt" style="display: none;"></span>
+		</dd>
+	</dl>
+</div>
+<div class="mod-table">
+	<div class="mod-table-head">
+		<div class="con style0list">
+			<table>
+				<colgroup>
+					<col style="width: 25%;">
+					<col style="width: 25%;">
+					<col style="width: 25%;">
+					<col style="width: 25%;">
+				</colgroup>
+				<thead>
+					<tr>
+						<th>等级名称</th>
+						<th>等级条件</th>
+						<th>股东分红佣金比率</th>
+						<th>创建时间</th>
+					</tr>
+				</thead>
+				<colgroup>
+					<col style="width: 25%;">
+					<col style="width: 25%;">
+					<col style="width: 25%;">
+					<col style="width: 25%;">
+				</colgroup>
+				<tbody   id="partner_global">
+				{foreach name="partner_level_list" item="partner_level_info" }
+				    <tr align="center" data-level_id={$partner_level_info.level_id}>
+						<td>{$partner_level_info.level_name}</td>
+						<td><input  class="table-input" type="text" value="{$partner_level_info.level_money}" /></td>
+						<td><input  class="table-input"  type="text" value="{$partner_level_info.commission_rate}" />%</td>
+						<td>{$partner_level_info.create_time}</td>
+					</tr>					
+				{/foreach}
+				</tbody>
+			</table>
+		</div>
+	</div>
+</div>
+<button class="edit_button" onclick="updatePartnerLevelAll();">提交</button>
+
+{/block}
+{block name="script"}
+{include file="admin/b2c/openDialog" /}
+<script>
+/**
+ * 修改股东等级
+ */
+function updatePartnerLevelAll(){
+	if($("#is_partner_enable").prop("checked")){
+		var is_open = 1;
+	}else{
+		var is_open = 0;
+	}
+	var trObj = $("#partner_global");
+	var partner_level_string = "";
+	$("#partner_global tr").each(function() {
+		var level_id = $(this).data("level_id");
+		var level_money = $(this).children().eq(1).children("input").val();
+		var commission_rate = $(this).children().eq(2).children("input").val();
+		partner_level_string = partner_level_string + ";" + level_id + "," + level_money + "," + commission_rate;
+	});
+	partner_level_string = partner_level_string.substring(1, partner_level_string.length );
+
+	$.ajax({
+		type:"post",
+		url:"ADMIN_MAIN/Distribution/updatePartnerLevelAll",
+		data:{
+			'partner_level_string':partner_level_string,
+			'is_open':is_open
+		},
+		async:true,
+		success:function (data) {
+			if (data["code"] > 0) {
+				showMessage('success', data["message"],"ADMIN_MAIN/Distribution/updateGlobalBonusPoolConfig");
+			}else{
+				showMessage('error', data["message"]);
+			}	
+		}
+	});
+}
+
+</script>
+{/block}

@@ -1,0 +1,85 @@
+{extend name="admin/b2c/base" /}
+{block name="resources"/}
+<link rel="stylesheet" type="text/css" href="ADMIN_CSS/defau.css">
+{/block}
+{block name="main"}
+<div class="set-style">
+	<dl>
+		<dt>等级名称:</dt>
+		<dd>
+			<p><input name="" id="level_name" type="text" value="{$partner_level_info.level_name}" /></p>	
+			<p class="error">请输入等级名称</p>
+		</dd>
+	</dl>
+	<dl>
+		<dt>升级条件:</dt>
+		<dd>
+			<p><input name="" id="level_money" type="text" value="{$partner_level_info.level_money}" onkeyup="javascript:CheckInputIntFloat(this);"/></p>	
+			<p class="error">请输入升级条件</p>
+		</dd>
+	</dl>
+	<dl>
+		<dt>股东分红佣金比率:</dt>
+		<dd>
+			<p><input name="" id="commission_rate" type="text" value="{$partner_level_info.commission_rate}" onkeyup="javascript:CheckInputIntFloat(this);"/>&nbsp;%</p>	
+			<p class="error">请输入本店销售佣金比率</p>
+		</dd>
+	</dl>
+	<!-- <dl>
+		<dt>全球分红分值:</dt>
+		<dd>
+			<p><input name="" id="global_value" type="text" value="{$partner_level_info.global_value}" onkeyup="javascript:CheckInputIntFloat(this);"/>&nbsp;%</p>	
+			<p class="error">请输入本店销售佣金比率</p>
+		</dd>
+	</dl>
+	<dl>
+		<dt>全球分红权重:</dt>
+		<dd>
+			<p><input name="" id="global_weight" type="text" value="{$partner_level_info.global_weight}" onkeyup="javascript:CheckInputIntFloat(this);"/>&nbsp;%</p>	
+			<p class="error">请输入给上级的佣金比率</p>
+		</dd>
+	</dl>	 -->
+	<button class="edit_button" onclick="updatePartnerLevel();">提交</button>
+</div>
+{include file="admin/b2c/openDialog" /}
+<script src="__STATIC__/js/limit_input_digit.js"></script>
+<script>		
+	function updatePartnerLevel(){
+		var level_name = $("#level_name").val();
+		var level_money = $("#level_money").val();
+		var commission_rate = $("#commission_rate").val();
+		//var global_value = $("#global_value").val();
+		//var global_weight = $("#global_weight").val();
+		if(level_name == ""){
+			$("#level_name").parent().next().show();
+			return false;
+		}else{
+			$("#level_name").parent().next().hide();
+		}
+		if((parseFloat(commission_rate))>100 ){
+			showMessage('error', "佣金比率不可超过100%！");	
+			return false;
+		}
+		$.ajax({
+			type:"post",
+			url:"ADMIN_MAIN/Distribution/updatePartnerLevel",
+			data:{
+				'level_name':level_name,
+				'level_money':level_money,
+				'commission_rate':commission_rate,
+				//'global_value':global_value,
+				//'global_weight':global_weight,
+				'level_id':{$level_id}
+			},
+			async:true,
+			success:function (data) {
+				if (data["code"] > 0) {
+					showMessage('success', data["message"],"ADMIN_MAIN/Distribution/PartnerLevelList");
+				}else{
+					showMessage('error', data["message"]);
+				}	
+			}
+		});
+	}
+</script>
+{/block}

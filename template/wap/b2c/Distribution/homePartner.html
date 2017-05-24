@@ -1,0 +1,48 @@
+{extend name="wap/b2c/base" /}
+{block name="resources"}	
+<link rel="stylesheet" type="text/css" href="__TEMP__/{$style}/public/css/weui.css">	
+<link rel="stylesheet" type="text/css" href="__TEMP__/{$style}/public/css/apply_statu.css">
+
+{/block}
+{block name="goodsHead"}
+<section class="head">
+		<a class="head_back" onclick="window.history.go(-1)" href="javascript:void(0)">
+			<i class="icon-back"></i>
+		</a>
+		<div class="head-title">股东</div>
+	</section>
+{/block}
+{block name="main"}
+	<div class="main_content">
+		<div class="weui_cells_title">会员名称：{$partner.nick_name}</div>
+		<div class="weui_cells">
+	        <div class="weui_cell">
+	            <div class="weui_cell_bd weui_cell_primary">
+	                <p>股东等级：{$partner.level_name}</p>
+	            </div>
+	            <div class="weui_cell_ft">分红比率&nbsp;:&nbsp;{$partner.commission_rate}</div>
+	        </div>
+	      
+	    </div>	
+	    <div class="weui_cells_title">佣金</div>
+	    <div class="weui_cells weui_cells_access">
+	        <a class="weui_cell" href="APP_MAIN/distribution/userAccountRecordsDetail?shop_id={$shop_id}&type_id=4">
+	            <div class="weui_cell_bd weui_cell_primary">
+	                <p>股东分红</p>
+	            </div>
+	            <div class="weui_cell_ft">¥{$partner.commission_partner}</div>
+	        </a>
+	        <a class="weui_cell" href="APP_MAIN/distribution/userAccountRecordsDetail?shop_id={$shop_id}&type_id=5">
+	            <div class="weui_cell_bd weui_cell_primary">
+	                <p>全球分红</p>
+	            </div>
+	            <div class="weui_cell_ft">¥{$partner.commission_partner_global}</div>
+	        </a>
+	
+	    </div>
+	</div>
+{/block}
+{block name="bottom"}{/block}
+{block name="javascript"}
+
+{/block}

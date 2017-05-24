@@ -1,0 +1,63 @@
+{extend name="admin/b2c/base" /}
+{block name="main"}
+<div class="set-style">
+	<dl>
+		<dt>类型名称：</dt>
+		<dd>
+			<input id="class_name" type="text" />
+		</dd>
+	</dl>
+	<dl>
+		<dt>排序：</dt>
+		<dd>
+			<input id="sort" type="text" value="0" />
+		</dd>
+	</dl>
+	<button class="edit_button" onclick="setConfigAjax();">提交</button>
+</div>
+<script>
+function setConfigAjax(){
+	var class_name = $("#class_name").val();
+	var sort = $("#sort").val();
+	if(class_name == ""){
+		showMessage('success', "请输入类型名称");
+		return;
+	}
+	$.ajax({
+		type:"post",
+		url:"ADMIN_MAIN/Config/addHelpClass",
+		data:{
+  	      'class_name':class_name,
+	      'sort':sort
+		},
+		success:function (data) {
+			if (data["code"] > 0) {
+				showMessage('success', data["message"],'ADMIN_MAIN/Config/helpClass');
+			}else{
+				showMessage('error', data["message"]);
+			}
+		}
+	});
+}
+
+function testSend(){
+	var email_test = $("#email_test").val();
+	$.ajax({
+		type:"post",
+		url:"ADMIN_MAIN/Config/testSend",
+		data:{
+			'email_test':email_test,
+		},
+		async:true,
+		success:function (data) {
+			if (data["code"] > 0) {
+				showMessage('success', data["message"]);
+			}else{
+				showMessage('error', data["message"]);
+			}
+		}
+	});
+}
+</script>
+{include file="admin/b2c/openDialog" /}
+{/block}

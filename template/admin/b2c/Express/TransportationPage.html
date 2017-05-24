@@ -1,0 +1,34 @@
+    {foreach name="express_list_pagequery" item="v" key="k" }
+        <tr style="background-color:#E8F2FF;"><td colspan="7">
+        <div style="float:left;margin:0 8px;">
+            <input type="checkbox" value="{$v.shipping_fee_id}" name="sub" onclick="CheckThis()"></div>
+        <div style="float:left;margin-top:4px;font-size:1.2em;font-weight:700;">{$v.shipping_fee_name}</div>
+        <div class="mod-operate" style="float:right;margin-top:4px;margin-right:10px;">
+            <a class="edit" href="ADMIN_MAIN/Express/TransportationEdit?shipping_fee_id={$v.shipping_fee_id}" >编辑</a>
+            <a class="del" name="Delete" onclick="TransportationDelete({$v.shipping_fee_id},event);" href="javascript:void(0)">删除</a>
+        </div>
+        <div class="clear"></div>
+        </td></tr>
+        <tr style=" font-size:1.1em; border-top: 1px #D7D7D7 solid;border-bottom: 1px #D7D7D7 solid;background-color:#F6F6F6; ">
+            <td></td>
+            <td>运送方式</td>
+            <td>运送到</td>
+            <td>首件（重kg）</td>
+            <td>运费(元)</td>
+            <td>续件（重kg）</td>
+            <td>运费(元)</td>
+        </tr>
+         {foreach name="$v['ext']" item="va" key="ka" }
+         	
+        <tr class="tr-Current"  >
+            <td><div class="cell"></div></td>
+            <td><div class="cell">快递</div></td>
+            <td><div class="cell" title="{if condition="strtoupper($va['is_default']) eq '1'"}全国{else /}{$va.address_name}{/if}">{if condition="strtoupper($va['is_default']) eq '1'"}全国{else /}{$va.address_name}{/if}</div></td>
+            <td><div class="cell">件数 = {$va.snum}</div></td>
+            <td><div class="cell">{$va.sprice}</div></td>
+            <td><div class="cell">续件= {$va.xnum}</div></td>
+            <td><div class="cell">{$va.xprice}</div></td>
+        </tr>
+        {/foreach}
+    {/foreach}
+

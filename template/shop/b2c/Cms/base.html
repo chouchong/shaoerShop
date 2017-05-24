@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>文章中心</title>
+<link rel="shortcut icon" type="image/x-icon" href="__TEMP__/{$style}/public/images/favicon.ico" media="screen"/>
+<link type="text/css" rel="stylesheet" href="__TEMP__/{$style}/public/css/ns_help.css">
+<link type="text/css" rel="stylesheet" href="__TEMP__/{$style}/public/css/ns_common.css">
+<link type="text/css" rel="stylesheet" href="__TEMP__/{$style}/public/css/ns_color_style.css">
+<link type="text/css" rel="stylesheet" href="__TEMP__/{$style}/public/css/ns_bottom.css">
+<style>
+.footer-info {
+	position: fixed;
+	bottom: 0px;
+}
+</style>
+<script type="text/javascript" src="__TEMP__/{$style}/public/js/jquery.js"></script>
+<script type="text/javascript" src="__TEMP__/{$style}/public/js/ns_article_help.js"></script>
+<script type="text/javascript" src="__TEMP__/{$style}/public/js/ns_components.js"></script>
+<script type="text/javascript" src="__TEMP__/{$style}/public/js/jquery.cookie.js"></script>
+<script type="text/javascript">
+	var shop_main='SHOP_MAIN';	var upload = "__UPLOAD__";</script>
+
+{block name="resources"}
+<!-- 添加css、字体文件文件 -->
+{/block}
+
+</head>
+<body>
+<!-- 头部广告 -->
+{block name="headAd"}
+{/block}
+
+<!-- 公共的顶部（部分界面不用，例如，商家入驻） -->
+{block name="commonTop"}
+	{include file='shop/b2c/controlTop'/}
+{/block}
+
+<!-- 头部，菜单栏、搜索、导航栏 -->
+{block name="head"}
+	{include file='shop/b2c/controlHeadSerach'/}
+{/block}
+<!--头部商品分类 start-->
+{block name="headGoodType"}
+{include file='shop/b2c/controlHeadGoodType'/}
+{/block}
+<!--头部商品分类 end-->
+
+<!-- 内容 -->
+{block name="main"}{/block}
+
+<!-- 底部 -->
+{block name="bottom"}
+{include file='shop/b2c/controlBottom'/}
+{/block}
+{block name="javascript"}
+<!-- 添加js文件 -->
+{/block}
+</body>
+</html>

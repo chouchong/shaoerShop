@@ -1,0 +1,66 @@
+@CHARSET "UTF-8";
+
+.uploadImgItem input {
+	cursor: pointer;
+	position: absolute;
+	left: 0;
+	top: 0;
+	width: 92px;
+	filter: alpha(opacity = 0);
+	-moz-opacity: 0;
+	-khtml-opacity: 0;
+	opacity: 0;
+}
+
+.uploadImgItem img {
+	display: block;
+	margin: 0px auto;
+	width: 90px;
+	height: 90px;
+}
+
+.input-mini {
+	margin-top: 0;
+}
+
+.pro-form .procategory li {
+	width: 100%;
+}
+
+.gridly {
+	position: relative;
+	width: 960px;
+}
+
+.brick.small {
+	width: 140px;
+	height: 140px;
+}
+
+.brick.small img {
+	width: 64px;
+	height: 64px;
+	padding: 3px;
+}
+
+.brick.large {
+	width: 300px;
+	height: 300px;
+}
+
+.example .brick.small {
+	width: 70px;
+	height: 70px;
+}
+
+.example .brick .delete {
+	width: 20px;
+	height: 20px;
+	line-height: 20px;
+	background: rgba(153, 153, 153, 0.6);
+	text-decoration: none;
+}
+
+.auto-width {
+	width: auto !important;
+}

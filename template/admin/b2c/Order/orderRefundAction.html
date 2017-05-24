@@ -1,0 +1,151 @@
+<div class="modal fade" id="confirmRefund" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display:none;">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+				<h4 class="modal-title" id="myModalLabel">确认退款</h4>
+			</div>
+			<div class="modal-body">
+					<!-- 主要内容 -->
+				<div class="form-group">
+					退款金额：
+					<div class="col-lg-2">
+						<input type="text" id="refund_money_input" class="form-control" placeholder="请填写退款金额">
+					</div>
+				</div>
+			</div>
+			<div class="modal-footer">
+				<input type="hidden" id="confirm_order_id" value=""/>
+				<input type="hidden" id="confirm_order_goods_id" value=""/>
+				<button type="button" class="btn" onclick="confirmRefundOk()">确认</button>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="modal fade" id="refuseRefund" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display:none;">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+				<h4 class="modal-title" id="myModalLabel">拒绝退款</h4>
+			</div>
+			<div class="modal-body"><!-- 主要内容 --></div>
+			<div class="modal-footer">
+				<input type="hidden" id="refuse_order_id" value=""/>
+				<input type="hidden" id="refuse_order_goods_id" value=""/>
+				<button type="button" class="btn" onclick="refuseRefund(1)">拒绝本次</button>
+				<button type="button" class="btn" onclick="refuseRefund(2)">永久拒绝</button>
+			</div>
+		</div>
+	</div>
+</div>
+<script>
+function refundOperation(operation_type, order_id, order_goods_id){
+	if(operation_type == 'agree'){
+		//同意退款
+		agreeRefund(order_id, order_goods_id);
+	}else if(operation_type == 'refuse'){
+		//拒绝退款
+		refuseRefund(order_id,order_goods_id);
+	}else if(operation_type == 'confirm_receipt'){
+		//确认收货
+		orderGoodsConfirmRecieve(order_id,order_goods_id);
+	}else if(operation_type == 'confirm_refund'){
+		//确认退款
+		confirmRefund(order_id,order_goods_id);
+	}
+}
+/**
+ * 同意退款
+ */
+function agreeRefund(order_id, order_goods_id){
+	$.ajax({
+		type : "post",
+		url : "ADMIN_MAIN/Order/orderGoodsRefundAgree",
+		data : {'order_id':order_id,"order_goods_id":order_goods_id},
+		success : function(data) {
+			if (data['code'] > 0) {
+				showMessage('success', data["message"],window.location.reload());
+			} else {
+				showMessage('error', data["message"]);
+			}
+		}
+	});
+}
+/**
+ * 拒绝退款展示
+ */
+function refuseRefund(order_id,order_goods_id)
+{
+	$("#refuse_order_id").val(order_id);
+	$("#refuse_order_goods_id").val(order_goods_id);
+	$("#refuseRefund").modal('show');
+}
+/**
+ * 拒绝退款操作
+ */
+function refuseRefundType(type){
+	var order_id = $("#refuse_order_id").val();
+	var order_goods_id = $("#refuse_order_goods_id").val();
+	if(type == 1)
+	{
+		refund_url = "ADMIN_MAIN/Order/orderGoodsRefuseOnce";
+	} else{
+		refund_url = "ADMIN_MAIN/Order/orderGoodsRefuseForever";
+	}
+	$.ajax({
+		type : "post",
+		url : refund_url,
+		data : {'order_id':order_id,"order_goods_id":order_goods_id},
+		success : function(data) {
+			if (data['code'] > 0) {
+				showMessage('success', "已拒绝",window.location.reload());
+			} else {
+				showMessage('error', data["message"]);
+			}
+		}
+	});
+}
+function orderGoodsConfirmRecieve(order_id,order_goods_id){
+	$.ajax({
+		type : "post",
+		url : "ADMIN_MAIN/Order/orderGoodsConfirmRecieve",
+		data : {'order_id':order_id,"order_goods_id":order_goods_id},
+		success : function(data) {
+			if (data['code'] > 0) {
+				showMessage('success', data["message"],window.location.reload());
+			} else {
+				showMessage('error', data["message"]);
+			}
+		}
+	});
+}
+/**
+ * 确认退款界面显示
+ */
+function confirmRefund(order_id,order_goods_id){
+	$("#confirm_order_id").val(order_id);
+	$("#confirm_order_goods_id").val(order_goods_id);
+	$("#confirmRefund").modal('show');
+}
+/**
+ * 确认退款执行
+ */
+function confirmRefundOk(){
+	var order_id = $("#confirm_order_id").val();
+	var order_goods_id = $("#confirm_order_goods_id").val();
+	var refund_money = $("#refund_money_input").val();
+	$.ajax({
+		type : "post",
+		url : "ADMIN_MAIN/Order/orderGoodsConfirmRefund",
+		data : {'order_id':order_id,"order_goods_id":order_goods_id, "refund_real_money":refund_money},
+		success : function(data) {
+			if (data['code'] > 0) {
+				showMessage('success', "已退款",window.location.reload());
+			} else {
+				showMessage('error', data["message"]);
+			}
+		}
+	});
+}
+</script>

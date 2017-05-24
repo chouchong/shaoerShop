@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>会员注册</title>
+<meta name="Keywords" content="">
+<meta name="Description" content="">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<link rel="shortcut  icon" type="image/x-icon" href="__TEMP__/{$style}/public/images/favicon.ico" media="screen"/>
+<link rel="stylesheet" href="__TEMP__/{$style}/public/css/login_base.css">
+<link rel="stylesheet" href="__TEMP__/{$style}/public/css/login_wap.css">
+<link rel="stylesheet" type="text/css"href="__TEMP__/{$style}/public/css/font-awesome.css">
+<link rel="stylesheet" href="__TEMP__/{$style}/public/css/layer.css" id="layuicss-skinlayercss">
+<script src="__TEMP__/{$style}/public/js/showBox.js"></script>
+<script src="__TEMP__/{$style}/public/js/jquery.js"></script>
+<script type="text/javascript" src="__TEMP__/{$style}/public/js/layer.js"></script>
+<script type="text/javascript"
+	src="__TEMP__/{$style}/public/js/jquery.js"></script>
+<script type="text/javascript">
+	$(function() {
+		$('.nk_cell').click(function() {
+			if (!$(this).is('.active')) {
+				$('.nk_cell').removeClass('active');
+				$(this).addClass('active');
+				var oDiv1 = $('#nk_text1');
+				var oDiv2 = $('#nk_text2');
+				if (oDiv1.css('display') == "block") {
+					oDiv1.hide();
+					oDiv2.show();
+				} else {
+					oDiv2.hide();
+					oDiv1.show();
+				}
+			}
+		});
+		/* $("#password").onchange(function(){
+			var psd = $("#password").val();
+			alert(psd);
+		}) */
+		$('.right_login_user').click(function() {
+			/* layer.msg('hahah'); */
+			$("#username").val("");
+		});
+		$('.right_login_pass').click(function() {
+			$("#password").val("");
+			$("#password_mobile").val("");
+		});
+		$('.right_login_cfpass').click(function() {
+			$("#cfpassword").val("");
+			$("#cfpassword_mobile").val("");
+		});
+		$('.right_login_mobile').click(function() {
+			$("#mobile").val("");
+		});
+		
+	})
+	function psd(){
+		var password = $("#password").val();
+		var cfpassword = $("#cfpassword").val();
+		if(password != '' && cfpassword != ''){
+			if(password != cfpassword){
+				layer.msg('两次密码输入不一致');
+				$('#login-button').attr('disabled',"true");
+			}else{
+				$('#login-button').removeAttr("disabled"); 
+			}	
+		}
+	}
+	function psd_mobile(){
+		var password_mobile = $("#password_mobile").val();
+		var cfpassword_mobile = $("#cfpassword_mobile").val();
+		if(password_mobile != '' && cfpassword_mobile != ''){
+			if(password_mobile != cfpassword_mobile){
+				layer.msg('两次密码输入不一致');
+				$('#login-button-mobile').attr('disabled',"true");
+			}else{
+				$('#login-button-mobile').removeAttr("disabled"); 
+			}	
+		}
+	}
+	
+   function login(username,password){
+		$.ajax({
+			type : "post",
+			url : "index",
+			async : true,
+			data : {
+				"username" : username,
+				"password" : password
+			},
+			success : function(data) {
+				setTimeout(function(){location.href="APP_MAIN/member/index"},1000);
+			}
+		});
+	}
+	
+	function register_member(){
+		var username = $("#username").val();
+		var password = $("#password").val();
+		var cfpassword = $("#cfpassword").val();
+		var reg = /^.{6,}$/;
+		if(!reg.test(password)){
+			layer.msg("密码至少6位");
+			return false;
+		}else if(!reg.test(cfpassword)){
+			layer.msg("确认密码至少6位");
+			return false;
+		}
+		if(username == ''){
+			layer.msg('用户名不能为空');
+			return false;
+		}else if(password == ''){
+			layer.msg('密码不能为空');
+			return false;
+		}else if(cfpassword == ''){
+			layer.msg('确认密码不能为空');
+			return false;
+		}
+			$.ajax({
+				type : "post",
+				url : "register",
+				async : true,
+				data : {
+					"username" : username,
+					"password" : password
+				},
+				success : function(data) {
+					 if(data["code"] > 0 ){
+						 layer.msg(data["message"]);
+						 login(username,password);
+						 //setTimeout(function(){location.href="APP_MAIN/Login/index"},1000);
+						//showMessage('success', data["message"],'APP_MAIN/Login/index');
+					}else{
+						layer.msg(data["message"]);
+						//showMessage('error', data["message"]);
+					} 
+				}
+			});
+	}
+	
+	function login_mobile(mobile,password){
+		$.ajax({
+			type : "post",
+			url : "index",
+			async : true,
+			data : {
+				"mobile" : mobile,
+				"password" : password
+			},
+			success : function(data) {
+				setTimeout(function(){location.href="APP_MAIN/member/index"},1000);
+			}
+		});
+	}
+	function register_mobile(){
+		var mobile = $("#mobile").val();
+		var password_mobile = $("#password_mobile").val();
+		var cfpassword_mobile = $("#cfpassword_mobile").val();
+		if(!(/^1[34578]\d{9}$/.test(mobile))){ 
+			layer.msg("手机号码有误，请重填");  
+	        return false; 
+	    } 
+		var reg = /^.{6,}$/;
+		if(!reg.test(password_mobile)){
+			layer.msg("密码至少6位");
+			return false;
+		}else if(!reg.test(cfpassword_mobile)){
+			layer.msg("确认密码至少6位");
+			return false;
+		}
+		
+		if(mobile == ''){
+			layer.msg('手机号不能为空');
+			return false;
+		}else if(password_mobile == ''){
+			layer.msg('密码不能为空');
+			return false;
+		}else if(cfpassword_mobile == ''){
+			layer.msg('确认密码不能为空');
+			return false;
+		}
+			$.ajax({
+				type : "post",
+				url : "register",
+				async : true,
+				data : {
+					"mobile" : mobile,
+					"password" : password_mobile
+				},
+				success : function(data) {
+					 if(data["code"] > 0 ){
+						 layer.msg(data["message"]);
+						 login_mobile(mobile,password_mobile);
+					}else{
+						layer.msg(data["message"]);
+					} 
+				}
+			});
+	}
+</script>
+</head>
+<body>
+	<div class="nk_reg_logo">
+		<img src="__TEMP__/{$style}/public/images/login.png" />
+	</div>
+	<!-- <a href="APP_MAIN/login"><div class="banner_login">
+		<span >登录</span>
+	</div></a>
+	<a href="APP_MAIN/login/register"><div class="banner_register" >
+		<span >注册</span>
+	</div></a> -->
+	<div class="nk_top">
+		<div class="{if condition='$loginConfig.mobile_config.is_use eq 1'}nk_cell{else/}nk_cell_one{/if} active">
+			账号注册
+		</div>
+		{if condition="$loginConfig['mobile_config']['is_use'] eq 1"}
+		<div class="nk_cell">
+			手机号注册
+		</div>
+		{/if}
+	</div>
+	<div class="reg-box">
+		<!-- <form id="regForm" action="APP_MAIN/login/register" method="post" onsubmit="return check()"> -->
+			<div id="nk_text1" style="display:block;">
+				<div class="reg-cont" style="margin-top:45px;">
+					<label class="login-txt" for="username"><span style="padding-right:15px;">用户名</span><input class="" type="text"
+						name="username" id="username" placeholder="请输入用户名"> <i
+						class="right_login_user"> </i>
+					</label>
+				</div>
+				<div class="reg-cont" onchange="psd()">
+					<label for="password"><span style="padding-right:27px;">密码</span><input
+						class="" type="password" name="password" id="password"
+						placeholder="请输入账户密码" > <i class="right_login_pass"> </i>
+					</label>
+				</div>
+				<div class="reg-cont" onchange="psd()">
+					<label for="cfpassword"><span style="padding-right:3px;">确认密码</span><input
+						class="" type="password" name="cfpassword" id="cfpassword"
+						placeholder="请确认账户密码"> <i class="right_login_cfpass">
+					</i>
+					</label>
+				</div>
+				<button id="login-button" class="lang-btn" onclick="register_member()">注册</button>
+			</div>
+		<!-- </form> -->
+		<!-- <form action="" method="post"> -->
+				<div id="nk_text2" style="display:none;    height: 178px;">
+				<div class="nk-cont" style="margin-top:45px;">
+						<label><span  style="padding-right:20px;">手机号</span><input type="text"name="mobile" id="mobile" placeholder="请输入手机号码"><i class="right_login_mobile" style="margin-right: 6px;">
+					</i> 
+						</label>
+				</div>
+				<div class="nk-cont">
+						<label><span  style="padding-right:20px;">验证码</span><input type="password"
+							name="motify" placeholder="请输入手机验证码">
+							<a href="javascript:;">获取验证码</a>
+						</label>
+				</div>
+
+				<div class="reg-cont" onchange="psd_mobile()">
+					<label for="password"><span style="padding-right:32px;">密码</span><input
+						class="" type="password" name="password" id="password_mobile"
+						placeholder="请输入账户密码"> <i class="right_login_pass"> </i>
+					</label>
+				</div>
+				<div class="reg-cont" onchange="psd_mobile()">
+					<label for="cfpassword"><span style="padding-right:8px;">确认密码</span><input
+						class="" type="password" name="cfpassword" id="cfpassword_mobile"
+						placeholder="请确认账户密码"> <i class="right_login_cfpass">
+					</i>
+					</label>
+				</div>
+				<button id="login-button-mobile" class="lang-btn" onclick="register_mobile()">注册</button>
+				</div>
+			<!-- </form> -->
+		<!-- <div id="member" class="news-title pt-60 pb-50">
+			<h5 class="t-c f-24">使用以下账号登录</h5>
+		</div> -->
+		{if condition='$loginCount neq 0'}
+		<img src="__TEMP__/{$style}/public/images/assistant_member.png" style="width: 80% !important;margin-left: 10%;margin-top: 25px;"/>
+		{/if}
+		<div style="margin: 0 10%;">
+		
+		{if condition="$loginConfig['qq_login_config']['is_use'] eq 1"}
+		<div class="{if condition='$loginCount eq 1'}login_wei{elseif condition='$loginCount eq 2'}login_wei_two{elseif condition='$loginCount eq 3'}login_wei_three{/if}">
+			<a href="APP_MAIN/login/oauthlogin.html?type=QQLOGIN">
+			<img src="__TEMP__/{$style}/public/images/qq.png"/>
+			<span>QQ</span>
+			</a>
+		</div>
+		{/if}
+		{if condition="$loginConfig['wchat_login_config']['is_use'] eq 1"}
+		<div class="{if condition='$loginCount eq 1'}login_wei{elseif condition='$loginCount eq 2'}login_wei_two{elseif condition='$loginCount eq 3'}login_wei_three{/if}">
+			<a href="APP_MAIN/login/oauthlogin.html?type=WCHAT">
+				<img src="__TEMP__/{$style}/public/images/weixin.png" />
+				<span>微信</span>
+			</a>
+		</div>
+		{/if}
+		<div class="{if condition='$loginCount eq 1'}login_wei{elseif condition='$loginCount eq 2'}login_wei_two{elseif condition='$loginCount eq 3'}login_wei_three{/if}" style="display: none;">
+			<a href="APP_MAIN/login/wchatOauth.html">
+				<img src="__TEMP__/{$style}/public/images/weibo.png"/>
+				<span >微博</span>
+			</a>
+		</div>
+		</div>
+		<!-- <div class="nk_loginlogin">
+			已有账号？<a href="APP_MAIN/login/index">立即登录</a>
+		</div> -->
+	</div>
+</body>
+</html>

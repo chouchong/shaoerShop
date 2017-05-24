@@ -1,0 +1,250 @@
+{extend name="shop/b2c/base" /}
+{block name="resources"}
+<link type="text/css" rel="stylesheet" href="__TEMP__/{$style}/public/css/flow.css">
+<link rel="stylesheet" type="text/css" href="__TEMP__/{$style}/public/css/ns_shop_common.css">
+<style>
+.flowstep{top:58px;right:474px;}
+.pay-info tr td{text-align: right;background: #ffffff;padding-bottom:5px;font-size:14px;}
+</style>
+{/block}
+{block name="main"}
+<div class="pop-main pop-compare" style="display: none;">
+	<div class="pop-header">
+		<span>温馨提示</span>
+		<a class="pop-close" href="javascript:;" title="关闭"></a>
+	</div>
+	<div class="pop-con">
+		<i class="pop-icon"></i>
+		<p class="pop-text">您确认要删除吗？</p>
+		<a href="javascript:;" class="pop-sure main-bg-color">确定</a><a href="javascript:;" class="cancel-btn">取消</a>
+	</div>
+</div>
+
+<div class="pop-mask" style="display: none;"></div>
+<div class="blank15"></div> 
+<div class="block_jm">
+	<div class="flowstep">
+		<ol class="flowstep-5">
+			<li class="step-first">
+				<div class="step-done">
+					<div class="step-name">查看购物车</div>
+					<div class="step-no"></div>
+				</div>
+			</li>
+			<li>
+				<div class="step-done">
+					<div class="step-name">拍下商品</div>
+					<div class="step-no"></div>
+				</div>
+			</li>
+			<li>
+				<div class="step-name">付款</div>
+				<div class="step-no">3</div>
+			</li>
+			<li>
+				<div class="step-name">确认收货</div>
+				<div class="step-no">4</div>
+			</li>
+			<li class="step-last">
+				<div class="step-name">评价</div>
+				<div class="step-no">5</div>
+			</li>
+		</ol>
+	</div>
+	<div id="bg" class="bg" style="display:none;"></div>
+	<div class="blank15"></div>
+	<div class="checkBox_jm clearfix">
+		<div class="title">1 地址选择</div>
+		<div class="address_jm" id="AddressList">{include file='shop/b2c/Goods/controlAddressList'/}</div>
+	</div>
+	<div class="checkBox_jm">
+		<div class="title">2 商品清单</div>
+		<table border="0" cellpadding="0" cellspacing="0" width="100%" class="checkgoods">
+			<tbody>
+				<tr>
+					<th width="50%" align="left" class="tdone">商品</th>
+					<th>数量</th>
+					<th>单价</th>
+					<th>小计</th>
+				</tr>
+				<tr>
+					<td colspan="4" style="background:#FAFAFA; border-top:1px solid #eee; font-weight:bold; padding:5px 10px;">{$web_info.title}</td>
+				</tr>
+				{foreach name="list" item="cart_info" key="k"}
+				<tr>
+					<td width="50%" style="border-top:none;">
+						<div class="thumb_name">
+							<dl>
+								<dt>
+									<a href="SHOP_MAIN/goods/goodsinfo.html?goodsid={$cart_info.goods_id}" target="_blank">
+										<img src="__UPLOAD__/{$cart_info.picture_info.pic_cover_small}" style="border:1px solid #eeeeee;" title="{$cart_info.goods_name}">
+									</a>
+								</dt>
+								<dd>
+									<a href="SHOP_MAIN/goods/goodsinfo.html?goodsid={$cart_info.goods_id}" target="_blank" class="f6">{$cart_info.goods_name}</a><br>
+									<font class="attrname">{$cart_info.sku_name}</font>
+								</dd>
+							</dl>
+						</div>
+					</td>
+					<td align="center" style="border-top:none;">{$cart_info.num}</td>
+					<td align="center" class="price_font" style="border-top:none;">
+					￥{$cart_info.price}
+					{if condition="$cart_info.point_exchange_type==1"}
+						{if condition=" $cart_info.point_exchange>0"}
+							+积分{$cart_info.point_exchange}
+						{/if}
+						<br/>积分商品
+					{/if}
+					</td>
+					<td align="center" class="price_font js-total-num" data-sum="{$cart_info.price*$cart_info.num}" 
+					data-sum-integral="{if condition='$cart_info.point_exchange_type==1'}{$cart_info.point_exchange*$cart_info.num}{else/}0{/if}"
+					style="border-top:none;">￥{$cart_info.price*$cart_info.num}</td>
+				</tr>
+				{/foreach}
+				<tr>
+					<td colspan="4" bgcolor="#ffffff" align="left" class="shipping_type">
+						<ul class="shipping_jm">
+							<li>
+								<input type="hidden" name="pay_ship[0]" id="pay_ship_0" class="shipping" value="8">
+								<a id="ship_0_8" title="配送的运费是固定的 免邮" class="shipping_type shipping_type_curr pay_ship0">
+									<!--注意：如果选中的是当前的配送，注意a标签的变化，变化为<a class="shipping_type shipping_type_curr">-->
+									<label>普通快递</label>
+								</a>
+							</li>
+						</ul>
+						<span id="picktxt0"></span>
+<!-- 						<p class="shipping_desc" id="express" data-express="{$express}" >运费：￥{$express}</p> -->
+					</td>
+				</tr>
+				<tr>
+					<td colspan="4" bgcolor="#ffffff" align="left" style="padding:12px 0 12px 30px;">
+						<div class="checkout_other">
+							<a class="jmbag js-order-use_coupon" href="javascript:void(0);" onclick="showCheckoutOther(this);"><span>+</span>使用店铺优惠券</a>
+							<table class="subbox_other sub_bonus" width="100%">
+								<tbody>
+									<tr>
+										<td align="right" width="120">使用店铺优惠券：</td>
+										<td>
+											<select onchange="changeUseCoupon(this,-1)" class="otherinput">
+												<option value="-1" data-money="0">不使用优惠卷</option>
+												{foreach name="coupon_list" item="coupon"}
+												<option value="{$coupon['coupon_id']}" data-money="{$coupon['money']}">{$coupon['coupon_code']}-下单立减{$coupon['money']}元</option>
+												{/foreach}
+											</select>
+										</td>
+<!-- 										<td>&nbsp; 或 &nbsp;<a href="javascript:void(0);" onclick="javascript:document.getElementById('Bonus_span_0').style.display='block';document.getElementById('Bonus_a_0').style.display='none';" class="main-color" id="Bonus_a_0">直接输入优惠券号</a></td> -->
+<!-- 										<td> -->
+<!-- 											<label id="Bonus_span_0" style="display:none;"> -->
+<!-- 											<input name="bonus_sn[0]" id="bonus_sn_0" type="text" size="15" value="输入优惠券" onfocus="if (value =='输入优惠券'){value =''}" onblur="if (value ==''){value='输入优惠券'}" class="input_addr2"> -->
+<!-- 											<input name="validate_bonus" type="button" value="使用" onclick="validateBonus(document.getElementById('bonus_sn_0').value,0)" class="BonusButton"> -->
+<!-- 											</label> -->
+<!-- 										</td> -->
+									</tr>
+								</tbody>
+							</table>
+						</div>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+		<table border="0" cellpadding="0" cellspacing="0" width="100%" class="checkgoods" style="border-top:0;">
+			<tbody>
+				<tr>
+					<td colspan="4" class="tdother2">
+						<div class="checkout_other">
+							<a class="jmbag js-order-leave-message" href="javascript:void(0);" onclick="showCheckoutOther(this);"><span>+</span>订单留言</a>
+							<table class="subbox_other" width="100%">
+								<tbody width="100%" cellpadding="5" cellspacing="0">
+									<tr>
+										<td align="right" width="100" valign="top">订单留言：</td>
+										<td colspan="4">
+											<textarea name="postscript" cols="80" rows="3" id="leavemessage" class="textarea"></textarea>
+										</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<td colspan="4" class="tdother2">
+						<div class="allow_user_surplus">
+							<p>
+								<label class="is_user_surplus" for="issurplus">
+									<input type="checkbox" id="issurplus"  onclick="checkboxOnclick(this)" style="vertical-align:middle; cursor:pointer">使用账户余额支付
+								</label>
+							</p>
+							<div id="allow_user_surplus">
+								<span class="surplus_desc">
+								<input name="surplus" type="text" data-max="{$member_account.balance}" class="surplus" id="member_balance">&nbsp;&nbsp;元</span>
+								您当前的可用余额为<span class="your_surplus">{$member_account.balance}</span>
+							</div>
+							<script type="text/javascript">
+							function checkboxOnclick(checkbox){
+									var surplus = 0;
+								if ( checkbox.checked == true){
+									document.getElementById("allow_user_surplus").style.display = "block";
+								}else{
+									document.getElementById("allow_user_surplus").style.display = "none";
+								}
+							}
+							</script>
+						</div>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+		<input type="hidden" id="hidden_discount_money" value="{$discount_money}">
+		<input type="hidden" id="hidden_express" value="{$express}">
+		<input type="hidden" id="hidden_count_money" value="{$count_money}">
+		<input type="hidden" id="is_calculate_express" value="{$is_calculate_express}">
+		<input type="hidden" id="res_message" value="{$res_message}">
+		<input type="hidden" id="count_point_exchange" value="{$count_point_exchange}"/>
+		<div class="blank10"></div>
+		<table cellpadding="0" cellspacing="0" width="100%" class="pay-info">
+			<tbody>
+				<tr>
+					<td>运费： <span id="express">￥{$express}</span></td>
+				</tr>
+				<tr>
+					<td>总优惠： <span id="discount_money">￥{$discount_money}</span></td>
+				</tr>
+				<tr>
+					<td>实付款： 
+						<span id="realprice" class="main-color" style="font-size:20px;">￥0.00</span>
+						{if condition="$count_point_exchange>0 "}
+						<span class="main-color" style="font-size:20px;">+{$count_point_exchange}积分<span style="font-size:14px;color:#666">（当前的积分{$member_account.point}）</span></span>
+						{/if}
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+	<script type="text/javascript">
+	function showCheckoutOther(obj){
+		var otherParent = obj.parentNode;
+		otherParent.className = (otherParent.className=='checkout_other') ? 'checkout_other2' : 'checkout_other';
+		var spanzi = obj.getElementsByTagName('span')[0];
+		spanzi.innerHTML= spanzi.innerHTML == '+' ? '-' : '+';
+	}
+	</script>
+		<div class="flowBox_jm clearfix" style="border:none;padding-bottom:20px;">
+			<div style="float:left;width:40%;padding:8px 0; padding-left:5px;"> 
+				<a href="SHOP_MAIN/Member/cart.html" class="continue_buy" style="padding:0;">返回购物车</a>
+			</div>
+			<div style="float:right;width:55%;text-align:right;padding:8px 20px;"> 
+				<input onclick="submitOrder()" type="image" src="__TEMP__/{$style}/public/images/jmpic/btn_done.png" align="absmiddle">
+				<input type="hidden" value="{$goods_sku_list}" id="goods_sku_list" />
+				<input type="hidden" value="-1" id="use_coupon" data-money="0"/>
+			</div>
+		</div>
+		<div class="blank10"></div>
+	<!-- </form> -->
+	<div class="blank15"></div>
+</div>
+{/block}
+{block name="javascript"}
+<script type="text/javascript"src="__TEMP__/{$style}/public/js/base.js"></script>
+<script type="text/javascript"src="__TEMP__/{$style}/public/js/buyFlowSecondGetGoods/buyFlowSecondGetGoods.js"></script>
+{/block}

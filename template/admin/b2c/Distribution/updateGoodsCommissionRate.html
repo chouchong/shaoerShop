@@ -1,0 +1,95 @@
+{extend name="admin/b2c/base" /}
+{block name="resources"/}
+<link rel="stylesheet" type="text/css" href="ADMIN_CSS/defau.css">
+{/block}
+{block name="main"}
+<div class="set-style">
+	<dl>
+		<dt>分销佣金比率:</dt>
+		<dd>
+			<p><input name="" id="distribution_commission_rate" type="text" value="{$goods_info.distribution_commission_rate}" onkeyup="javascript:CheckInputIntFloat(this);" /></p>	
+			<p class="error">请输入等级名称</p>
+		</dd>
+	</dl>
+	<dl>
+		<dt>股东分红佣金比率:</dt>
+		<dd>
+			<p><input name="" id="partner_commission_rate" type="text" value="{$goods_info.partner_commission_rate}" onkeyup="javascript:CheckInputIntFloat(this);"/></p>	
+			<p class="error">请输入升级条件</p>
+		</dd>
+	</dl>
+	<dl>
+		<dt>股东全球分红比率:</dt>
+		<dd>
+			<p><input name="" id="global_commission_rate" type="text" value="{$goods_info.global_commission_rate}" onkeyup="javascript:CheckInputIntFloat(this);"/></p>	
+			<p class="error">请输入本店销售佣金比率</p>
+		</dd>
+	</dl>
+	<dl>
+		<dt>分销团队分红佣金比率:</dt>
+		<dd>
+			<p><input name="" id="distribution_team_commission_rate" type="text" value="{$goods_info.distribution_team_commission_rate}" onkeyup="javascript:CheckInputIntFloat(this);"/></p>	
+			<p class="error">请输入给上级的佣金比率</p>
+		</dd>
+	</dl>
+	<dl>
+		<dt>股东团队分红佣金比率:</dt>
+		<dd>
+			<p><input name="" id="partner_team_commission_rate" type="text" value="{$goods_info.partner_team_commission_rate}" onkeyup="javascript:CheckInputIntFloat(this);"/></p>	
+			<p class="error">请输入给上上级的佣金比率</p>
+		</dd>
+	</dl>
+	
+	<dl>
+		<dt>区域代理分红佣金比率:</dt>
+		<dd>
+			<p><input name="" id="regionagent_commission_rate" type="text" value="{$goods_info.regionagent_commission_rate}" onkeyup="javascript:CheckInputIntFloat(this);"/></p>	
+			<p class="error">请输入给上上级的佣金比率</p>
+		</dd>
+	</dl>
+	<dl>
+		<dt>渠道代理分红佣金比率:</dt>
+		<dd>
+			<p><input name="" id="channelagent_commission_rate" type="text" value="{$goods_info.channelagent_commission_rate}" onkeyup="javascript:CheckInputIntFloat(this);"/></p>	
+			<p class="error">请输入给上上级的佣金比率</p>
+		</dd>
+	</dl>
+	<button class="edit_button" onclick="updateGoodsCommissionRate();">提交</button>
+</div>
+{include file="admin/b2c/openDialog" /}
+<script src="__STATIC__/js/limit_input_digit.js"></script>
+<script>			
+	function updateGoodsCommissionRate(){
+		var distribution_commission_rate = $("#distribution_commission_rate").val();
+		var partner_commission_rate = $("#partner_commission_rate").val();
+		var global_commission_rate = $("#global_commission_rate").val();
+		var distribution_team_commission_rate = $("#distribution_team_commission_rate").val();
+		var partner_team_commission_rate = $("#partner_team_commission_rate").val();		
+		var regionagent_commission_rate = $("#regionagent_commission_rate").val();
+		var channelagent_commission_rate = $("#channelagent_commission_rate").val();
+
+		$.ajax({
+			type:"post",
+			url:"ADMIN_MAIN/Distribution/updateGoodsCommissionRate",
+			data:{
+				'distribution_commission_rate':distribution_commission_rate,
+				'partner_commission_rate':partner_commission_rate,
+				'global_commission_rate':global_commission_rate,
+				'distribution_team_commission_rate':distribution_team_commission_rate,
+				'partner_team_commission_rate':partner_team_commission_rate,
+				'regionagent_commission_rate':regionagent_commission_rate,
+				'channelagent_commission_rate':channelagent_commission_rate,
+				'goods_id':{$goods_id}
+			},
+			async:true,
+			success:function (data) {
+				if (data["code"] > 0) {
+					showMessage('success', data["message"],"ADMIN_MAIN/Distribution/goodsCommissionRateList");
+				}else{
+					showMessage('error', data["message"]);
+				}	
+			}
+		});
+	}
+</script>
+{/block}

@@ -1,0 +1,160 @@
+{extend name="wap/b2c/base" /}
+{block name="resources"}
+	<meta content="text/html; charset=UTF-8">
+    <link rel="stylesheet" href="__TEMP__/{$style}/public/css/order.css">
+    <style type="text/css">
+	#express_method a{
+		border: 1px solid #999;
+		padding: 5px 20px;
+		font-size: 15px;
+	}	
+	#express_method a.active{
+		background-color: #E86660;
+		color: white;
+		border: 1px solid #E86660;
+	}	
+	#express_method a:hover {
+		text-decoration:none;
+	}
+	#express_method a:visited{
+		color: white;
+	}
+</style>
+    {/block}
+  
+   {block name="main"}
+    <input type="hidden" id="allitems" value="{$items}">
+    <div class="popup" id="popup" style="display: none"></div>
+    <div class="h50"></div>
+    <div class="cart-detail">
+    <!--goback end 说明此处将移至订单界面-->
+    <section class="cart-info" style="display:block">
+    </section>
+    <section class="cart-prolist" >
+
+        <ul class="cart-prolist-ul" style="border:0;padding:0px;">
+            <li>
+                <h2 class="title">店铺名称：{$shopname}
+               </h2>
+
+            </li>
+            <input type="hidden" id="heima_module" value="APP_MAIN">
+            <input type="hidden" id="goodslist" value="{$goods_sku_list}">
+            {foreach name="itemlist" item="list"}
+            <li class="cart-list-li" style="border:0;border-bottom:1px solid #D9D9D9;margin:0px;">
+                <div class="product" >
+                    <div class="pic" >
+                        <a href="APP_MAIN/goods/goodsDetail.html?id={$list.goods_id}" >
+                            <img src="__ROOT__/{$list['picture_info']['pic_cover_micro']}" alt="33" ></a>
+                    </div>
+                    <div class="info">
+                         <p class="info-price" style="float:right;font-size:15px;">¥<span name="goods_price">{$list.price}</span></p>
+                        <p class="info-name" style="float:left;width:40%">{$list.goods_name}<span style="color: #999999;">{if condition="$list['sku_name'] neq '0'"}<br/>{$list.sku_name}{/if}</span></p>
+                        <input type="hidden" name="goods_skuid" value="{$list.sku_id}">
+
+                    </div>
+                       <div class="number" style="float:right;">
+                       <span class="ui-number" name="succ_num">
+                    <span style="font-size:15px;color:red;">   ×</span><span name="succ_amount" style="font-size:15px;color:red;">{$list.num}</span>
+                       </span>
+
+                    </div>
+                </div>
+
+            </li>
+            {/foreach}
+        </ul>
+        <div class="remarks" style="border:0;padding:0px 2px 0px 0px;">
+            <textarea id="leavemessage" placeholder="给卖家留言"></textarea></div>
+        <div>
+        <div id="express_method">
+        <span>配送方式：</span>
+        <a class="button active" href="javascript:void(0);" value="1">快递</a>
+        </div>
+        <div id="express">
+        <ul class="cart-info-ul">
+	        <li class="cart-info-li">
+	                <div id="addressok" onload="opener.location.reload()">
+	                <a href="APP_MAIN/Member/memberAddress.html?url=cart" class="address-a">
+	                    <input type="hidden" id="addressid" value="{$address_default.id}">
+	                    <div class="address-info">
+	                        收件人：{$address_default.consigner}<span class="mobile">{$address_default.mobile}</span><br>
+	         {$address_default.address_info} {$address_default.address}
+	                    </div>
+	                </a>
+	                </div>
+	                <script type="text/javascript">
+	                    //alert(1);
+	                    $(function () {
+	                    	if($("#addressid").val() == ''){
+	                    		$("#addressok").hide();
+	                    		$("#noaddress").show();
+	                    	}else{
+	                    		   $("#noaddress").hide();
+	                    	}
+	                    })
+	                    var __IMG__ = '__TEMP__/{$style}/public/images';
+	                </script>
+	                <div id="noaddress" class="address-none" style="display: none;" onclick= 'javascript:void(0);'>
+	                    <a href="javascript:void(0);" class="address-a" onclick="javascript:window.location.href='APP_MAIN/Member/memberAddress.html'">请添加收货地址</a>
+	                </div>
+	                <div class="address-arrow"><a href="APP_MAIN/Member/memberAddress.html" ><i class="address-arrow-i"></i></a></div>
+	            </li>
+         
+        </ul>
+        </div>
+        </div>
+        <!-- 此处删除部分信息 -->
+        <input type="hidden" id="base_favorable" value="{$discount_money}">
+        <input type="hidden" id="favorable" value="{$discount_money}">
+        <div class="postage"><span style="float:left;">运费：</span><i>¥</i><span id="feeprice" money="{$express}">{$express}</span></div>
+        <div class="total"><span style="float:left;">合计：</span><i style="color:red;font-size:15px;">¥</i><span id="orderprice" class="total-price">{$count_money}</span></div>
+        <div class="total"><span style="float:left;">可用积分：<span style="color: gray;">{$point}</span></span><span>使用<input type="text" id="use_integrate" style="width: 50px;line-height: 10px;" onchange="calculate_youhui()">积分</span></div>
+        <div class="total"><span style="float:left;">&nbsp;</span><span id="convert_rate" style="font-size: 14px;color: gray;" rate="{$convert_rate}">1积分={$convert_rate}元</span></div>
+        <div class="total"><span style="float:left;">优惠券：</span>
+        <span>
+        <select id="use_coupon" onchange="calculate_youhui()">
+        <option value="0" money="0">不使用优惠券</option>
+        {volist name="coupon_list" id="coupon"}
+        <option value="{$coupon['coupon_id']}" money="{$coupon['money']}">{$coupon['coupon_code']}-{$coupon['money']}</option>
+        {/volist}
+        </select>
+        </span>
+        </div>
+        <div class="remarks" style="display:none">
+           优惠：<span id="usePreference" style="float:right;">使用优惠></span></div>
+        <div class="remarks" >
+           <input type="hidden" id="discount_money" value="{$discount_money}">
+           <input type="hidden" id="discount_money0" value="{$discount_money}">
+           <i style="color:red" id="goods_total_money" money="{$count_money}">¥{$count_money}</i>+运费(<i style="color:red">¥<span id="feeprice2">{$express}</span></i>)-优惠(<i style="color:red">¥<span id="discount_money1">{$discount_money}</span></i>)=需付：<i style="color:red">¥<span id="realprice"></span></i>
+        </div>
+    </section>
+    <div class="clear"></div>
+        <div id="pay">
+        </div>
+        <div style="padding:8px 15px;">
+        	<div style="font-size:16px;padding:5px 0px">支付方式</div>
+    		<div style="padding:5px 0px"><img src="__TEMP__/{$style}/public/images/weifu.png" style="width:30px;height:28px;margin-right:10px"><span style="font-size:16px;font-weight:bold;line-height:28px">微信支付</span><span id="wchatpay" style="float:right"></span></div>
+        
+    		<div style="padding:5px 0px"><img src="__TEMP__/{$style}/public/images/zhifu.png" style="width:30px;height:28px;margin-right:10px"><span style="font-size:16px;font-weight:bold;line-height:31px">支付宝支付</span><span id="alipay" style="float:right"></span></div>
+    		<input type="hidden" id="pay_type" value="0">
+    	</div>
+    	<div style="height:45px"></div>
+    <!--需要微信支付，此处移至待付款订单，显示下面按钮 begin-->
+    <section class="s-btn" style="position: fixed;left: 0;right: 0;bottom: 0;height: 45px;padding: 0;border-top: 1px solid #e6e6e6;z-index: 5;">
+ <button class="alipay" type="button" style="width:90%;margin-top:2px;margin-right:5%;margin-left:5%;height:90%;background:#46a0f0;border:1px solid #46a0f0; "onclick="jisuan(this)">结算</button>
+
+    </section>
+    <!--需要微信支付，显示下面按钮 end-->
+
+    <!--如果积分和预存款够支付，显示下面按钮 begin-->
+    <section class="s-btn" style="display: none;">
+        <button onclick="window.open(&#39;product-order.html&#39;)">去结算</button><!--按钮不可用加样式“disable”-->
+    </section>
+    <!--如果积分和预存款够支付，显示下面按钮 end-->
+    </div>
+    <div class="clear"></div>
+<script type="text/javascript" src="__TEMP__/{$style}/public/js/payment_order.js"></script>
+{/block}
+{block name="bottom"}
+{/block}

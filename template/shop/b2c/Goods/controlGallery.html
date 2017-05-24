@@ -1,0 +1,22 @@
+<link rel="stylesheet" href="__TEMP__/{$style}/public/css/gallery/gallery.css">
+<script type="text/javascript" src="__TEMP__/{$style}/public/js/gallery/gallery.js"></script>
+<div id="MagnifierWrap">
+	<div class="MagnifierMain">
+		<img class="MagTargetImg" src="__UPLOAD__/{$default_gallery_img}">
+	</div>
+	<span class="spe_leftBtn on">&lt;</span>
+	<span class="spe_rightBtn on">&gt;</span>
+	<div class="spec-items">
+		<ul><!-- style="left: -148px;" -->
+		{foreach name="$goods_info.img_list" item ="img" key = "k"}
+			{if condition="$k==0"}
+			<li class="on">
+			{else/}
+			<li>
+			{/if}
+			<img src="__UPLOAD__/{$img.pic_cover_big}">
+			</li>
+		{/foreach}
+		</ul>
+	</div>
+</div>

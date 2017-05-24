@@ -1,0 +1,92 @@
+{extend name="admin/b2c/base" /}
+{block name="resources"/}
+<script src="ADMIN_JS/art_dialog.source.js"></script>
+<script src="ADMIN_JS/iframe_tools.source.js"></script>
+<script src="ADMIN_JS/material_managedialog.js"></script>
+<link rel="stylesheet" type="text/css" href="ADMIN_CSS/defau.css">
+<style type="text/css">
+.nav_total{margin-top:30px ;margin-left:30px;background:#F8F8F8;}
+.nav_total label{float:left;text-align:left;font-size:14px;width:10%;}
+.nav_total label input[type='radio']{float: left;margin-right: 5px;}
+.nav_total>div{
+	overflow:hidden;
+	clear: both;
+}
+.edit_button{
+    float: left;
+    margin-top: 30px;
+    margin-left: 100px;
+}
+</style>
+{/block}
+{block name="right_tab"}{/block}
+{block name="main"}
+<div class="nav_total">
+   <input type="hidden" value="{$data.nav_id}"  id="nav_id"/>
+  
+   <div>
+      <label>导航名称</label>
+      <input  id="nav_title"  type="text"  value="{$data.nav_title}" name="title"/>
+   </div>
+   <div>
+      <label>排序号</label>
+      <input  id="sort"  type="text"  value="{$data.sort}" name="" />
+   </div>
+    <div>
+      <label>链接地址</label>
+      <input  id="nav_url"  type="text"  value="{$data.nav_url}" name="" style="width:70%;"/>
+   </div>
+   
+   <div>
+        <label>所在位置</label>
+        <div id="type">
+        
+        <label for="navigationtype1"><input type="radio" value="1" name="navigationtype" id="navigationtype1" />头部</label>
+        <label for="navigationtype2"><input type="radio" value="2" name="navigationtype" id="navigationtype2"/>中部</label>
+        <label for="navigationtype3"><input type="radio" value="3" name="navigationtype" id="navigationtype3"/>底部</label>
+        </div>
+   </div>
+ 
+   <div>
+        <button class="edit_button" onclick="save()">修改</button>
+   </div>
+   
+</div>  
+{/block} {block name="script"}
+
+{include file="admin/b2c/openDialog" /}
+  <script type="text/javascript">
+  $(function(){
+	var  navigationtype={$data.type};
+	$('#navigationtype'+navigationtype).attr('checked','checked');
+  })
+     function save(){
+    	 var nav_title=$("#nav_title").val();
+    	 var nav_id=$("#nav_id").val();
+    	 var sort=$("#sort").val();
+    	 var nav_url=$("#nav_url").val();
+    	 var type=$("input[name='navigationtype']:checked").val();
+
+    	$.ajax({
+    		type:"post",
+    	    url:"ADMIN_MAIN/Config/updateShopNavigation",
+    	    data:{
+    	    	'nav_id':nav_id,
+    	      'nav_title':nav_title,   
+    	      'sort':sort,
+    	      'nav_url':nav_url,
+    	      'type':type
+    	    },
+    	    async : true,
+    	    success:function(data){
+    	    	if (data["code"] > 0) {
+    				showMessage('success', data["message"]);
+    				location.href="ADMIN_MAIN/Config/shopNavigationList.html";
+    			}else{
+    				showMessage('error', data["message"]);
+    			} 
+    	    } 
+    	});
+     }
+  </script>
+{/block}

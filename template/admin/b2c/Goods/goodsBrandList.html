@@ -1,0 +1,118 @@
+{extend name="admin/b2c/base" /}
+{block name="resources"/} {/block}
+{block name="right_tab"}
+<li><a class="nscs-table-handle_green" href="javascript:;" onclick="addBrand()"><i class="fa fa-plus-circle"></i>&nbsp;添加品牌</a></li>
+{/block}
+{block name="main"}
+<div class="mod-table">
+	<div class="mod-table-head">
+		<div class="con style0list">
+			<table>
+				<colgroup>
+					<col style="width: 5%;">
+					<col style="width: 8%;">
+					<col style="width: 11%;">
+					<col style="width: 11%;">
+					<col style="width: 12%;">
+				</colgroup>
+				<thead>
+					<tr>
+						<th><label style="margin-left: 5px;"> <input type="checkbox"  onclick="CheckAll(this)"></label></th>
+						<th>图片</th>
+						<th>品牌名称</th>
+						<th>品牌首字母</th>
+						<th>操作</th>
+					</tr>
+				</thead>
+				<colgroup>
+					<col style="width: 5%;">
+					<col style="width: 8%;">
+					<col style="width: 11%;">
+					<col style="width: 11%;">
+					<col style="width: 12%;">
+				</colgroup>
+				<tbody></tbody>
+			</table>
+		</div>
+	</div>
+</div>
+{/block}
+{block name="script"}
+{include file="admin/b2c/pageCommon" /}
+{include file="admin/b2c/openDialog" /}
+<script type="text/javascript">	
+	/* 跳转到添加品牌 */
+	function addBrand() {
+		location.href = "ADMIN_MAIN/Goods/addGoodsBrand.html";
+	}
+
+	//加载数据
+	function LoadingInfo(pageIndex) {
+		$.ajax({
+			type : "post",
+			url : "ADMIN_MAIN/Goods/goodsBrandList",
+			async : true,
+			data : {
+				"pageIndex" : pageIndex
+			},
+			success : function(data) {
+				$("#page_count").val(data["page_count"]);
+				$("#pageNumber a").remove();
+				var html = '';
+				if (data["data"].length > 0) {
+					for (var i = 0; i < data["data"].length; i++) {
+						html += '<tr align="center">';
+						html += '<td><div class="cell"><label ><input name="sub" type="checkbox" value="'+ data["data"][i]["brand_id"] +'" ></label></div></td>';
+						html += '<td><img src="__UPLOAD__/'+ data["data"][i]["brand_pic"] +'" style="height:25px;"></td>';
+						html += '<td>' + data["data"][i]["brand_name"] + '</td>';
+						html += '<td>' + data["data"][i]["brand_initial"] + '</td>';
+						html += '<td><a href="ADMIN_MAIN/Goods/updateGoodsBrand.html?brand_id=' + data["data"][i]["brand_id"] + '">修改</a>  <a onclick="delBrand(' + data["data"][i]["brand_id"] + ')">删除</a></td> ';
+						html += '</tr>';
+					}
+				} else {
+					html += '<tr align="center"><th colspan="9">暂无符合条件的数据记录</th></tr>';
+				}
+				$(".style0list tbody").html(html);
+				var totalpage = $("#page_count").val();
+				if (totalpage == 1) {
+					changeClass("all");
+				}
+				var $html = pagenumShow(jumpNumber,totalpage,{$pageshow})
+				$("#pageNumber").append($html);
+			}
+		});
+	}
+	/* 删除品牌 */
+	function delBrand(brand_id) {
+		$( "#dialog" ).dialog({
+            buttons: {
+                "确定,#e57373": function() {
+                    $(this).dialog('close');
+					$.ajax({
+						type : "post",
+						url : "ADMIN_MAIN/Goods/deleteGoodsBrand",
+						data : {
+							'brand_id' : brand_id
+						},
+						dataType : "json",
+						success : function(data) {
+							if (data['code'] > 0) {
+								showMessage('success', data["message"],'ADMIN_MAIN/Goods/goodsBrandList');
+							}else{
+								showMessage('error', data["message"]);
+							}
+						}
+					});
+                }
+            },
+            contentText:"你确定删除吗？",
+            title:"消息提醒"
+        });
+	}
+	//全选
+	function CheckAll(event){
+		var checked = event.checked;
+		$(".style0list tbody input[type = 'checkbox']").prop("checked",checked);
+	}
+</script>
+{/block}

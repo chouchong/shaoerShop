@@ -1,0 +1,64 @@
+{extend name="admin/b2c/base" /}
+{block name="resources"/}
+<link rel="stylesheet" type="text/css" href="ADMIN_CSS/defau.css">
+{/block}
+{block name="main"}
+<div class="set-style">
+	<dl>
+		<dt>是否开启三级分销:</dt>
+		<dd>			
+					{if condition="$shop_config_info.is_distribution_enable eq 1 "} 
+					<input id="is_distribution_enable" type="checkbox" class="checkbox" checked="checked" />					
+					{else /}
+					<input id="is_distribution_enable" type="checkbox" class="checkbox" />
+					{/if}
+					<span class="help-inline" id="is_menuPrompt" style="display: none;"></span>
+							
+		</dd>
+	</dl>
+	<dl>
+		<dt>推广员申请是否需要审核:</dt>
+		<dd>			
+					{if condition="$shop_config_info.is_distribution_audit eq 1 "} 
+					<input id="is_distribution_audit" type="checkbox" class="checkbox" checked="checked" />					
+					{else /}
+					<input id="is_distribution_audit" type="checkbox" class="checkbox" />
+					{/if}
+					<span class="help-inline" id="is_menuPrompt" style="display: none;"></span>
+							
+		</dd>
+	</dl>
+	<button class="edit_button" onclick="modifyShopConfigIsDistribution();">提交</button>
+</div>
+{include file="admin/b2c/openDialog" /}
+<script>		
+function modifyShopConfigIsDistribution(){
+	if($("#is_distribution_enable").prop("checked")){
+		var is_open = 1;
+	}else{
+		var is_open = 0;
+	}
+	if($("#is_distribution_audit").prop("checked")){
+		var is_audit = 1;
+	}else{
+		var is_audit = 0;
+	}
+	$.ajax({
+		type:"post",
+		url:"ADMIN_MAIN/Distribution/modifyShopConfigIsDistributionOrPromoterIsAudit",
+		data:{
+			'is_open':is_open,
+			'is_audit':is_audit
+		},
+		async:true,
+		success:function (data) {
+			if (data["code"] > 0) {
+				showMessage('success', data["message"],"ADMIN_MAIN/Distribution/threeLevelDistributionConfig");
+			}else{
+				showMessage('error', data["message"]);
+			}	
+		}
+	});
+}
+</script>
+{/block}

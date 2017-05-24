@@ -1,0 +1,55 @@
+Niushop商城系统 - 团队十年电商经验汇集巨献!
+
+这不是一个自由软件！您只能在不用于商业目的的前提下对程序代码进行修改和使用。
+
+1、严禁去除niushop相关的版权信息。
+
+2、请尊重niushop开发人员劳动成果，严禁使用本系统转卖、销售或二次开发后转卖、销售等商业行为！
+
+3、请关注niushop官方网址了解产品最新咨询、功能升级、BUG修复。
+
+Niushop官方网址: http://www.niushop.com.cn
+
+
+Niushop安装环境：
+
+1、PHP5.4版本以上，支持PHP7.0
+
+2、支持rewrite伪静态规则
+
+3、支持php扩展：php_curl,php_gd2
+
+Niushop目录说明：
+
+/application :系统控制器层
+
+/data:系统数据服务层
+
+/public:系统公共文件层（js、css、images）
+
+/runtime:缓存
+
+/template:页面模板
+
+/thinkphp:框架
+
+/upload:上传数据层
+
+/vender:系统扩展
+
+/index.php:入口文件 
+
+
+Niushop安装步骤：
+
+1、将源码解压到服务器空间
+
+2、访问你的网址进行安装， 正常会跳转到 http://域名/install.php
+
+3、按照系统提示进行安装 
+
+4、进入后台  后台地址：http://域名/admin
+
+5、进入前台  前台地址：http://域名 
+
+6、添加任务计划程序: minutes.bat

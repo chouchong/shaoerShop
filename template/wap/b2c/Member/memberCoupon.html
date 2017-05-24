@@ -1,0 +1,81 @@
+{extend name="wap/b2c/base" /}
+{block name="resources"}
+    <link rel="stylesheet" type="text/css" href="__TEMP__/{$style}/public/css/member_common.css">
+{/block}
+{block name="goodsHead"}
+<section class="head">
+		<a class="head_back" onclick="window.history.go(-1)" href="javascript:void(0)"><i class="icon-back"></i></a>
+		<div class="head-title">我的优惠券</div>
+	</section>
+{/block}
+
+{block name="main"}
+ 
+  <div class="cf-container" data-reactid="2">
+   		<div class="cf-edge" data-reactid="3"></div>
+		<ul class="cf-content" data-reactid="4">
+   			<li class="cf-tab-item select" data-index="1" data-reactid="7"><a href="javascript:getMemberCounponList(1);">未使用</a></li>
+			<li class="cf-tab-item" data-index="1" data-reactid="7"><a href="javascript:getMemberCounponList(2);">已使用</a></li>
+			<li class="cf-tab-item" data-index="1" data-reactid="7"><a href="javascript:getMemberCounponList(3);">已过期</a></li>
+			
+    	</ul>
+	</div>
+  
+    <div class="com_content">
+    </div>
+<script type="text/javascript">
+	$(function(){
+		$('.cf-container .cf-tab-item').click(function(){
+       		$('.cf-container .cf-tab-item').removeClass('select');
+       		$(this).addClass('select');
+       	})
+		getMemberCounponList(1);
+	})
+	function getMemberCounponList(type){
+		$.ajax({
+			type:'post',
+			async:true,
+			url:'APP_MAIN/Member/memberCoupon',
+			data:{'type':type },
+			dataType:'json',
+			success:function(data){
+				var listhtml='<div class="youhuiquan-list"><ul id="not_use">';
+				if(data.length>0){
+					$('.null_default').hide();
+					for(var i=0;i<data.length;i++){
+						var money=data[i]['money'];
+						var coupon_code=data[i]['coupon_code'];
+						var start_time=data[i]['start_time'];
+						var end_time=data[i]['end_time'];
+						if(type==1){
+							listhtml+='<li><a class="not_use" href="">';
+						}else{
+							listhtml+='<li><a class="already-use" href="">';	
+						}
+						
+						listhtml+='<span class="circle left"></span><span class="circle right"></span><div class="p-l"><div class="active-img">劵</div>';
+						listhtml+='<div class="active-msg"><div class="clear"></div><div class="name">'+coupon_code+'</div>';
+						listhtml+='<div class="date"><span>'+start_time+'</span>至<span>'+end_time+'</span></div>';
+						listhtml+='</div></div><div class="p-r">';
+						listhtml+='<div class="number-money">￥'+money+'</div>';
+						if(type==2){
+							listhtml+='<span class="uneless-img"></span></div></a></li>';	
+						}else if(type==3){
+							listhtml+='<span class="due-img"></span></div></a></li>';
+						}else{
+							listhtml+='</div></a></li>';
+						}
+					}
+					listhtml+='</ul></div>';
+				}else{
+					listhtml='<div class="null_default"><i class="icon-nocontent-youhuiquan"></i><span class="nulltext">你还没有任何优惠券哦！</span></div>';
+				}
+				
+				$('.com_content').html(listhtml);
+			}
+		})
+	}
+</script>
+
+{/block}
+{block name="bottom"}{/block}

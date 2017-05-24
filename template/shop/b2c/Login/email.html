@@ -1,0 +1,223 @@
+{extend name="shop/b2c/Login/registerBase"}
+{block name="main"}
+<script>
+$(document).ready(function(){
+	$("#emailregistermodel-email").change(function(){
+		if(!($(this).val().search(/\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*/)==-1)){	
+			$('#emailregistermodel-email').css("border","1px solid #ccc");
+			$("#emailyz").css("color","red").text("");
+			$("isset_email").attr("value","不存在");
+			var user_email = $(this).val();
+			$.ajax({
+				type: "GET",
+				url: "SHOP_MAIN/login/email",
+				data: {"email":user_email},
+				success: function(data){
+					if(data){
+						$('#emailregistermodel-email').css("border","1px solid red");
+						$("#emailyz").css("color","red").text("该邮箱已被注册");
+						$("isset_email").attr("value","存在");
+					}
+				} 
+			});
+		}
+	});
+	$("#btn_submit").click(function(){
+		var email = $("#emailregistermodel-email").val();
+		var password = $("#password").val();
+		var repass = $("#repass").val();
+		var isset_email = $("#isset_email").attr("value");
+		var code =$("#emailregistermodel-email_captcha").val();
+ 		if(email.search(/\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*/)==-1){
+ 			$("#emailregistermodel-email").trigger("focus");
+ 			$('#emailregistermodel-email').css("border","1px solid red");
+			$("#emailyz").css("color","red").text("请输入正确的邮箱格式");
+			return false;
+		}
+ 		 if(isset_email == "存在"){
+ 			$('#emailregistermodel-email').css("border","1px solid red");
+			$("#emailyz").css("color","red").text("该邮箱已被注册");
+			$("#emailregistermodel-email").trigger("focus");
+			return false;
+ 		}
+ 		if(!( password.length >=6 && password.length <=16)){
+			$("#isset_email").attr("value","不存在");
+			$("#password").trigger("focus");
+			$("#password").css("border","1px solid red");
+			$("#yzpassword").css("color","red").text("密码为6到16位");
+			$('#emailregistermodel-email').css("border","1px solid #ccc");
+			$("#emailyz").css("color","red").text("");
+			return false;
+		}
+
+		if( !(repass.length >=6 && repass.length <=16 && repass == password)){
+			$("#repass").trigger("focus");
+			$("#repass").css("border","1px solid red");
+			$("#qrrepass").css("color","red").text("密码为6到16位");
+			$("#password").css("border","1px solid #ccc");
+			$("#yzpassword").css("color","red").text("");
+			return false;
+		}
+		if(code.length != 6){
+			$("#emailregistermodel-email_captcha").trigger("change");
+			$("#emailregistermodel-email_captcha").css("border","1px solid red");
+			$("#qryzm").css("color","red").text("输入正确验证码格式");
+			$("#repass").css("border","1px solid #ccc");
+			$("#qrrepass").css("color","red").text("");
+			return false;
+		}
+		$("#EmailRegisterModel").submit();
+	});
+});
+</script>
+<!-- 红包消息 -->
+<input type="hidden" value="不存在" id="isset_email"/>
+	<div class="header w990">
+		<div class="logo-info">
+			<a href="SHOP_MAIN/index/index.html" class="logo">
+				<img alt="" src="__UPLOAD__/{$web_info['logo']}" />
+			</a>
+			<span class="findpw">欢迎注册</span>
+		</div>
+	</div>
+	<div class="reg-content">
+		<div class="w990">
+<div class="reg-form">
+	<div class="reg-con">
+		<div class="reg-type">
+			<p class="login-info">
+				我已经注册，现在就
+				<a href="SHOP_MAIN/login/index.html" title="去登录" class="color">登录</a>
+			</p>
+			<ul class="clearfix">
+				<li>
+					<a href="SHOP_MAIN/login/register.html">普通注册</a>
+				</li>
+				{if condition="$phone_info['is_use'] eq 1"}
+				<li>
+					<a href="SHOP_MAIN/login/mobile.html">手机注册</a>
+				</li>
+				{/if}
+				 {if condition="$email_info['is_use'] eq 1"}
+				<li class="active">
+					<a href="javascript:void(0);">邮箱注册</a>
+				</li>
+				{/if}
+			</ul>		
+		</div>
+		<div class="reg-wrap">
+			<div class="reg-wrap-con" style="background: url(__TEMP__/{$style}/public/images/register_bg_image.png) no-repeat right 70px;">
+				<!-- 邮箱注册 star -->
+				<form id="EmailRegisterModel" class="form-horizontal" name="EmailRegisterModel" action="SHOP_MAIN/login/email" method="post">
+				<input type="hidden" name="_csrf" value="Q2dXM2NPVXYbFDZYMT0TNycsLkklHQ1HAQsGAA5/OjAaHxtUG3s7Dg==">
+				<!-- 邮箱 -->
+				<div class="form-group form-group-spe">
+					<label for="emailregistermodel-email" class="input-left">
+					<span class="spark">*</span>
+					<span>邮箱：</span>
+					</label>
+					<div class="form-control-box">	
+	    			<input type="email" id="emailregistermodel-email" class="form-control" name="email" placeholder="请输入您的邮箱号" />
+	    			<span id="emailyz"></span>
+	    			</div>
+					<div class="invalid"></div>
+				</div>
+				<input style="display: none">
+				<!-- 密码 -->
+				<div class="form-group form-group-spe">
+					<label for="emailregistermodel-password" class="input-left">
+					<span class="spark">*</span>
+					<span>密码：</span>
+					</label>
+					<div class="form-control-box">
+					<input type="password" id="password" class="form-control" name="password" autocomplete="off" placeholder="请输入密码">
+					<!--  <i class="fa fa-eye-slash pwd-toggle" data-id="password"></i>	-->	
+					<span id="yzpassword"></span>		
+					</div>
+					<div class="invalid"></div>
+				</div>
+				<!-- 密码 -->
+				<div class="form-group form-group-spe">
+					<label for="emailregistermodel-password" class="input-left">
+					<span class="spark">*</span>
+					<span>确认密码：</span>
+					</label>
+					<div class="form-control-box">
+					<input type="password" id="repass" class="form-control" name="qrpassword" autocomplete="off" placeholder="请确认输入密码">
+					<!--  <i class="fa fa-eye-slash pwd-toggle" data-id="password"></i>	-->	
+					<span id="qrrepass"></span>
+					</div>
+					<div class="invalid"></div>
+				</div>
+				<!-- 验证码 
+				<div class="form-group form-group-spe">
+					<label for="emailregistermodel-captcha" class="input-left">
+					<span>验证码：</span>
+					</label>
+					<div class="form-control-box">
+					<input type="text" id="captcha" class="input-small" name="EmailRegisterModel[captcha]">
+					<label class="captcha">
+					<img id="captcha-image" class="captcha-image" src="/site/captcha.html?v=58982c7be3851" alt="点击换图" title="点击换图" style="vertical-align: middle; cursor: pointer;"><script data-captcha-id='captcha-image' type='text'>{"refreshUrl":"\/site\/captcha.html?refresh=1","hashKey":"niiCaptcha\/site\/captcha"}</script>
+					</label>		
+					</div>
+					<div class="invalid"></div>
+				</div>
+				--><!-- 邮箱校验码 -->
+				
+				<div class="form-group form-group-spe">
+					<label for="emailregistermodel-email_captcha" class="input-left">
+					<span class="spark">*</span>
+					<span>邮箱校验码：</span>
+					</label>
+					<div class="form-control-box">
+					<input type="text" id="emailregistermodel-email_captcha" class="input-small" name="EmailRegisterModel[email_captcha]" >
+				<!-- 	<a href="javascript:void(0);" class="phonecode" id="sendOutCode" name="code_email">获取邮箱校验码</a> -->
+					<input type="button"class="phonecode" id="sendOutCode" name="code_email" value="获取邮箱校验码">
+					</div>
+					<div class="invalid"></div>
+				</div>
+			
+				<!-- 注册邀请码 
+				<div class="form-group form-group-spe">
+					<label for="emailregistermodel-invite_code" class="input-left">
+					<span>注册邀请码：</span>
+					</label>
+					<div class="form-control-box">
+			      	<input type="text" id="emailregistermodel-invite_code" class="input-small" name="EmailRegisterModel[invite_code]">
+					</div>
+					<div class="invalid"></div>
+				</div>
+				-->
+				<div class="form-group m-10">
+					<label class="input-left">&nbsp;</label>
+					<div class="form-control-box">
+						<label for="remember1">
+							<input type="checkbox" value="0" name="remember" id="remember1" class="checkbox" checked="checked" />
+							<span>
+								我已阅读并同意
+								<a href="SHOP_MAIN/cms/articleClassInfo.html?article_id=178" class="user_protocol">《用户注册协议》</a>
+							</span>
+						</label>
+					</div>
+				</div>
+				<div class="reg-btn">
+					<div class="form-group form-group-spe">
+					<label for="" class="input-left">
+					</label>
+					<div class="form-control-box">
+				  	<input type="button" class="btn-img btn-entry bg-color" id="btn_submit" name="btn_submit" value="同意协议并注册">
+					</div>
+					<div class="invalid"></div>
+					</div>
+				</div>
+				</form>
+				<!-- 手机注册 end -->
+			</div>
+		</div>
+	</div>
+</div>
+</div>
+	</div>
+{/block}
+{/extend}
+	

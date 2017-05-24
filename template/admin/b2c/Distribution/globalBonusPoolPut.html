@@ -1,0 +1,268 @@
+{extend name="admin/b2c/base" /}
+{block name="resources"/}
+<link rel="stylesheet" type="text/css" href="ADMIN_CSS/defau.css">
+<script type="text/javascript" src="__STATIC__/My97DatePicker/WdatePicker.js"></script>
+<style>
+	
+	.top{
+		margin-top: 10px;width: 500px;/* height: 110px; */border:1px solid #CCCCCC;margin-left: 18px;
+		
+	}
+	
+	.top laber{
+		font-size:12px;
+	}
+	.top dl button{
+		cursor:pointer;
+		margin-left:65px;
+		margin-top:37px;
+		width: 320px;
+		height: 30px; 
+		background-color: #146e3c;
+		color: white;
+		border-width: 2px;
+    	border: none;
+	}
+	.table{
+		width: 99%;
+		table-layout: fixed;
+		empty-cells: show;
+		border-collapse: collapse;
+		  border: 1px solid #d8d8d8;
+	}
+	.table th{
+    	line-height: 25px;
+		text-align:center;
+		 border: 1px solid #d8d8d8;
+	}
+	.WSY_table_header{
+		background-color: #146e3c;
+	}
+	.table tr{
+	    font-size: 12px;
+    color: #323232;
+    font-family: Helvetica,"Microsoft YaHei", Arial, Helvetica, sans-serif;
+	}
+	.table td{
+	    border: 1px solid #d8d8d8;
+    padding: 0 1em 0;
+    text-overflow: ellipsis;
+    overflow:  hidden;
+	line-height: 40px;
+    text-align: center !important;
+	}
+	
+	
+	
+	.top dl{
+		padding:20px;
+		width:auto;
+	}
+	.date-style{
+		width:100%;
+		display:inline-block;
+		
+	}
+	.date-style span{
+		height:20px;
+		line-height:20px;
+	}
+	.put-top{
+		text-align:center;
+	}
+	.money-box{
+		width:500px;
+		border:1px solid #E6E6E6;;
+		margin-left: 18px;
+		text-align:center;
+	}
+	.money-box div{
+		margin:20px auto;
+		width:300px;
+	}
+	.money-box div span{
+		height:20px;
+		line-height:20px;
+		margin-bottom:10px;
+	}
+	.money-box button{
+		padding:4px 10px;
+		width:100px;
+		margin-bottom:20px;
+	}
+	#global_money{
+		height:20px;
+		padding:4px;
+	}
+</style>
+{/block}
+{block name="main"}
+<div class="set-style">
+
+	<p style="font-size:14px;color:#FFF;padding-top:5px;padding-bottom:5px;line-height:20px;height:20px;padding-left:10px;background-color:#28b779;">上次发放时间:{$partner_global_calculate_info.create_time}  发放分红:{$partner_global_calculate_info.fenhong_money}</p>
+	<input type="hidden" id="last_time"value="{$partner_global_calculate_info.end_time}"/>
+	<div style="height:200px;border:1px solid #EBEBEB;margin-bottom:10px;">
+		<div style="float:left;width:50%;height:200px;text-align:center;">
+			<h1 style="color:#939694;padding-top:15px;" id="total_amount">0</h1>
+			<h5 style="color:#939694;">当前奖金池总额</h5>
+			<div  class="date-style" >
+			<input style="width: 35%;" type="text" value="{$partner_global_calculate_info.end_time}" id="start_time"  placeholder="请选择开始时间" onclick="WdatePicker()" />&nbsp;&nbsp;-&nbsp;&nbsp;<input placeholder="请选择结束时间" onclick="WdatePicker()"style="width:35%;" type="text" value="{$end_time}" id="end_time"/>
+			</div>
+			<div style="margin-left:10%;width:80%;line-height:30px;text-align:center;border:1px solid #00C0FF;"onclick="settlementAmount();">
+			<span style="color:#00C0FF;font-size:12px;" >结算统计</span>
+			</div>
+		</div>
+		<div style="float:right;width:50%;height:200px;text-align:center;">
+			<h1 style="color:#FF8B12;padding-top:15px;" id="put_money">0</h1>
+			<h5 style="color:#939694;">发放金额</h5>
+			<div  class="date-style" >
+			<input type="text" value="" id="global_money" style="width: 78%;" onkeyup = "showThisValue(this);">
+			</div>
+			<div style="margin-left:10%;width:80%;line-height:30px;text-align:center;background:#00C0FF;border:1px solid #00C0FF;"onclick="globalBonusPoolPut();">
+			<span style="color:#fff;font-size:12px;">发放分红</span>
+			</div>
+		</div>
+	</div>
+	<table class="table">
+		<thead>
+			<tr>
+				<th>分红身份</th>
+				<th>人数</th>
+				<th>总分值</th>
+			</tr>
+		</thead>
+
+		<tbody>
+			{foreach name="partner_level_global_list" item="partner_level_info" }
+			<tr align="center">
+				<td><span>{$partner_level_info.level_name}:</span></td>
+				<td><span>{$partner_level_info.level_num}</span></td>
+				<td><span>{$partner_level_info.global_value_num}</span></td>
+			</tr>
+			{/foreach}
+
+		</tbody>
+	</table>
+</div>
+<input type="hidden" value="{$is_global_enable}" id="hidden_is_global_enable" />
+{include file="admin/b2c/openDialog" /}
+<script src="__STATIC__/js/limit_input_digit.js"></script>
+<script>		
+$(function(){	
+	settlementAmount();
+});
+//查询一顿时间内可发放佣金
+function settlementAmount(){
+	var start_time = $("#start_time").val();
+	var end_time = $("#end_time").val();
+	var last_time= $("#last_time").val();
+	var start_date=new Date(start_time.replace("-", "/").replace("-", "/")); 
+	var end_date=new Date(end_time.replace("-", "/").replace("-", "/")); 
+	var today = new Date("{$end_time}".replace("-", "/").replace("-", "/")); 
+	if(last_time != ""){		
+		var last_date = new Date(last_time.replace("-", "/").replace("-", "/")); 
+		if(start_date < last_date){
+			showMessage('error', "发放开始时间不可小于上一次发放结束时间！");	
+			return false;
+		}
+		if(last_date > end_date){
+			showMessage('error', "发放结束时间不可小于上一次发放结束时间！");	
+			return false;
+		}
+	}
+	if(end_date > today){
+		showMessage('error', "发放结束时间不可超过今天！");	
+		return false;
+	}
+	$.ajax({
+		type:"post",
+		url:"ADMIN_MAIN/Distribution/getPartnerGlobalLastInfo",
+		data:{
+			'start_time':start_time,
+			'end_time':end_time
+		},
+		async:true,
+		success:function (data) {
+			$("#total_amount").html(data);
+			
+		}
+	});
+}
+
+//发放分红
+function globalBonusPoolPut(){
+	var global_money = $("#global_money").val();
+	var start_time = $("#start_time").val();
+	var end_time = $("#end_time").val();
+	var total_amount = $("#total_amount").html();
+	var last_time= $("#last_time").val();
+
+
+	if($("#hidden_is_global_enable").val()==0){
+		showMessage('error', "没有开启全服分红");
+		return;
+	}
+	if(global_money == ""){
+		showMessage('error', "发放分红金额不能为空！");
+		return;
+	}
+	if(global_money == 0){
+		showMessage('error', "发放分红金额不能为0！");
+		return;
+	}
+	if(parseFloat(global_money) > parseFloat(total_amount)){
+		showMessage('error', "发放分红金额不可超过当前奖金池总额！");	
+		return;
+	}
+	
+	var start_date=new Date(start_time.replace("-", "/").replace("-", "/")); 
+	var end_date=new Date(end_time.replace("-", "/").replace("-", "/")); 
+	var today = new Date("{$end_time}".replace("-", "/").replace("-", "/")); 
+	if(last_time != ""){		
+		var last_date = new Date(last_time.replace("-", "/").replace("-", "/")); 
+		if(start_date < last_date){
+			showMessage('error', "发放开始时间不可小于上一次发放结束时间！");	
+			return;
+		}	
+	}
+	if(end_date > today){
+		showMessage('error', "发放结束时间不可超过今天！");	
+		return;
+	}
+	$.ajax({
+		type:"post",
+		url:"ADMIN_MAIN/Distribution/globalBonusPoolPut",
+		data:{
+			'start_time':start_time,
+			'end_time':end_time,
+			'global_money':global_money
+		},
+		async:true,
+		success:function (data) {
+			if (data["code"] > 0) {
+				showMessage('success', data["message"],"ADMIN_MAIN/Distribution/globalBonusPoolPut");
+			}else{
+				showMessage('error', data["message"]);
+			}	
+		}
+	});
+}
+/**
+ * 投放自己
+ */
+ function showThisValue(oInput){
+	 if('' != oInput.value.replace(/\d{1,}\.{0,1}\d{0,}/,''))
+	    {
+	        oInput.value = oInput.value.match(/\d{1,}\.{0,1}\d{0,}/) == null ? '' :oInput.value.match(/\d{1,}\.{0,1}\d{0,}/);
+	    }
+	var put_money = $(oInput).val();
+	if(put_money == ""){
+		$("#put_money").text(0);
+	}else{
+		$("#put_money").text(put_money);
+		
+	}
+	
+}
+</script>
+{/block}

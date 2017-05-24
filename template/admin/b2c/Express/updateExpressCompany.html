@@ -1,0 +1,138 @@
+{extend name="admin/b2c/base" /} {block name="resources"/}
+{/block}{block name="main"}
+<div class="set-style">
+	<dl>
+		<dt>物流公司名称:</dt>
+		<dd>
+			<p>
+				<input id="company_name" type="text" value="{$expressCompany.company_name}">
+			</p>
+			<p class="error">请输入物流公司名称</p>
+
+		</dd>
+	</dl>
+	<dl>
+		<dt>物流公司编号:</dt>
+		<dd>
+			<p>
+				<input id="express_no" type="text" value="{$expressCompany.express_no}">
+			</p>
+			<p class="error">请输入物流公司编号</p>
+
+		</dd>
+	</dl>
+	<dl>
+		<dt>联系电话:</dt>
+		<dd>
+			<p>
+				<input id="phone" type="text" value="{$expressCompany.phone}">
+			</p>
+			<p class="error">请输入联系电话</p>
+		</dd>
+	</dl>
+	<dl>
+		<dt>排序:</dt>
+		<dd>
+			<p>
+				<input id="orders" type="number" value="{$expressCompany.orders}">
+			</p>
+			<p class="error">请输入排列序号</p>
+		</dd>
+	</dl>
+	<dl>
+		<dt>是否启用物流:</dt>
+			<dd>
+					<input id="is_enabled" type="checkbox" class="checkbox" {if condition="$expressCompany.is_enabled eq 1"}checked="checked"{/if} /> 
+			</dd>
+	</dl>
+	<input type="hidden" id="co_id" value="{$expressCompany.co_id}">
+	<button class="edit_button" onclick="updataExpressCompanyAjax();">提交</button>
+
+</div>
+
+{include file="admin/b2c/openDialog" /}
+ <script>
+	/**
+	 *模块输入信息验证
+	 */
+	function verify(company_name, express_no, phone,orders) {
+		if (company_name == '') {
+			$("#company_name").parent().next().show();
+			return false;
+		} else {
+			$(".error").hide();
+		}
+		if (express_no == '') {
+			$("#express_no").parent().next().show();
+			return false;
+		} else {
+			$(".error").hide();
+		}
+		if (phone == '') {
+			$("#phone").parent().next().show();
+			return false;
+		} else {
+			$(".error").hide();
+		}
+		if (orders == '') {
+			$("#orders").parent().next().show();
+			return false;
+		} else {
+			$(".error").hide();
+		}
+	}
+	/**
+	 *添加物流公司
+	 **/
+	function updataExpressCompanyAjax() {
+		var company_name = $("#company_name").val();
+		var express_no = $("#express_no").val();
+		var phone = $("#phone").val();
+		var orders = $("#orders").val();
+		var co_id = $("#co_id").val();
+		if($("#is_enabled").prop("checked")){
+			var is_enabled = 1;
+		}else{
+			var is_enabled = 0;
+		}
+		verify(company_name, express_no, phone,orders);
+		$.ajax({
+			type : "post",
+			url : "ADMIN_MAIN/Express/updateExpressCompany",
+			data : {
+				'company_name' : company_name,
+				'express_no' : express_no,
+				'phone' : phone,
+				'is_enabled' : is_enabled,
+				'orders':orders,
+				'co_id':co_id
+			},
+			async : true,
+			success : function(data) {
+				if (data['code'] > 0) {
+					$("#dialog").dialog({
+						buttons : {
+							"确定,#e57373" : function() {
+								$(this).dialog('close');
+							}
+						},
+						contentText : data["message"],
+						time : 5,
+						timeHref : "ADMIN_MAIN/Express/expressCompany",
+					});
+
+				} else {
+					$("#dialog").dialog({
+						buttons : {
+							"确定,#e57373" : function() {
+								$(this).dialog('close');
+							}
+						},
+						contentText : data["message"]
+					});
+				}
+			}
+		});
+	}
+</script>
+{/block}

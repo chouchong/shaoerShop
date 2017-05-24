@@ -1,0 +1,95 @@
+{extend name="admin/b2c/base" /}
+{block name="resources"/}
+<link rel="stylesheet" type="text/css" href="ADMIN_CSS/defau.css">
+<script src="ADMIN_JS/art_dialog.source.js"></script>
+<script src="ADMIN_JS/iframe_tools.source.js"></script>
+<script src="ADMIN_JS/material_managedialog.js"></script>
+{/block}
+{block name="main"}
+<input type="hidden" id="withdraw_id" value="{$list.id}">
+<div class="set-style">
+	<dl>
+		<dt>最低提现金额:</dt>
+		<dd>
+			<input id="cash_min" type="number" value="{$list.withdraw_cash_min}" /><span class="withdraw_rule" id="verification_cash">提现金额不能为空</span>
+			<p class="hint">提现金额将不小于此值才能提现</p>
+		</dd>
+	</dl>
+	<dl>
+		<dt>提现倍数:</dt>
+		<dd>
+			<input id="multiple" type="number" value="{$list.withdraw_multiple}" /><span class="withdraw_rule" id="verification_multiple">提现倍数不能为空</span>
+		</dd>
+	</dl>
+	<dl>
+		<dt>提现手续费比例:</dt>
+		<dd>
+			<input id="poundage" type="number" value="{$list.withdraw_poundage}" />&nbsp;%<span class="withdraw_rule" id="verification_poundage">提现手续费不能为空</span>
+			<p class="hint">为0表示不收手续费</p>
+		</dd>
+	</dl>
+	<dl>
+		<dt>提现提示信息:</dt>
+		<dd>
+			<textarea name="store_zy" rows="2" id="message"
+				class="textarea w400" maxlength="50">{$list.withdraw_message}</textarea><span class="withdraw_rule" id="verification_message">提现提示信息不能为空</span>
+		</dd>
+	</dl>
+	<button class="edit_button" onclick="setMemberwithdrawAjax();">提交</button>
+</div>
+<script src="ADMIN_JS/ajax_file_upload.js" type="text/javascript"></script>
+<script src="__STATIC__/js/file_upload.js" type="text/javascript"></script>
+{include file="admin/b2c/openDialog" /}
+<script>
+	function setMemberwithdrawAjax() {
+		var withdraw_id = $("#withdraw_id").val();
+		var cash_min = $("#cash_min").val();
+		var multiple = $("#multiple").val();
+		var poundage = $("#poundage").val();
+		var message = $("#message").val();
+		if(cash_min == ''){
+			$("#verification_cash").show();
+			$("#verification_multiple").hide();
+			$("#verification_poundage").hide();
+			$("#verification_message").hide();
+			return false;
+		}else if(multiple == ''){
+			$("#verification_cash").hide();
+			$("#verification_multiple").show();
+			$("#verification_poundage").hide();
+			$("#verification_message").hide();
+			return false;
+		}else if(poundage == ''){
+			$("#verification_cash").hide();
+			$("#verification_multiple").hide();
+			$("#verification_poundage").show();
+			$("#verification_message").hide();
+			return false;
+		}else if(message == ''){
+			$("#verification_cash").hide();
+			$("#verification_multiple").hide();
+			$("#verification_poundage").hide();
+			$("#verification_message").show();
+			return false;
+		}
+		$.ajax({
+			type : "post",
+			url : "ADMIN_MAIN/Commission/memberWithdrawSetting",
+			data : {
+				'id':withdraw_id,
+				'cash_min' : cash_min,
+				'multiple' : multiple,
+				'poundage' : poundage,
+				'message' : message
+			},
+			success : function(data) {
+				if (data > 0) {
+					showMessage('success',"提交成功","ADMIN_MAIN/Commission/userAccountList");
+				} else {
+					showMessage('error',"提交失败");
+				}
+			}
+		});
+	}
+</script>
+{/block}

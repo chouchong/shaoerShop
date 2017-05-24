@@ -1,0 +1,66 @@
+<!--
+	创建人：李志伟
+	创建时间：2017年2月7日 12:22:28
+	功能描述：导航栏、菜单栏 、商品分类（与首页的样式不同，没有轮播图）
+-->
+{if condition="$is_head_goods_nav eq 1"}
+<div class="category-box">
+{else/}
+<div class="category-box category-box-border">
+{/if}
+	<div class="w1210">
+		<div class="home-category fl">
+			<a href="SHOP_MAIN/goods/category.html" class="menu-event" title="查看全部商品分类"><i></i>全部商品分类</a>
+			{if condition="$is_head_goods_nav eq 1"}
+			<div class="category-layer" style="display: block;">
+			{else/}
+			<div class="expand-menu category-layer" style="display: none;">
+			{/if}
+				<!-- 公共的菜单栏-->
+				<div class="category-layer">
+					<span class="category-layer-bg bg-color"></span>
+<!-- 					<span class="category-layer-bg bg-color"></span> -->
+					{foreach $goods_category_one as $vo}
+					<div class="list">
+							<dl class="cat">
+								<dt class="cat-name">
+									<!-- <i class="iconfont"></i> -->&nbsp;<a
+										href="SHOP_MAIN/goods/goodslist.html?category_id={$vo.category_id}"
+										target="_blank" title="{$vo.category_name}">{$vo.category_name}</a>
+								</dt>
+								<i class="right-arrow">&gt;</i>
+							</dl>
+							<div class="categorys" style="display: none;">
+								<div class="item-left fl">
+									<div class="subitems">
+									{foreach $goods_category_two as $vo2}
+										{if condition="$vo2.pid eq $vo.category_id"}
+											<dl class="fore1">
+												<dt style="width: 5em;">
+													<a href="SHOP_MAIN/goods/goodslist.html?category_id={$vo2.category_id}"
+														target="_blank" title="{$vo2.category_name}"> <em>{$vo2.category_name}</em> <i>&gt;</i>
+													</a>
+												</dt>
+												<dd>
+													{foreach $goods_category_three as $vo3}
+														{if condition="$vo3.pid eq $vo2.category_id"}
+														<a href="SHOP_MAIN/goods/goodslist.html?category_id={$vo3.category_id}"
+														target="_blank" title="{$vo3.category_name}">{$vo3.category_name}</a> 
+														{/if}
+													{/foreach}
+												</dd>
+											</dl>
+										{/if}
+									{/foreach}
+									</div>
+								</div>
+							</div>
+					</div>
+					{/foreach}
+				</div>
+			</div>
+		</div>
+		<!-- 公共的菜单栏-->
+	{include file='shop/b2c/controlCommonNav'/}
+	</div>
+</div>

@@ -1,0 +1,138 @@
+{extend name="admin/b2c/base" /} {block name="resources"/} {/block} {block
+name="right_tab"}
+<li><a class="nscs-table-handle_green"
+	href="ADMIN_MAIN/Express/addExpressCompany">添加物流公司</a></li>
+{/block} {block name="main"}
+<div class="mod-table">
+	<div class="mod-table-head">
+	<table class="mytable">
+	<tr>				
+		<th width="10%"><input type="text" id = 'search_text' placeholder="请输入物流公司名称或编号" /><input type="button" onclick="searchData()" value="搜索" /></th>
+	</tr>
+</table>
+	
+		<div class="con style0list">
+			<table>
+				<colgroup>
+					<col style="width: 5%;">
+					<col style="width: 11%;">
+					<col style="width: 11%;">
+					<col style="width: 11%;">
+					<col style="width: 11%;">
+					<col style="width: 12%;">
+				</colgroup>
+				<thead>
+					<tr align="center">
+						<th><label > <input 
+								type="checkbox"  onclick="CheckAll(this)"></label>
+						</th>
+						<th>物流公司名称</th>
+						<th>物流编号</th>
+						<th>联系电话</th>
+						<th>状态</th>
+						<th>操作</th>
+					</tr>
+				</thead>
+				<colgroup>
+					<col style="width: 11%;">
+					<col style="width: 11%;">
+					<col style="width: 11%;">
+					<col style="width: 11%;">
+					<col style="width: 12%;">
+				</colgroup>
+				<tbody>
+				</tbody>
+			</table>
+		</div>
+	</div>
+</div>
+{/block} {block name="script"}
+{include file="admin/b2c/pageCommon" /}
+{include file="admin/b2c/openDialog" /}
+<script type="text/javascript">
+//查询用户列表
+	function LoadingInfo(pageIndex) {
+		var search_text = $("#search_text").val();
+		$.ajax({
+					type : "post",
+					url : "ADMIN_MAIN/Express/expressCompany",
+					async : true,
+					data : {
+						"pageIndex" : pageIndex, "search_text" : search_text
+					},
+					success : function(data) {
+						$("#page_count").val(data["page_count"]);
+						$("#pageNumber a").remove();
+						var html = '';
+						if (data["data"].length > 0) {
+							for (var i = 0; i < data["data"].length; i++) {
+								html += '<tr align="center">';
+								html += '<td><div class="cell"><label ><input name="sub" type="checkbox" value="'+ data['data'][i]['co_id']+'" ></label></div></td>';
+								html += '<td>' + data["data"][i]["company_name"]
+										+ '</td>';
+								html += '<td>' + data["data"][i]["express_no"]
+										+ '</td>';
+								html += '<td>' + data["data"][i]["phone"]
+										+ '</td>';
+								html += data["data"][i]["is_enabled"] == 0 ? '<td style="color:red;">锁定</td>'
+										: '<td style="color:green;">正常</td>';
+								html += '<td><a href="ADMIN_MAIN/Express/updateExpressCompany?co_id='
+										+ data["data"][i]["co_id"]
+										+ '">修改|</a><a style="cursor: pointer;" onclick="DelExpressCompany('+data["data"][i]["co_id"]+')">删除</a></td> ';
+								html += '</tr>';
+							}
+						} else {
+							html += '<tr align="center"><th colspan="9">暂无符合条件的数据记录</th></tr>';
+						}
+						$(".style0list tbody").html(html);
+						var totalpage = $("#page_count").val();
+						if (totalpage == 1) {
+							changeClass("all");
+						}
+						var $html = pagenumShow(jumpNumber,totalpage,{$pageshow})
+						$("#pageNumber").append($html);
+					}
+				});
+	}	
+	//全选
+	function CheckAll(event){
+		var checked = event.checked;
+		$(".style0list tbody input[type = 'checkbox']").prop("checked",checked);
+	}
+	function searchData(){
+		LoadingInfo(1);
+	}
+	function DelExpressCompany(co_id){
+		$( "#dialog" ).dialog({				
+            buttons: {
+                "确定,#e57373": function() {
+                    $(this).dialog('close');
+                    $.ajax({
+        				type : "post",
+        				url : "ADMIN_MAIN/Express/expressCompanyDelete",
+        				async : true,
+        				data : {
+        					"co_id" : co_id
+        				},
+        				success : function(data) {
+        					
+        					if (data["code"] > 0) {
+        						showMessage('success', data["message"],"ADMIN_MAIN/Express/expressCompany");
+        						
+        					}else{
+        						showMessage('error', data["message"]);
+        					}
+        				}
+        				})
+                },
+                "取消": function() {
+                    $(this).dialog('close');
+                }
+            },
+            contentText:"是否删除物流公司？",
+        });
+	
+	}
+</script>
+{/block}
+

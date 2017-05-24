@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html>
+	<head>
+	{if $frist_menu.module_name=='首页'}
+	<title>{$title_name} - 商家管理</title>
+	{else /}
+		<title>{$title_name} - {$frist_menu.module_name}管理</title>
+	{/if}
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta name="baidu-site-verification" content="phGGG7jWOJ" />
+		<link rel="shortcut  icon" type="image/x-icon" href="ADMIN_IMG/admin_icon.ico" media="screen"/>
+		<link rel="stylesheet" type="text/css" href="__STATIC__/bootstrap/css/bootstrap.css">
+<!-- 		<link rel="stylesheet" type="text/css" href="__STATIC__/bootstrap/css/bootstrapSwitch.css"> -->
+		<link rel="stylesheet" type="text/css" href="__STATIC__/bootstrap/css/bootstrap-responsive.css">
+		<link rel="stylesheet" type="text/css" href="__STATIC__/css/common.css">
+		<link rel="stylesheet" type="text/css" href="__STATIC__/css/font-awesome.min.css">
+		<link rel="stylesheet" type="text/css" href="__STATIC__/css/seller_center.css">
+		<link rel="stylesheet" type="text/css" href="__STATIC__/simple-switch/css/simple.switch.three.css">
+		<script src="__STATIC__/js/jquery-1.8.1.min.js"></script>
+		<script src="__STATIC__/bootstrap/js/bootstrap.js"></script>
+<!-- 		<script src="__STATIC__/bootstrap/js/bootstrapSwitch.js"></script> -->
+		<script src="__STATIC__/simple-switch/js/simple.switch.min.js"></script>
+		<script src="__STATIC__/js/jquery.unobtrusive-ajax.min.js"></script>
+		<script src="__STATIC__/js/common.js"></script>
+		<script src="__STATIC__/js/seller.js"></script>
+		<script>
+			var PLATFORM_NAME="{$title_name}";
+			var ADMINIMG = "ADMIN_IMG";
+			var ADMINMAIN = "ADMIN_MAIN";
+			var UPLOAD = "__UPLOAD__";
+		</script>
+		<!-- <script src="__STATIC__/js/highcharts.js"></script> -->
+		{block name="resources"/}{/block}
+	</head>
+<body>
+<style>
+.wrapper{width:1268px;}
+</style>
+	<header class="ncsc-head-layout">
+		<div class="wrapper">
+			<div class="ncsc-admin">
+<!-- 				<div class="ncsc-admin-info dropdown-toggle" data-toggle="dropdown"> -->
+					<div class="ncsc-admin-headimg">
+					{if condition="$user_headimg neq ''"}
+						<img src="__ROOT__/{$user_headimg}"/>
+					{else /}
+						<img src="__STATIC__/images/default_user_portrait.gif"/>
+					{/if}
+					</div>
+					<span class="user-name">{$username}</span>
+					<a class="ncsc-admin-a ncsc-admin-info" data-toggle="dropdown"><i class="ncsc-admin-i ncsc-admin-down"></i></a>
+					<a class="ncsc-admin-a h40"><i class="ncsc-admin-line"></i></a>
+					<a class="ncsc-admin-a" href="SHOP_MAIN/Index/index" target="_blank" title="新窗口打开商城前台首页"><i class="ncsc-admin-i ncsc-admin-home"></i></a>
+					<a class="ncsc-admin-a" href="ADMIN_MAIN/Login/logout.html" title="安全退出管理中心"><i class="ncsc-admin-i ncsc-admin-off"></i></a>
+<!-- 						<img src="__STATIC__/images/topright_list.png"/> -->
+<!-- 				</div> -->
+				<div class="user-operation dropdown-menu">
+<!-- 					<a href="ADMIN_MAIN" title="首页"> -->
+<!-- 						<i class="fa fa-home"></i>首页 -->
+<!-- 					</a>  -->
+<!-- 					<a href="ADMIN_MAIN/Auth/userDetail.html" title="个人资料"> -->
+<!-- 						<i class="fa fa-user"></i>个人资料 -->
+<!-- 					</a>  -->
+					<a href="javascript:;" title="修改密码" onclick="editpassword()">
+						<i class="fa fa-wrench"></i>修改密码
+					</a>
+<!-- 					<a href="ADMIN_MAIN/Login/logout.html" title="安全退出"> -->
+<!-- 						<i class="fa fa-sign-out"></i>安全退出 -->
+<!-- 					</a> -->
+				</div>
+			</div>
+			<div class="center-logo">
+				<a href="ADMIN_MAIN"><img src="ADMIN_IMG/shop_logo.png"/></a>
+<!-- 				<h1><a href="#" title="{$title_name}"><span>NIU</span>SHOP&nbsp;<span>电商系统</span></a></h1> -->
+			</div>
+			<div class="index-search-container" style="position: relative;">
+				<div class="index-sitemap" onclick="nav_open(this)">
+					<a href="javascript:void(0);">导航管理<i class="icon-angle-down"></i></a>
+					<div class="sitemap-menu" style="display: none; z-index: 1000;">
+						<div class="title-bar" onclick="nav_close()">
+							<h2>
+								<i class="icon-sitemap"></i>管理导航<em></em>
+							</h2>
+							<span id="closeSitemap" class="close">X</span>
+						</div>
+						<div id="quicklink_list" class="content">
+							{foreach name="nav_list" item="nav"}
+							<dl>
+								<dt>{$nav.data.module_name}</dt>
+								{foreach name="nav['sub_menu']" item="nav_sub"}
+								<dd>
+									<a href="ADMIN_MAIN/{$nav_sub.url}"> {$nav_sub.module_name}</a>
+								</dd>
+								{/foreach}
+							</dl>
+							{/foreach}
+						</div>
+					</div>
+				</div>
+				<div class="search-bar">
+					<!-- <form method="get" target="_blank"> -->
+						<input type="hidden" name="act" value="search"> 
+						<input type="text" id="search_goods" name="keyword" placeholder="商品搜索" class="search-input-text" > 
+						<input type="submit" class="search-input-btn pngFix" value="" onclick="search()">
+					<!-- </form> -->
+				</div>
+			</div>
+			<nav class="ncsc-nav">
+				{foreach name="headlist" item="per"} {if condition="strtoupper($per['module_id']) eq $headid"}
+				<dl class="current_nav" onmouseover="add_nav_class(this)"
+					onmouseout="remove_nav_class(this)">
+					<dt>
+						<a href="ADMIN_MAIN/{$per.url}">{$per.module_name}</a>
+					</dt>
+					<dd class="arrow"></dd>
+				</dl>
+				{else /}
+				<dl onmouseover="add_nav_class(this)" onmouseout="remove_nav_class(this)">
+					<dt>
+						<a href="ADMIN_MAIN/{$per.url}">{$per.module_name}</a>
+					</dt>
+				</dl>
+				{/if} {/foreach}
+			</nav>
+		</div>
+	</header>
+	<!-- 	左边菜单的加载 -->
+	<div class="MAIN">
+		{block name="menu"}
+		<div class="LEFT">
+			<div id="accordion2" class="accordion leftmenu">
+				<div class="accordion-group">
+					<div class="sidebarX">
+						{if condition="$frist_menu.module_picture != ''"}
+						<img src="__UPLOAD__/{$frist_menu.module_picture}">
+						{else/}
+						<img src="__STATIC__/images/admin_left_logo.png">
+						{/if}
+						<h2>{$frist_menu.module_name}</h2>
+					</div>
+					<div class="accordion-body collapse in" id="collapseOne">
+						<ul class="nav nav-pills nav-stacked" id="left_menu-small">
+							{foreach name="leftlist" item="leftItem"} {if condition="strtoupper($leftItem['module_id']) eq $second_menu_id"}
+							<li class="active"><h1></h1><a href="ADMIN_MAIN/{$leftItem.url}">{$leftItem.module_name}</a></li>
+							{else /}
+							<li><a href="ADMIN_MAIN/{$leftItem.url}">{$leftItem.module_name}</a></li>
+							{/if} {/foreach}
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+		{/block}
+		<!-- 	右边主要内容的加载 -->
+		<div class="RIGHT">
+			<div class="ncsc-path">
+				<i class="icon-desktop"></i>{$title_name}
+				{if condition="$frist_menu.module_name != ''"}
+				<i class="icon-angle-right"></i>
+				<a href="ADMIN_MAIN/{$frist_menu.url}">{$frist_menu.module_name}</a>
+				{/if}
+				{if condition="$secend_menu.module_name != ''"}
+				<i class="icon-angle-right"></i>
+				<a href="ADMIN_MAIN/{$secend_menu.url}">{$secend_menu.module_name}</a>
+				{/if}
+			</div>
+			<!--顶部边框开始  -->
+			<div class="tabmenu">
+				<ul class="tab pngFix">
+					{foreach name="child_menu_list" item="child_menu" key="k" } {eq name="child_menu['active']" value="1"}
+					<li class="active"><a href="ADMIN_MAIN/{$child_menu.url}">{$child_menu.menu_name}</a></li>
+					{else/}
+					<li class="daohang_no"><a href="ADMIN_MAIN/{$child_menu.url}">{$child_menu.menu_name}</a></li>
+					{/eq} {/foreach}
+				</ul>
+				<div class="right_side_operation">
+					<ul>
+						{block name="right_tab"}
+						<li><a class="nscs-table-handle_green" href="ADMIN_MAIN/Auth/addUser" style="display: none;">右侧按钮测试</a></li>
+						{/block}
+					</ul>
+				</div>
+			</div>
+			<hr class="tabmenu_hr" style="border:1px solid #00C0FF;margin:0 0px 10px 20px;"  />
+			<div class="main">
+			{block name="main"} {/block}
+			</div>
+			<div class="page" id="turn-ul" style="display: none;">
+				<div class="pagination pagination-right">
+					<ul>
+						<li><a id="beginPage" class="page-disable">首页</a></li>
+						<li><a id="prevPage" class="page-disable">上一页</a></li>
+						<li id="pageNumber"></li>
+						<li><a id="nextPage">下一页</a></li>
+						<li><a id="lastPage">末页</a></li>
+					</ul>
+				</div>
+			</div>
+			<input type="hidden" id="page_count" />
+		</div>
+	</div>
+	<!--修改密码弹出框 -->
+	<div id="edit-password" class="modal hide" tabindex="-1" role="dialog"
+		aria-labelledby="myModalLabel" aria-hidden="true">
+		<div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+			<h3 id="myModalLabel">修改密码</h3>
+		</div>
+		<div class="modal-body">
+			<form class="form-horizontal">
+				<div class="control-group">
+					<label class="control-label" for="inputPassword"><span class="color-red">*</span>原密码</label>
+					<div class="controls">
+						<input type="password" id="pwd0" placeholder="请输入原密码">
+						<span class="help-block"></span>
+					</div>
+				</div>
+				<div class="control-group">
+					<label class="control-label" for="inputPassword"><span class="color-red">*</span>新密码</label>
+					<div class="controls">
+						<input type="password" id="pwd1" placeholder="请输入新密码">
+						<span class="help-block"></span>
+					</div>
+				</div>
+				<div class="control-group">
+					<label class="control-label" for="inputPassword"><span class="color-red">*</span>再次输入密码</label>
+					<div class="controls">
+						<input type="password" id="pwd2" placeholder="请输入确认密码">
+						<span class="help-block"></span>
+					</div>
+				</div>
+				<div style="text-align: center; height: 20px;" id="show"></div>
+			</form>
+		</div>
+		<div class="modal-footer">
+			<button class="btn btn-info" onclick="submitPassword()"  style="display:inline-block;">保存</button>
+			<button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
+		</div>
+	</div>
+	<!--修改密码弹框结束  -->
+	<div class="footer">
+		<div id="faq" style="background: #eee; padding-top: 10px;">
+			<div class="faq-wrapper"></div>
+		</div>
+		<div id="footer" class="wrapper">
+			<p>
+				{foreach name="ShopNavigationData" id="vo" key='key'}
+				{if $key>0} |{/if} <a href="{$vo.nav_url}">{$vo.nav_title}</a> 
+				{/foreach}
+			</p>
+			Copyright 2015-2025 <a href="" target="_blank">{$title_name}</a> All rights
+			reserved.<br>
+		</div>
+	</div>
+	<script>
+	$(".checkbox").simpleSwitch({
+		"theme": "FlatCircular"
+	});
+</script>
+	<script>
+		$(function() {
+			//设置最小高度  2016年8月1日17:57:09
+			var height = Number($(window).height()) - 173;
+			$('.MAIN').css('minHeight', height);
+			$('.index-sitemap > a').bind("click", function() {
+				$(".sitemap-menu-arrow").slideDown("slow");
+				$(".sitemap-menu").slideDown("slow");
+			});
+			$('.add-quickmenu > a').bind("click", function() {
+				$(".sitemap-menu-arrow").slideDown("slow");
+				$(".sitemap-menu").slideDown("slow");
+			});
+			$('#closeSitemap').bind("click", function() {
+				$(".sitemap-menu-arrow").slideUp("fast");
+				$(".sitemap-menu").slideUp("fast");
+			});
+		})
+		// 系统注销菜单的控制
+		var closetimer = 0;
+		function exitSystemOver() {
+			cancelColseMenu();
+			$("#exit_System").css("display", "block");
+		};
+
+		function exitSystemOut() {
+			closetimer = window.setTimeout(mclose, 600);
+		};
+
+		function cancelColseMenu() {
+			window.clearTimeout(closetimer);
+			closetimer = null;
+		};
+
+		function mclose() {
+			$("#exit_System").css("display", "none");
+		}
+		$(document).ready(function() {
+			//获取页面完整地址
+			var url = window.location.host;
+			if (url.indexOf('autoscript') != -1) {
+				$("#hm_a").remove();
+			}
+		});
+		//弹出修改密码的弹窗
+		function editpassword() {
+			$('#edit-password').modal('show');
+		}
+		//保存修改密码的按钮
+		function submitPassword() {
+			var pwd0 = $("#pwd0").val();
+			var pwd1 = $("#pwd1").val();
+			var pwd2 = $("#pwd2").val();
+			if (pwd1 == '') {
+				$("#pwd1").focus();
+				$("#pwd1").siblings("span").html("密码不能为空");
+				return;
+			} else if ($("#pwd1").val().length < 6) {
+				$("#pwd1").focus();
+				$("#pwd1").siblings("span").html("密码不能少于6位数");
+				return;
+			}
+			if (pwd2 == '') {
+				$("#pwd2").focus();
+				$("#pwd2").siblings("span").html("密码不能为空");
+				return;
+			} else if ($("#pwd2").val().length < 6) {
+				$("#pwd2").focus();
+				$("#pwd2").siblings("span").html("密码不能少于6位数");
+				return;
+			}
+			if (pwd1 != pwd2) {
+				$("#pwd2").focus();
+				$("#pwd2").siblings("span").html("两次密码输入不一样，请重新输入");
+				return;
+			}
+			$.ajax({
+				url : "ADMIN_MAIN/Login/ModifyPassword",
+				type : "post",
+				data : {
+					"old_pass" : $("#pwd0").val(),
+					"new_pass" : $("#pwd1").val()
+				},
+				dataType : "json",
+				success : function(data) {
+					if (data['code'] > 0) {
+						$("#show").html('<span style="color:green">密码修改成功</span>');
+					} else {
+						$("#show").html('<span style="color:red">'+data['message']+'</span>');
+					}
+				}
+			});
+		}
+
+		function add_nav_class(doc) {
+			$(doc).addClass("hover");
+		}
+		function remove_nav_class(doc) {
+			$(doc).removeClass("hover");
+		}
+		function nav_open() {
+			$(".sitemap-menu-arrow").show();
+			$(".sitemap-menu").show();
+		}
+		function nav_close() {
+			$(".sitemap-menu-arrow").hide();
+			$(".sitemap-menu").hide();
+		}
+		//查询
+		function search(){
+			var search_info = $("#search_goods").val();
+			window.location.href="ADMIN_MAIN/Goods/goodsList.html?search_info="+search_info;
+		}
+	</script>
+	{block name="script"}{/block}
+</body>
+</html>

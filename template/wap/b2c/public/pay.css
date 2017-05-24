@@ -1,0 +1,51 @@
+@CHARSET "UTF-8";
+.shade{
+	position:fixed;top:0px;left:0px;width:100%;height:100%;margin-top:0;background: rgba(0, 0, 0, 0.7);z-index: 999;
+}
+.head-info{
+	background: none;line-height:31px;height:98px;
+}
+
+.head-pay{
+	color: #222;margin-top:12px;font-size: 15px;
+}
+.head-pay-value{
+	font-size: 24px;color: #222;
+}
+.pay-type-item{
+	padding: 8px 15px; margin-top: 10px; background: #FFF;
+}
+.pay-item-list{
+	padding: 10px 0px;border-bottom:1px solid #e5e5e5;
+}
+.codes{
+	overflow: hidden;width: 79%;margin: 0 auto;border-radius: 10px;
+}
+#close{
+	text-align: right;color: #222;background: #fff;padding: 3px 10px 0 10px;
+}
+.codes .wchat-weixin{
+	background: #fff;border-bottom: 1px solid #e5e5e5;padding-bottom: 10px;
+}
+.wchat-photo{
+	    margin: 0 15px;
+}
+
+.wchat-title{
+	font-size: 14px; line-height: 28px;color:#222;
+}
+#wchatpay{
+	margin-right: 13px;float:right;
+}
+.ali-pay{
+	background: #fff;padding:10px 0px;
+}
+.ali-photo{
+	    margin: 0 15px;
+}
+.ali-item{
+	font-size: 14px; line-height: 31px;color: #222;
+}
+#alipay{
+	margin-right: 13px;float:right;
+}

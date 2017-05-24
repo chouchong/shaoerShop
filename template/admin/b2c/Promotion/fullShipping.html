@@ -1,0 +1,79 @@
+{extend name="admin/b2c/base" /}
+{block name="main"}
+<div class="mod-table">
+	<div class="table-div">
+		<table>
+			<tbody>
+				<tr>
+					<td colspan="2" class="back-f5f5f5">
+						<div class="table-title-font">
+							<span>信息填写</span>
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<td class="table-1td">满额包邮</td>
+					<td>
+						<div class="controls">
+							 <label class="radio inline"><input type="radio" name="fare" value="1" checked="checked" id="manebaoyouResultYes">启用</label> 
+							<label class="radio inline"><input type="radio" name="fare" value="0" checked="checked" id="manebaoyouResultNo">禁用</label>
+							<input type="hidden" id="is_open" value='{$info.is_open}'>
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<td class="table-1td">包邮所需订单金额</td>
+					<td>
+						<div>
+							<input id="full_mail_money" class="input-mini input-integral" type="number" min="0.01" step="0.01" value="{$info.full_mail_money}">
+							<span id="full_mail" class="help-inline ml15" style="display: none;color:red;">请输入包邮所需订单金额</span>
+						</div>
+						<span>请设定数字参数，全场包邮请填写0</span>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+	<p class="button mt60">
+		<button class="edit_button" type="button" onclick="SavepointConfig();">保存</button>
+	</p>
+</div>
+{/block}
+{block name="script"}
+{include file="admin/b2c/openDialog" /}
+<script type="text/javascript">
+  function SavepointConfig(){
+	  var is_open = $("input[type='radio'][name='fare']:checked").val();
+	  var full_mail_money = $("#full_mail_money").val();
+	  if(full_mail_money == ''){
+		  $("#full_mail").show();
+		  return false;
+	  }
+		$.ajax({
+			type:"post",
+			url : "ADMIN_MAIN/Promotion/fullShipping",
+			async : true,
+			data : {
+				"is_open" : is_open,
+				"full_mail_money" : full_mail_money
+			},
+			success : function(data){
+				if(data['code'] > 0)
+					{
+						showMessage('success', data["message"]);
+					}else{
+						showMessage('error', data["message"]);
+					}
+			}
+		})
+	}
+ 	window.onload=function(){
+		var is_open = $("#is_open").val();
+		if(parseInt(is_open) == 0){
+			$("#manebaoyouResultNo").prop("checked","checked");
+		}else{
+			$("#manebaoyouResultYes").prop("checked","checked");
+		}
+	};
+</script>
+{/block}

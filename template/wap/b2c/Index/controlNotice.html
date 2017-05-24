@@ -1,0 +1,100 @@
+<script src="__TEMP__/{$style}/public/js/rollSlide.js"></script>
+<style>
+.hot {
+	width: 100%;
+	height: 40px;
+	background: #FFF;
+	border-bottom: 1px solid #eee;
+}
+
+.hot .notice-img {
+	float: left;
+	width: 40px;
+	height: 40px;
+	margin: 2px 20px;
+	position: relative;
+}
+
+.hot .notice-img img {
+	display: block;
+	height: 27px;
+	width: 27px;
+	margin:4px;
+}
+
+.hot .notice-img:after {
+	content: '';
+	display: block;
+	width: 1px;
+	height: 44px;
+	background-color: #eee;
+	position: absolute;
+	right: -20px;
+	top: 0;
+}
+
+.hot ul {
+	position: absolute;
+	left: 95px;
+	top: 0px;
+	overflow: hidden;
+}
+
+.hot ul li {
+	width: 100%;
+	height: 60px;
+	float: left;
+	line-height: 60px;
+}
+
+.hot ul li .hot-message {
+	display: block;
+	width: 80%;
+	float: left;
+	margin-left: 2%;
+	height: 50px;
+	margin-top: 10px;
+}
+
+.hot ul li .hot-message a {
+	display: block;
+	padding-left: 10px;
+	height: 25px;
+	overflow: hidden;
+	/* font-size: 0.6rem; */
+	font-size:14px;
+	line-height: 25px;
+	color: #666;
+	-webkit-line-clamp: 1;
+	-webkit-box-orient: vertical;
+	display: -webkit-box;
+	position: relative;
+}
+</style>
+
+<script type="text/javascript">
+$(function(){
+	$('.hot').rollSlide({
+		orientation: 'top',
+		num: 1,
+		v: 1500,
+		//space: 500,
+		isRoll: true
+	});
+});
+</script>
+<div class="hot" style="position: relative; overflow: hidden;">
+	<div class="notice-img">
+		<a href="javascript:;"><img src="__TEMP__/{$style}/public/images/ad.png"></a>
+	</div>
+	
+	<ul class="roll__list">
+	{foreach name="notice_arr" item="notice" key="k"}
+		<li>
+			<div class="hot-message">
+				<a href="javascript:;">{$notice}</a>
+			</div>
+		</li>
+	{/foreach}
+	</ul>
+</div>

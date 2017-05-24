@@ -1,0 +1,45 @@
+{extend name="admin/b2c/base" /}
+{block name="resources"/}
+<link rel="stylesheet" type="text/css" href="ADMIN_CSS/defau.css">
+{/block}
+{block name="main"}
+<input type="hidden" id="promoter_id" value="{$promoter_id}"/>
+<div class="set-style">
+	<dl>
+		<dt>上级推广员ID:</dt>
+		<dd>
+			<p><input name="" id="parent_promoter" type="text" value=""/></p>	
+			<p class="error">上级推广员ID不可为空</p>
+			<p class="hint"style="margin-top:0px;"><br><span style="color:orange;">原上级推广员ID为{$parent_promoter}。</span></p>
+		</dd>
+	</dl>	
+	<button class="edit_button" onclick="modifyPromoterParent();">提交</button>
+</div>
+{include file="admin/b2c/openDialog" /}
+<script>		
+	function modifyPromoterParent(){
+		var promoter_id = $("#promoter_id").val();
+		var parent_promoter = $("#parent_promoter").val();
+		if(parent_promoter == ''){
+			$("#parent_promoter").parent().next().show();
+			return false;
+		}
+		$.ajax({
+			type:"post",
+			url:"ADMIN_MAIN/Distribution/modifyPromoterParent",
+			data:{
+				'promoter_id':promoter_id,
+				'parent_promoter':parent_promoter
+			},
+			async:true,
+			success:function (data) {
+				if (data["code"] > 0) {
+					showMessage('success', data["message"],"ADMIN_MAIN/Distribution/promoterList");
+				}else{
+					showMessage('error', data["message"]);
+				}	
+			}
+		});
+	}
+</script>
+{/block}

@@ -1,0 +1,108 @@
+{extend name="admin/b2c/base" /}
+{block name="resources"/} {/block}
+{block name="right_tab"}
+<li><a class="nscs-table-handle_green" href="ADMIN_MAIN/Distribution/addPromoterLevel" ><i class="fa fa-plus-circle"></i>&nbsp;添加</a></li> 
+{/block}
+{block name="main"}
+<div class="mod-table">
+	<div class="mod-table-head">
+		<div class="con style0list">
+			<table>
+				<colgroup>
+					<col style="width: 5%;">
+					<col style="width: 10%;">
+					<col style="width: 15%;">
+					<col style="width: 15%;">
+					<col style="width: 8%;">
+					<col style="width: 8%;">
+					<col style="width: 8%;">
+					<col style="width: 8%;">
+					<col style="width: 8%;">
+					<col style="width: 15%;">
+				</colgroup>
+				<thead>
+					<tr>
+						<th><label style="margin-left: 5px;"> <input type="checkbox"  onclick="CheckAll(this)"></label></th>
+						<th>股东姓名</th>
+						<th>分红开始时间</th>
+						<th>分红结束时间</th>
+						<th>分红总金额</th>
+						<th>店铺总分值</th>
+						<th>股东分值</th>
+						<th>分红佣金比率</th>
+						<th>分红金额</th>
+						<th>创建时间</th>				
+					</tr>
+				</thead>
+				<colgroup>
+					<col style="width: 5%;">
+					<col style="width: 10%;">
+					<col style="width: 15%;">
+					<col style="width: 15%;">
+					<col style="width: 8%;">
+					<col style="width: 8%;">
+					<col style="width: 8%;">
+					<col style="width: 8%;">
+					<col style="width: 8%;">
+					<col style="width: 15%;">
+				</colgroup>
+				<tbody></tbody>
+			</table>
+		</div>
+	</div>
+</div>
+{/block}
+{block name="script"}
+{include file="admin/b2c/pageCommon" /}
+{include file="admin/b2c/openDialog" /}
+<script type="text/javascript">	
+	//加载数据
+	function LoadingInfo(pageIndex) {
+		$.ajax({
+			type : "post",
+			url : "ADMIN_MAIN/Distribution/commissionPartnerGlobalList",
+			async : true,
+			data : {
+				"pageIndex" : pageIndex,
+				"records_id":{$records_id}
+			},
+			success : function(data) {
+				$("#page_count").val(data["page_count"]);
+				$("#pageNumber a").remove();
+				var html = '';
+				if (data["data"].length > 0) {
+					for (var i = 0; i < data["data"].length; i++) {
+						html += '<tr align="center">';
+						html += '<td><div class="cell"><label ><input name="sub" type="checkbox" value="'+ data["data"][i]["id"] +'" ></label></div></td>';
+						html += '<td>' + data["data"][i]["real_name"] + '</td>';
+						html += '<td>' + data["data"][i]["start_time"] + '</td>';
+						html += '<td>' + data["data"][i]["end_time"] + '</td>';
+						html += '<td>' + data["data"][i]["yingye_money"] + '</td>';
+						html += '<td>' + data["data"][i]["shop_value"] + '</td>';
+						html += '<td>' + data["data"][i]["partner_value"] + '</td>';
+						html += '<td>' + data["data"][i]["partner_rate"] + '</td>';
+						html += '<td>' + data["data"][i]["fenhong_money"] + '</td>';
+						html += '<td>' + data["data"][i]["create_time"] + '</td>';
+						html += '</tr>';
+					}
+				} else {
+					html += '<tr align="center"><th colspan="9">暂无符合条件的数据记录</th></tr>';
+				}
+				
+				$(".style0list tbody").html(html);
+				var totalpage = $("#page_count").val();
+				if (totalpage == 1) {
+					changeClass("all");
+				}
+				var $html = pagenumShow(jumpNumber,totalpage,{$pageshow})
+				$("#pageNumber").append($html);
+			}
+		});
+	}	
+	//全选
+	function CheckAll(event){
+		var checked = event.checked;
+		$(".style0list tbody input[type = 'checkbox']").prop("checked",checked);
+	}
+</script>
+{/block}
