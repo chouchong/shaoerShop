@@ -184,13 +184,13 @@ class Pay extends Controller
                 exit;
             }
             var_dump($url);
-            header('Location:' . $url);
+            // header('Location:' . $url);
             // $notify_url = 'http://' . $_SERVER['HTTP_HOST'] . '/wap/Pay/aliUrlBack';
             // $return_url = 'http://' . $_SERVER['HTTP_HOST'] . '/wap/Pay/aliPayReturn';
             // $show_url = 'http://' . $_SERVER['HTTP_HOST'] . '/wap/Pay/aliUrlBack';
             // $pay = new UnifyPay();
             // $res = $pay->aliPay($out_trade_no, $notify_url, $return_url, $show_url);
-            // echo "<script>window.location.href='" . $res . "'</script>";
+            echo "<script>window.location.href='" . $url . "'</script>";
         } else {
             // echo "点击右上方在浏览器中打开";
             $this->assign("status", - 1);
