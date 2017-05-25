@@ -84,7 +84,6 @@ class Pay extends Controller
         if (empty($out_trade_no)) {
             $this->error("没有获取到支付信息");
         }
-        
         $red_url = 'http://' . $_SERVER['HTTP_HOST'] . '/wap/Pay/wchatUrlBack';
         $pay = new UnifyPay();
         if (! isWeixin()) {
