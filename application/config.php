@@ -288,40 +288,27 @@ return [
     'alipay' => [
         'use_sandbox'               => true,// 是否使用沙盒模式
 
-        'partner'                   => '2088102169252684',
-        'app_id'                    => '2016073100130857',
-        'sign_type'                 => 'RSA2',// RSA  RSA2
+        'partner'                   => '2088911647939755',
+        'app_id'                    => '2088911647939755',
+        'sign_type'                 => 'RSA',// RSA  RSA2
 
         // 可以填写文件路径，或者密钥字符串  当前字符串是 rsa2 的支付宝公钥(开放平台获取)
-        'ali_public_key'            => 'MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAmBjJu2eA5HVSeHb7jZsuKKbPp3w0sKEsLTVvBKQOtyb7bjQRWMWBI7FrcwEekM1nIL+rDv71uFtgv7apMMJdQQyF7g6Lnn9niG8bT1ttB8Fp0eud5L97eRjFTOa9NhxUVFjGDqQ3b88o6u20HNJ3PRckZhNaFJJQzlahCpxaiIRX2umAWFkaeQu1fcjmoS3l3BLj8Ly2zRZAnczv8Jnkp7qsVYeYt01EPsAxd6dRZRw3uqsv9pxSvyEYA7GV7XL6da+JdvXECalQeyvUFzn9u1K5ivGID7LPUakdTBUDzlYIhbpU1VS8xO1BU3GYXkAaumdWQt7f+khoFoSw+x8yqQIDAQAB',
+        'ali_public_key'            => 'MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCnxj/9qwVfgoUh/y2W89L6BkRAFljhNhgPdyPuBV64bfQNN1PjbCzkIM6qRdKBoLPXmKKMiFYnkd6rAoprih3/PrQEB/VsW8OoM8fxn67UDYuyBTqA23MML9q1+ilIZwBC2AQ2UBVOrFXfFl75p6/B5KsiNG9zpgmLCUYuLkxpLQIDAQAB',
 
         // 可以填写文件路径，或者密钥字符串  我的沙箱模式，rsa与rsa2的私钥相同，为了方便测试
-        'rsa_private_key'           => 'MIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQC/z+Ue/oS0GjO2
-    myYrkdopw5qq6Ih/xlHBx0HBE0xA2dRinpMuZeI0LUUtN54UAUZbDz8rcaOCb0je
-    loeYolw54tadcIw4Q2hbdeJPplldJZyi1BDYtBJZvAveeRSidHdmBSUtOtCBXUBl
-    JUP3I8/R4c34Ii4Pm/K4vmhwLf/zqZAedKGhYP6m5q+p8sfBHRPy97/KluLPiSTR
-    FqGSRmd0IitUGK+KQ5qsAfJXyN1oVR4jBYaxfx7dWkTWmxAfNqtKfMvu2a5lH6hv
-    ClN+w4RUDBu3939bLjCYKcAomkv3QMquMP46m+D8Ny+3mGk5L9Ul4jyxlFTlV4L4
-    JM3g/02xAgMBAAECggEBALZliwseHDLnd6V9g56K41ozlzBOTv6yJ6yNPgnLwAcr
-    HLtq76p/V8smAVIuQTPkwnJ03S0CsumlyTVhDzAltG2XN14fWDdoYiQWxU3YccIR
-    shFkd2CaW5jZKLA1k1moRqHM4r1P4FYjxshn12l7tHNwtdvvJL3THcxvxABovauF
-    OVtznpRlnfJLjn2Lg+xNsxaYy3zL8L6nL7MXUWLKvmLiZn64PFcw7cf+9n2exRDs
-    wn0wDCpypGqOVVXVFeZaXTwmOoxgIUAZfAExdLtabGGCAz1lTsA0+r4DW2nSTe8C
-    Fy1Db+fcCTm+uQ3y6jDwuS3tB8V+PQKog3+ReZp/9sECgYEA/NEr+ln6DTy7u4rC
-    Wq7mixRJ1kaiAUph/hADrUwhkMiUapSMNAIXblFB+BQUjFZQmXEbcvz0Y70g9Zi9
-    JCXVTiDTBe7jj/FK63MU0F9KY5OducpVV+RhSpNy/i1M2qeW4gO351PpPHUpRUYr
-    GkYvAKktqrSOdBEWD3IeKLYDXxMCgYEAwjoavGjWzD9Xckbpb8yrQ+gHfLeWDKh7
-    BgvoBGagyqbzIOZU9wg3dSQ2F5eMWDxWVRGqap3fIHxcA0/VMqXG1DrvSIUC4SE8
-    Zys515fR00c9h3W3IugHnKgdYcV7nZrJoPZXlMjPOo39FCBnfbrUOgnKwxMlz3lV
-    vC6465ODhKsCgYEAmUtTuTd5kTE0O+FFO6s1iztAEjc94D5z8JNRR3EUITAeHgn4
-    gUiLYI7Qy1WRqA5mTMPyeuS6Ywe4xnJYrWRrVDY+/if9v7f1T5K2GirNdld5mb//
-    w41tGMUTQt/A7AwWRvEuP4v3rnr0DVcgp4vK0EHEuO9GOUZq8+6kLtc+cBUCgYBF
-    J/kzEsVAjmEtkHA33ZExqaFY1+l2clrziTPAtWYVIiK5mSmxl9xfOliER/KxzDIV
-    MigStEmpQH5ms3s/AGXuVVmz4aBn1rSyK2L6D9WnO9t9qv1dUW68aeOkV3OvZ1jZ
-    lj0S/flDaSEulGclDmvYinoGwX+aAyLy0VQIlUqj5wKBgHEUEf7YDnvw/IBnF1E4
-    983/7zBx9skoHhpEZsh2+1or7LIw6z0m3lsNBnK0MZZBmW/7HwOtVfhXUUPbVrOJ
-    di70YoMynX3gjK3LTXhzISheZgcNRKTqiJgVunPokJxQRyYcAfaQeuIm9O8cCPE1
-    rZpNAzCdd4NSj83UZRm3YOmC',
+        'rsa_private_key'           => 'MIICXQIBAAKBgQC5pz3G3VVEPyLfw7H3/aQ+VGT5UKuYC7kr1FZW9pXBIHihIq7A
+aDyNnak6r5PqvMoh1xBZ49Ciaf/hG8Eu6/XbEL8HPlko42Zxa3uAADoBjhisjeoR
+b35h4W963Yo+OCMm9b1AiEaOddw+aNMXWv/r6JFazsLoEaczZJSLgs6pgQIDAQAB
+AoGAZcnIGSxo/44ONNk6zlkGoBXtdrRAIJDs6Zb176Aq40RGXzKA1YVRDeQPUNnL
+I7x2pq8fi+lYDnRHksiA1pUQqiee17UUw4QQiFaeFyHnXaeLJIQbh66SRRFGZZZi
+M7pGV8D/h/gSqYMSqj3sqK7/woLWii+qWhW1vMrYiNgrtXECQQDpMC9RnWCTcyJC
+sS7z2ZMrIuovdvayfiC/lmKHN/Con1w45lmMvZ9hGzAchjpfeuacYsWs8M6Rv35R
+49mZZIgfAkEAy9CfTJkuamzLY63OTF2y0ZWpo0XLL0PiJpUigWmSLll1Ii82J1Fo
+cV9MIpYrsnmyNOQx215/heQZRM8pbbMaXwJBAKuxfMW8+KTYevtb9lQ5ePCj7oYw
+M4hM8dPe6IDjIWEmpQKIKJtF6xnWqN/3vPccSLwQxbeGPrJ1qo6lE0ysBsUCQQC+
+Y6+rOhylxeNoxd9EbvKv3YKNxpC7IkqLiBynjxrCuUY2HKwVpnJOFZtlY6qGGjBi
+QBhit6+gPydro6krlHc5AkADRjCqIXaSJj9IbdF+6AGsRRc2QePfJvTcRmtVyBZ7
+aZ/6vV0PmvATaO3CC7CvaFL2MChVF8Zb6PlyXH/WPFMj',
 
         'limit_pay'                 => [
             //'balance',// 余额
