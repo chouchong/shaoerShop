@@ -44,6 +44,7 @@ class ComposerStaticInit6f4c6fc29d62d4e6946cff3a9a69569b
         'P' => 
         array (
             'Phinx\\' => 6,
+            'Payment\\' => 8,
         ),
         'D' => 
         array (
@@ -117,6 +118,10 @@ class ComposerStaticInit6f4c6fc29d62d4e6946cff3a9a69569b
         'Doctrine\\Instantiator\\' => 
         array (
             0 => __DIR__ . '/..' . '/doctrine/instantiator/src/Doctrine/Instantiator',
+        ),
+        'Payment\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/riverslei/payment/src',
         ),
     );
 
