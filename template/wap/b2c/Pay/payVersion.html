@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>请选择支付方式</title>
+<link rel="stylesheet" type="text/css" href="/public/css/pay/pay_main.css">
+<script src="/public/js/jquery.js"></script>
+<style>
+.paybox .p-key {
+	float: none;
+}
+
+.shortcut, .shortcut .w {
+	height: 80px;
+}
+
+.checkstand {
+	font-size: 16px;
+	color: #565656;
+}
+.mask-layer{
+	position: fixed;
+	width: 100%;
+	height: 100%;
+	top:0;
+	display:none;
+	background: rgba(0,0,0,0.7);
+}
+.mask-layer-dialog{
+	background: #ffffff;
+	position: absolute;
+	top:50%;
+	left:50%;
+	margin-top:-100px;
+	margin-left:-169px;
+	width:400px;
+	outline: 5px solid #999999;
+	display:none;
+}
+.mask-layer-dialog header{
+	width: 100%;
+	height: 20px;
+	background: #BFBFBF;
+}
+.mask-layer-dialog header i{
+	display: inline-block;
+	height:20px;
+	float: right;
+	margin-right:5px;
+	font-size:20px;
+	font-style: normal;
+	color:#939393;
+	cursor:pointer;
+}
+.mask-warning-img,.mask-content{
+	float: left;
+	padding:20px 0 20px 10px;
+}
+.mask-warning-img{
+	width:20%;
+	text-align: center;
+}
+.mask-content{
+	width:75%;
+}
+.mask-content h3{
+	color:#565656;
+}
+.mask-content p{
+	color:#999999;
+	margin-top:5px;
+}
+.mask-content button{
+	border:0;
+	background: #ff9c00;
+	padding:10px 20px;
+	color:#ffffff;
+	border-radius: 3px;
+	margin:10px 0 0;
+	cursor:pointer;
+}
+.order .o-left{
+	padding-left:0;
+}
+</style>
+</head>
+<body>
+<div class="shortcut">
+	<div class="w">
+		<div class="s-logo">
+			<img alt="Niushop开源商城收银台" src="/upload/admin/common/1493179603.png"
+				style="width: 240px;"><strong class="checkstand">收银台</strong>
+		</div>
+	</div>
+</div>
+<div class="w">
+	<div class="order clearfix">
+		<!-- 订单信息 -->
+		<div class="o-left">
+			<h3 class="o-title">订单提交成功，请尽快付款！订单号：1495616349583</h3>
+			<p class="o-tips">
+				请您在<span class="font-red j_orderTime">00:00:00</span>内完成支付，否则订单会被自动取消。
+			</p>
+		</div>
+		<!-- 订单信息 end -->
+		<!-- 订单金额 -->
+		<div class="o-right">
+			<div class="o-price">
+				<em>应付金额</em><strong>190.00</strong><em>元</em>
+			</div>
+		</div>
+	</div>
+	<div class="payment pay-load">
+		<div class="jp-notice" style="background: none;">
+		</div>
+		<!-- 收银台加载loading -->
+		<div id="payChanel" class="pay-channel animate-enter animate-enter-active">
+						<div class="paybox paybox-baitiao">
+				<div class="p-wrap">
+					<i class="p-border"></i>
+					<div class="p-key">
+						<!-- 支付方式选择  ui-check-disable-->
+						<span class="p-k-check ui-checkbox-wrap ">
+							<i class="ui-checkbox-L"><em class="js-select-pay" data-pay="wchat"></em></i>
+							<i class="p-k-icon"><img src="/public/css/pay/pay_wchat.png"></i><strong>微信支付</strong>
+						</span>
+					</div>
+				</div>
+			</div>
+				<div class="paybox paybox-xjk">
+				<div class="p-wrap">
+					<i class="p-border"></i>
+					<div class="p-key">
+						<span class="p-k-check ui-checkbox-wrap ">
+							<i class="ui-checkbox-L"><em class="js-select-pay" data-pay="alipay"></em></i>
+							<i class="p-k-icon"><img src="/public/css/pay/pay_alipay.png"></i>
+							<strong>支付宝支付</strong>
+						</span>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="pay-verify animate-enter animate-enter-active">
+			<div class="pv-button" style="display: none;">
+				<input class="ui-button ui-button-XL ui-button-XL-loading" type="submit" value="加载中">
+			</div>
+			<div class="pv-button">
+				<a class="ui-button ui-button-XL disable js-pay">去支付</a>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="mask-layer"></div>
+<article class="mask-layer-dialog">
+	<header>
+		<i>x</i>
+	</header>
+	<div class="mask-warning-img">
+		<img src="/public/css/pay/pay_masklayer_warning.png"/>
+	</div>
+	<div class="mask-content">
+		<h3>请您在新打开的页面上完成付款操作。</h3>
+		<p>付款完成前，请不要关闭此窗口。<br/>完成付款后请根据您的情况点击下面的按钮</p>
+		<button>已完成付款，查看我的会员中心</button>
+	</div>
+</article>
+<input type="hidden" value="2017-05-24 16:59:09" id="create_time" />
+<script>
+//当浏览器窗口大小改变时，设置显示内容的高度  
+window.onresize=function(){
+// 	$(".mask-layer-dialog").
+}
+function countdown(){
+	var date = new Date($("#create_time").val().replace(/\-/g, "\/"));//开始时间，24小时后结束
+	date.setDate(date.getDate()+1);
+	var date_now = new Date();//当前时间
+	var endTime = date.getTime(); //结束时间毫秒数
+	var lag = (endTime - date_now.getTime()) / 1000; //当前时间和结束时间之间的秒数
+	if (lag > 0) {
+		var second = Math.floor(lag % 60);
+		var minite = Math.floor((lag / 60) % 60);
+		var hour = Math.floor((lag / 3600) % 24);
+		if(second<10){
+			second = "0"+second;
+		}
+		if(minite<10){
+			minite = "0"+minite;
+		}
+		if(hour<10){
+			hour = "0"+hour;
+		}
+		$(".j_orderTime").text(hour+":"+minite+":"+second);
+	} else{
+		$(".j_orderTime").text("00:00:00");
+	}
+}
+
+$(function() {
+	countdown();
+	setInterval("countdown()",1000);
+	$(".js-select-pay").click(function() {
+		if ($(this).hasClass("selected")) {
+			$(this).removeClass("selected");
+			$(".js-pay").addClass("disable");
+		} else {
+			$(".js-select-pay").removeClass("selected");
+			$(this).addClass("selected");
+			$(".js-pay").removeClass("disable");
+			}
+		})
+
+	//去支付
+	$(".js-pay").click(function() {
+		if ($('.js-select-pay.selected').attr("data-pay") != null) {
+			var url = "/wap/";
+			switch ($('.js-select-pay.selected').attr("data-pay")) {
+			case "wchat":
+				url += 'pay/wchatpay?no=1495616349583';
+				break;
+			case "alipay":
+				//跳转到支付宝
+				url += 'pay/alipay?no=1495616349583';
+				break;
+			}
+			window.open(url);
+			$(".mask-layer-dialog").fadeIn(300);
+			$(".mask-layer").fadeIn(300);
+		}
+	})
+	//关闭弹出层
+	$(".mask-layer-dialog header i").click(function(){
+		$(".mask-layer-dialog").fadeOut(300);
+		$(".mask-layer").fadeOut(300);
+	})
+	$(".mask-content button").click(function(){
+		window.location.href = "/shop/member/orderlist";
+	})
+})
+
+function shopOrderDetail(obj) {
+	if ($("#listPayOrderInfo").is(":hidden")) {
+		$(obj).text("收起详情");
+		$("#listPayOrderInfo").show(400);
+	} else {
+		$(obj).text("订单详情");
+		$("#listPayOrderInfo").hide(400);
+	}
+}
+</script>
+</body>
+</html>
