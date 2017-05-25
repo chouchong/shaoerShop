@@ -56,7 +56,7 @@ class Pay extends Controller
      */
     public function getPayValue()
     {
-         return view($this->style . 'Pay/demoVersion');
+         return view($this->style . 'Pay/payVersion');
     }
 
     /**
