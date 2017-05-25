@@ -183,6 +183,7 @@ class Pay extends Controller
                 echo $e->errorMessage();
                 exit;
             }
+            var_dump(Config::ALI_CHANNEL_WAP);
             var_dump(config('alipay'));
             // header('Location:' . $url);
             // $notify_url = 'http://' . $_SERVER['HTTP_HOST'] . '/wap/Pay/aliUrlBack';
