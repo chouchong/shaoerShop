@@ -84,6 +84,7 @@ final class AliConfig extends ConfigInterface
     {
         // 初始化配置信息
         try {
+            date_default_timezone_set('Asia/Shanghai');
             $this->initConfig($config);
         } catch (PayException $e) {
             throw $e;

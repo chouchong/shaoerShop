@@ -160,7 +160,7 @@ class Pay extends Controller
             $this->error("没有获取到支付信息");
         }
         if (! isWeixin()) {
-            // date_default_timezone_set('Asia/Shanghai');
+            date_default_timezone_set('Asia/Shanghai');
             // $aliConfig = require_once __DIR__ . '/../aliconfig.php';
 
             // 订单信息
