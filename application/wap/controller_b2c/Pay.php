@@ -169,7 +169,7 @@ class Pay extends Controller
                 'body'    => 'ali wap pay',
                 'subject'    => '测试支付宝手机网站支付',
                 'order_no'    => $out_trade_no,
-                'timeout_express' => time()+600,// 表示必须 600s 内付款
+                'timeout_express' => time()+60000,// 表示必须 600s 内付款
                 'amount'    => '0.01',// 单位为元 ,最小为0.01
                 'return_param' => 'tata',// 一定不要传入汉字，只能是 字母 数字组合
                 'client_ip' => isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : '127.0.0.1',// 客户地址
