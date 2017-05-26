@@ -58,7 +58,11 @@ class Pay extends Controller
      */
     public function getPayValue()
     {
-         return view($this->style . 'Pay/payVersion');
+        if(request()->isMobile()){
+           return view($this->style . 'Pay/payWapVersion');
+        }else{
+            return view($this->style . 'Pay/payVersion');
+        }
     }
 
     /**
