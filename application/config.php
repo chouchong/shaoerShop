@@ -328,7 +328,7 @@ return [
 //     ],
     'use_sandbox'               => true,// 是否使用沙盒模式
 
-    'partner'                   => '2088102169252684',
+    'partner'                   => '2088102170095391',
     'app_id'                    => '2016080500174794',
     'sign_type'                 => 'RSA2',// RSA  RSA2
 
