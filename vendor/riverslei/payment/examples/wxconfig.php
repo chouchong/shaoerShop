@@ -8,9 +8,9 @@
 return [
     'use_sandbox'       => true,// 是否使用 微信支付仿真测试系统
 
-    'app_id'            => 'xxxxxx',  // 公众账号ID
-    'mch_id'            => 'xxxxxx',// 商户id
-    'md5_key'           => 'xxxxxxx',// md5 秘钥
+    'app_id'            => 'wxaae5a7ea28c5a150',  // 公众账号ID
+    'mch_id'            => '1241385702',// 商户id
+    'md5_key'           => 'xBHVEGLfTJqBs7jyjims4LyZHDWFouGnJ',// md5 秘钥
     'app_cert_pem'      => dirname(__FILE__) . DIRECTORY_SEPARATOR . 'wx' . DIRECTORY_SEPARATOR .  'pem' . DIRECTORY_SEPARATOR . 'weixin_app_cert.pem',
     'app_key_pem'       => dirname(__FILE__) . DIRECTORY_SEPARATOR . 'wx' . DIRECTORY_SEPARATOR .  'pem' . DIRECTORY_SEPARATOR . 'weixin_app_key.pem',
     'sign_type'         => 'MD5',// MD5  HMAC-SHA256

@@ -286,73 +286,33 @@ return [
         'picture_page_size' => 15
     ],
     'alipay' => [
-//         'use_sandbox'               => true,// 是否使用沙盒模式
+        'use_sandbox'               => false,// 是否使用沙盒模式
 
-//         'partner'                   => '2088911647939755',
-//         'app_id'                    => '2016030301178543',
-//         'sign_type'                 => 'RSA',// RSA  RSA2
+        'partner'                   => '2088521246090223',
+        'app_id'                    => '2016112503249649',
+        'sign_type'                 => 'RSA',// RSA  RSA2
 
-//         // 可以填写文件路径，或者密钥字符串  当前字符串是 rsa2 的支付宝公钥(开放平台获取)
-//         'ali_public_key'            => 'MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCnxj/9qwVfgoUh/y2W89L6BkRAFljhNhgPdyPuBV64bfQNN1PjbCzkIM6qRdKBoLPXmKKMiFYnkd6rAoprih3/PrQEB/VsW8OoM8fxn67UDYuyBTqA23MML9q1+ilIZwBC2AQ2UBVOrFXfFl75p6/B5KsiNG9zpgmLCUYuLkxpLQIDAQAB',
+        // 可以填写文件路径，或者密钥字符串  当前字符串是 rsa2 的支付宝公钥(开放平台获取)
+        'ali_public_key'            => 'MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDDI6d306Q8fIfCOaTXyiUeJHkrIvYISRcc73s3vF1ZT7XN8RNPwJxo8pWaJMmvyTn9N4HQ632qJBVHf8sxHi/fEsraprwCtzvzQETrNRwVxLO5jVmRGi60j8Ue1efIlzPXV9je9mkjzOmdssymZkh2QhUrCmZYI/FCEa3/cNMW0QIDAQAB"',
 
-//         // 可以填写文件路径，或者密钥字符串  我的沙箱模式，rsa与rsa2的私钥相同，为了方便测试
-//         'rsa_private_key'           => 'MIICXQIBAAKBgQC5pz3G3VVEPyLfw7H3/aQ+VGT5UKuYC7kr1FZW9pXBIHihIq7A
-// aDyNnak6r5PqvMoh1xBZ49Ciaf/hG8Eu6/XbEL8HPlko42Zxa3uAADoBjhisjeoR
-// b35h4W963Yo+OCMm9b1AiEaOddw+aNMXWv/r6JFazsLoEaczZJSLgs6pgQIDAQAB
-// AoGAZcnIGSxo/44ONNk6zlkGoBXtdrRAIJDs6Zb176Aq40RGXzKA1YVRDeQPUNnL
-// I7x2pq8fi+lYDnRHksiA1pUQqiee17UUw4QQiFaeFyHnXaeLJIQbh66SRRFGZZZi
-// M7pGV8D/h/gSqYMSqj3sqK7/woLWii+qWhW1vMrYiNgrtXECQQDpMC9RnWCTcyJC
-// sS7z2ZMrIuovdvayfiC/lmKHN/Con1w45lmMvZ9hGzAchjpfeuacYsWs8M6Rv35R
-// 49mZZIgfAkEAy9CfTJkuamzLY63OTF2y0ZWpo0XLL0PiJpUigWmSLll1Ii82J1Fo
-// cV9MIpYrsnmyNOQx215/heQZRM8pbbMaXwJBAKuxfMW8+KTYevtb9lQ5ePCj7oYw
-// M4hM8dPe6IDjIWEmpQKIKJtF6xnWqN/3vPccSLwQxbeGPrJ1qo6lE0ysBsUCQQC+
-// Y6+rOhylxeNoxd9EbvKv3YKNxpC7IkqLiBynjxrCuUY2HKwVpnJOFZtlY6qGGjBi
-// QBhit6+gPydro6krlHc5AkADRjCqIXaSJj9IbdF+6AGsRRc2QePfJvTcRmtVyBZ7
-// aZ/6vV0PmvATaO3CC7CvaFL2MChVF8Zb6PlyXH/WPFMj',
+        // 可以填写文件路径，或者密钥字符串  我的沙箱模式，rsa与rsa2的私钥相同，为了方便测试
+        'rsa_private_key'           => 'MIICeAIBADANBgkqhkiG9w0BAQEFAASCAmIwggJeAgEAAoGBAOfnpSVj9MhmddZZ6bbhNu02dTwmYqs8AOonFpgZQPoAau6z/JwArpzkG0Y3J0gono/uKyF/1b7WJDWXGpBTXFU6PMsPWvIAcyfmCgtXeD0eNfNVtGyVQCkJiHyBndXufzObH4jcCoxT1iBLJjwmXfn7RIAg4yiLCjmQIJydWOZ/AgMBAAECgYEAzQs6L9czZcWCRyZ0yShUgmT2P1rJPxHs1Rv+lDkwBFw+MBSgM+c+fKYLn4fAicKwgB5bsGDxQqzgkympaRbruRhsLCgNBYJgnehLX/ChYUgMqpScyj9P5wiiYxxbQPBr1bF/tt5FE4jo0hrvZ3Vz5eX/4l0dWNxvTAxpwErP26ECQQD9ygJk8gzSivj/rq+wRvLlgxwvIVtf9TmZrVTx9OfTxwuKfu6mUFcg+ratHcvrAWTrMoKNa6vsDHzGjUQBSurXAkEA6ezUk0pBK++fJ6FT6bPkeIUYOsjmaDQ5ybXDM2LJIwNE7Pf4IncuIUx63+7APsZt6WfdO4i1OWe2SRhLpRxUmQJBAMyj0ExvdPFsiB07UYVVoFR65QYH4rM8fIazYnR7o1d7/41cjrjivW7lWtm61gwYIrUYFHdOY+HBq/c6P6S/MR8CQB3pRpU+3W58yWEL4+ryMbinbB24Kp4Qb4M3Vqpva0Cq3lleq7/cdW2UlfGkWbitLsi1mzhNlr6sYEagcKvAH6ECQQC/yS4tDft9L98uA40hwSGVkuKgXJK2WBEBzbpgAaLwx5a8yT+kfZ5ewnZItVQ0tuNo9yQvWLxxsMyYhqFgBBnK',
 
-//         'limit_pay'                 => [
-//             //'balance',// 余额
-//             //'moneyFund',// 余额宝
-//             //'debitCardExpress',//     借记卡快捷
-//             //'creditCard',//信用卡
-//             //'creditCardExpress',// 信用卡快捷
-//             //'creditCardCartoon',//信用卡卡通
-//             //'credit_group',// 信用支付类型（包含信用卡卡通、信用卡快捷、花呗、花呗分期）
-//         ],// 用户不可用指定渠道支付当有多个渠道时用“,”分隔
+        'limit_pay'                 => [
+            'balance',// 余额
+            'moneyFund',// 余额宝
+            //'debitCardExpress',//     借记卡快捷
+            //'creditCard',//信用卡
+            //'creditCardExpress',// 信用卡快捷
+            //'creditCardCartoon',//信用卡卡通
+            //'credit_group',// 信用支付类型（包含信用卡卡通、信用卡快捷、花呗、花呗分期）
+        ],// 用户不可用指定渠道支付当有多个渠道时用“,”分隔
 
-//         // 与业务相关参数
-//         'notify_url'                => 'https://helei112g.github.io/v1/notify/ali',
-//         'return_url'                => 'https://helei112g.github.io/',
+        // 与业务相关参数
+        'notify_url'                => 'http://shop.2blab.com/wap/Pay/aliUrlBack',
+        'return_url'                => 'http://shop.2blab.com/wap/Pay/aliPayReturn',
 
-//         'return_raw'                => false,// 在处理回调时，是否直接返回原始数据，默认为 true
-//     ],
-    'use_sandbox'               => false,// 是否使用沙盒模式
-
-    'partner'                   => '2088521246090223',
-    'app_id'                    => '2016112503249649',
-    'sign_type'                 => 'RSA',// RSA  RSA2
-
-    // 可以填写文件路径，或者密钥字符串  当前字符串是 rsa2 的支付宝公钥(开放平台获取)
-    'ali_public_key'            => 'MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDDI6d306Q8fIfCOaTXyiUeJHkrIvYISRcc73s3vF1ZT7XN8RNPwJxo8pWaJMmvyTn9N4HQ632qJBVHf8sxHi/fEsraprwCtzvzQETrNRwVxLO5jVmRGi60j8Ue1efIlzPXV9je9mkjzOmdssymZkh2QhUrCmZYI/FCEa3/cNMW0QIDAQAB"',
-
-    // 可以填写文件路径，或者密钥字符串  我的沙箱模式，rsa与rsa2的私钥相同，为了方便测试
-    'rsa_private_key'           => 'MIICeAIBADANBgkqhkiG9w0BAQEFAASCAmIwggJeAgEAAoGBAOfnpSVj9MhmddZZ6bbhNu02dTwmYqs8AOonFpgZQPoAau6z/JwArpzkG0Y3J0gono/uKyF/1b7WJDWXGpBTXFU6PMsPWvIAcyfmCgtXeD0eNfNVtGyVQCkJiHyBndXufzObH4jcCoxT1iBLJjwmXfn7RIAg4yiLCjmQIJydWOZ/AgMBAAECgYEAzQs6L9czZcWCRyZ0yShUgmT2P1rJPxHs1Rv+lDkwBFw+MBSgM+c+fKYLn4fAicKwgB5bsGDxQqzgkympaRbruRhsLCgNBYJgnehLX/ChYUgMqpScyj9P5wiiYxxbQPBr1bF/tt5FE4jo0hrvZ3Vz5eX/4l0dWNxvTAxpwErP26ECQQD9ygJk8gzSivj/rq+wRvLlgxwvIVtf9TmZrVTx9OfTxwuKfu6mUFcg+ratHcvrAWTrMoKNa6vsDHzGjUQBSurXAkEA6ezUk0pBK++fJ6FT6bPkeIUYOsjmaDQ5ybXDM2LJIwNE7Pf4IncuIUx63+7APsZt6WfdO4i1OWe2SRhLpRxUmQJBAMyj0ExvdPFsiB07UYVVoFR65QYH4rM8fIazYnR7o1d7/41cjrjivW7lWtm61gwYIrUYFHdOY+HBq/c6P6S/MR8CQB3pRpU+3W58yWEL4+ryMbinbB24Kp4Qb4M3Vqpva0Cq3lleq7/cdW2UlfGkWbitLsi1mzhNlr6sYEagcKvAH6ECQQC/yS4tDft9L98uA40hwSGVkuKgXJK2WBEBzbpgAaLwx5a8yT+kfZ5ewnZItVQ0tuNo9yQvWLxxsMyYhqFgBBnK',
-
-    'limit_pay'                 => [
-        'balance',// 余额
-        //'moneyFund',// 余额宝
-        //'debitCardExpress',//     借记卡快捷
-        //'creditCard',//信用卡
-        //'creditCardExpress',// 信用卡快捷
-        //'creditCardCartoon',//信用卡卡通
-        //'credit_group',// 信用支付类型（包含信用卡卡通、信用卡快捷、花呗、花呗分期）
-    ],// 用户不可用指定渠道支付当有多个渠道时用“,”分隔
-
-    // 与业务相关参数
-    'notify_url'                => 'http://shop.2blab.com/wap/Pay/aliUrlBack',
-    'return_url'                => 'http://shop.2blab.com/wap/Pay/aliPayReturn',
-
-    'return_raw'                => false,// 在处理回调时，是否直接返回原始数据，默认为 true
+        'return_raw'                => true,// 在处理回调时，是否直接返回原始数据，默认为 true
 
     ],
     'wxpay' =>[
