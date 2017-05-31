@@ -1,4 +1,4 @@
-<?php if (!defined('THINK_PATH')) exit(); /*a:4:{s:39:"template/wap\b2c\Goods\goodsDetail.html";i:1495427102;s:26:"template/wap\b2c\base.html";i:1495427102;s:41:"template/wap\b2c\Goods\controlDetail.html";i:1495427174;s:27:"template/wap\b2c\share.html";i:1494503663;}*/ ?>
+<?php if (!defined('THINK_PATH')) exit(); /*a:4:{s:39:"template/wap\b2c\Goods\goodsDetail.html";i:1495866256;s:26:"template/wap\b2c\base.html";i:1495866256;s:41:"template/wap\b2c\Goods\controlDetail.html";i:1495866256;s:27:"template/wap\b2c\share.html";i:1495866258;}*/ ?>
 <!DOCTYPE html>
 <html>
 <head>

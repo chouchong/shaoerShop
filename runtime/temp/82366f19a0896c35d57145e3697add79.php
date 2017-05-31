@@ -1,4 +1,4 @@
-<?php if (!defined('THINK_PATH')) exit(); /*a:8:{s:33:"template/wap\b2c\Index\index.html";i:1495426982;s:26:"template/wap\b2c\base.html";i:1495427102;s:27:"template/wap\b2c\share.html";i:1494503663;s:41:"template/wap\b2c\Index\controlSearch.html";i:1493284251;s:40:"template/wap\b2c\Index\controlSlide.html";i:1495425994;s:41:"template/wap\b2c\Index\controlNotice.html";i:1495182036;s:38:"template/wap\b2c\Index\controlNav.html";i:1494985028;s:43:"template/wap\b2c\Index\controlDiscount.html";i:1494985017;}*/ ?>
+<?php if (!defined('THINK_PATH')) exit(); /*a:8:{s:33:"template/wap\b2c\Index\index.html";i:1495866256;s:26:"template/wap\b2c\base.html";i:1495866256;s:27:"template/wap\b2c\share.html";i:1495866258;s:41:"template/wap\b2c\Index\controlSearch.html";i:1495866256;s:40:"template/wap\b2c\Index\controlSlide.html";i:1495866256;s:41:"template/wap\b2c\Index\controlNotice.html";i:1495866256;s:38:"template/wap\b2c\Index\controlNav.html";i:1495866256;s:43:"template/wap\b2c\Index\controlDiscount.html";i:1495866256;}*/ ?>
 <!DOCTYPE html>
 <html>
 <head>

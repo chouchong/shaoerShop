@@ -1,4 +1,4 @@
-<?php if (!defined('THINK_PATH')) exit(); /*a:2:{s:46:"template/wap\b2c\\Member\addMemberAddress.html";i:1495165448;s:26:"template/wap\b2c\base.html";i:1495427102;}*/ ?>
+<?php if (!defined('THINK_PATH')) exit(); /*a:2:{s:46:"template/wap\b2c\\Member\addMemberAddress.html";i:1495866256;s:26:"template/wap\b2c\base.html";i:1495866256;}*/ ?>
 <!DOCTYPE html>
 <html>
 <head>
