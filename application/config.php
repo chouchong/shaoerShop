@@ -326,20 +326,20 @@ return [
 
 //         'return_raw'                => false,// 在处理回调时，是否直接返回原始数据，默认为 true
 //     ],
-    'use_sandbox'               => true,// 是否使用沙盒模式
+    'use_sandbox'               => false,// 是否使用沙盒模式
 
-    'partner'                   => '2088102170095391',
-    'app_id'                    => '2016080500174794',
-    'sign_type'                 => 'RSA2',// RSA  RSA2
+    'partner'                   => '2088521246090223',
+    'app_id'                    => '2016112503249649',
+    'sign_type'                 => 'RSA',// RSA  RSA2
 
     // 可以填写文件路径，或者密钥字符串  当前字符串是 rsa2 的支付宝公钥(开放平台获取)
-    'ali_public_key'            => 'MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAowQeNOi/vyGvD/BnnOXJQHcVasMScDH4EkRNCsZJk9ZixX1g3Ks65NBnwkMtRCvw7fdAo9CMtqrW/2eDBB+vDNp4HuPuED41hswZ2iTJDz6DQQ8VNEy4F9dUOguQuAcCr5nIwPLt3pRlF6fk4Ep1TEl1nGGBjpKwQHzGxcg93UqZM5Ns+JVI2XYXCQa6UFmlN5hXaNfuqlyJgtOMEXrO3Vud2ZegsQhkqVVMEz+NXzmmew5Aqz8m+Rq5TrVAL/fpypafb8HZ9btViGzNEHy/XO3yfL9VeKim83gPgkClq4kFhovVNlQJZBqLp+bDhPCnN13v6i5ki7SfqJsCoN+MWwIDAQAB',
+    'ali_public_key'            => 'MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDDI6d306Q8fIfCOaTXyiUeJHkrIvYISRcc73s3vF1ZT7XN8RNPwJxo8pWaJMmvyTn9N4HQ632qJBVHf8sxHi/fEsraprwCtzvzQETrNRwVxLO5jVmRGi60j8Ue1efIlzPXV9je9mkjzOmdssymZkh2QhUrCmZYI/FCEa3/cNMW0QIDAQAB"',
 
     // 可以填写文件路径，或者密钥字符串  我的沙箱模式，rsa与rsa2的私钥相同，为了方便测试
-    'rsa_private_key'           => 'MIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQCjBB406L+/Ia8P8Gec5clAdxVqwxJwMfgSRE0KxkmT1mLFfWDcqzrk0GfCQy1EK/Dt90Cj0Iy2qtb/Z4MEH68M2nge4+4QPjWGzBnaJMkPPoNBDxU0TLgX11Q6C5C4BwKvmcjA8u3elGUXp+TgSnVMSXWcYYGOkrBAfMbFyD3dSpkzk2z4lUjZdhcJBrpQWaU3mFdo1+6qXImC04wRes7dW53Zl6CxCGSpVUwTP41fOaZ7DkCrPyb5GrlOtUAv9+nKlp9vwdn1u1WIbM0QfL9c7fJ8v1V4qKbzeA+CQKWriQWGi9U2VAlkGoun5sOE8Kc3Xe/qLmSLtJ+omwKg34xbAgMBAAECggEBAJZBenI8Qlky/ACOD4LvzoOMAAKrEXi2pjh4GicfQ7xvtBTijwB3F87GRY0qjDO06Nr+tucHmFvatlcuGvYXGiuXx3Z5kvoHzSCVShLnKyfQ7/xsoZfWSy02fd0OwfLOC2y+K+ulPxmU4GVgjLcsClgpsa1Vtqwqiyi1miW9f0BTQ6uAPd8UW60vXYXaM+tNwlBFR3lr4UJaYpAy5U4BMy0fk5/k/7MxesFDX5/uW1wTxKpqsQKndveMl2DBhd6OPp4mFWLSKzb/euv8C036HMdiximlA14bnnH0/cQGp8SOB6bPOOXEClhsZ9js4O7o811m6f5x9IG7sTDB09DiHWECgYEA2+VIP0o3B5jpiqgCBIOso2mhhzuxQtwEIl4mMVfdGQYtVzxklfs2+QXE5RgAWw3t3nZRdasdMyqvEHNO4cgCt7Pyzp5LIZnAnr0hihN37Rql8rp+SOMqmGcfNvvbAhJiDSoSBZd7CVptzgCotM4axqn8THvpO+FzOFyEVVZguysCgYEAvcgO1Ufvy2fwt5ESxcUkZA+CbroH3OA8LtX23ybo7JSUI7ilT4H++nMNVACzfgfHwRfMUaND3I+wQT81IUYVaEgCOc36Uwi/dsqEwrKuAjI2g+u4rVYRWP00imyexosSCt1bEO90AX1LdDnHMnhtqDY9eGbQ3LBfy0A6AHUIG5ECgYEAjyIgs+m4Bj73jaSso4meP0RLuz4UtSOHoWNNUwMRTO+jZcxO4P2Dm/awYjsMSDi54/t6LLC0MhEPoRKdfwP1GOSOIQYSe42cPvd3NGxVvMWCzYutFf6gRFGjlOO9fAzBPDZtQqyGjuEI5nWxWvdpoHUXYCWr/KlUmZRHI1E1Z78CgYAzNwf5ur4VsGkfwMDGKluVvTG/2+g/TSwwn4FN21xEbBxGP5AtErHSuLXCE6ZcvpDDpT54UY0Auq4gDYSzBAzG5ZfkLZf+TIAO+Lw3Jq0a3p4jn7to2682yq4hJQr8HY+y6uWmflhaBowUQ3tkPWeqW2jfUy/OPrK7UQvWD78uYQKBgF0Moi9NvZm+VCej1gpNSKLLuwwOwdR7ptMWhb16k35RxgdvmIgpm0wzzDqfxyyHPBsH7uHrMnRQ09soND7jDyRCsCX79jKzAGsPNQnpVchAfoRk1jeVi/RFYVl82vjjLjrSewW7RbXLHrVk9F8kbylVpTAlwVptUvEWIdCZQZQ9',
+    'rsa_private_key'           => 'MIICeAIBADANBgkqhkiG9w0BAQEFAASCAmIwggJeAgEAAoGBAOfnpSVj9MhmddZZ6bbhNu02dTwmYqs8AOonFpgZQPoAau6z/JwArpzkG0Y3J0gono/uKyF/1b7WJDWXGpBTXFU6PMsPWvIAcyfmCgtXeD0eNfNVtGyVQCkJiHyBndXufzObH4jcCoxT1iBLJjwmXfn7RIAg4yiLCjmQIJydWOZ/AgMBAAECgYEAzQs6L9czZcWCRyZ0yShUgmT2P1rJPxHs1Rv+lDkwBFw+MBSgM+c+fKYLn4fAicKwgB5bsGDxQqzgkympaRbruRhsLCgNBYJgnehLX/ChYUgMqpScyj9P5wiiYxxbQPBr1bF/tt5FE4jo0hrvZ3Vz5eX/4l0dWNxvTAxpwErP26ECQQD9ygJk8gzSivj/rq+wRvLlgxwvIVtf9TmZrVTx9OfTxwuKfu6mUFcg+ratHcvrAWTrMoKNa6vsDHzGjUQBSurXAkEA6ezUk0pBK++fJ6FT6bPkeIUYOsjmaDQ5ybXDM2LJIwNE7Pf4IncuIUx63+7APsZt6WfdO4i1OWe2SRhLpRxUmQJBAMyj0ExvdPFsiB07UYVVoFR65QYH4rM8fIazYnR7o1d7/41cjrjivW7lWtm61gwYIrUYFHdOY+HBq/c6P6S/MR8CQB3pRpU+3W58yWEL4+ryMbinbB24Kp4Qb4M3Vqpva0Cq3lleq7/cdW2UlfGkWbitLsi1mzhNlr6sYEagcKvAH6ECQQC/yS4tDft9L98uA40hwSGVkuKgXJK2WBEBzbpgAaLwx5a8yT+kfZ5ewnZItVQ0tuNo9yQvWLxxsMyYhqFgBBnK',
 
     'limit_pay'                 => [
-        //'balance',// 余额
+        'balance',// 余额
         //'moneyFund',// 余额宝
         //'debitCardExpress',//     借记卡快捷
         //'creditCard',//信用卡
